@@ -5,20 +5,17 @@ ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'messag
 
 
 def read_questions(csv_file):
-    question_list = []
     with open(csv_file, 'r') as csvfile:
-        csvreader = csv.DictReader(csvfile)
-        for row in csvreader:
-            question_list.append(row)
-    return question_list
+        csv_reader = csv.DictReader(csvfile)
+        questions_list = [row for row in csv_reader]
+    return questions_list
 
 
 def read_answers(csv_file):
     answers_list = []
     with open(csv_file, 'r') as csvfile:
-        csvreader = csv.DictReader(csvfile)
-        for row in csvreader:
-            answers_list.append(row)
+        csv_reader = csv.DictReader(csvfile)
+        answers_list = [row for row in csv_reader]
     return answers_list
 
 
