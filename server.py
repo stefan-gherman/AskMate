@@ -61,12 +61,12 @@ def route_question_vote_down(question_id):
 
 @app.route('/answer/<answer_id>/vote_up')
 def route_answer_vote_up(answer_id):
-    pass
+    data_manager.vote_answer(answer_id, 'vote_up')
 
 
 @app.route('/answer/<answer_id>/vote_down')
 def route_answer_vote_down(answer_id):
-    pass
+    data_manager.vote_answer(answer_id, 'vote_down')
 
 
 if __name__ == "__main__":
