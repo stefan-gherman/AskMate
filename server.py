@@ -23,7 +23,7 @@ def route_add_question():
         title = request.form['title']
         message = request.form['message']
         data_manager.add_question(title, message)
-        return redirect(url_for("route_question", question_id=len(data_manager.question_list)))
+        return redirect(url_for("route_question", question_id=len(data_manager.questions_list)))
     else:
         return render_template('add_question.html')
 
