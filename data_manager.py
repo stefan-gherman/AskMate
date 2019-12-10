@@ -22,4 +22,4 @@ def delete_answer(answer_id):
     connection.write_answers(FILE, data)
     return connection.read_answers('data/answers.csv')
 
-print(delete_answer(0))
+

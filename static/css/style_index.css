@@ -1,0 +1,39 @@
+.sortquestion{
+    align: right;
+}
+
+div {
+    display: inline-block;
+}
+.container{
+    overflow: auto;
+    height: 30px;
+    weight: 100%;
+
+}
+.divbuttons{
+    height: 30px;
+    align: center;
+}
+.divtitle{
+    height: 30px;
+    align: center;
+}
+.divvote{
+    height: 30px;
+    align: center;
+}
+.divviewnumber{
+    height: 30px;
+    align: center;
+}
+.buttonplus{
+    height: 20px;
+    weight: 20px;
+    color: #3A7734;
+}
+.buttonminus{
+    height: 20px;
+    weight: 20px;
+    color: yellowgreen;
+}
