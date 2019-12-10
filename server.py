@@ -11,14 +11,16 @@ def route_index():
 
 @app.route('/question/<question_id>')
 def route_question(question_id):
-    pass
+    return 'google'
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
 def route_add_question():
     if request.method == 'POST':
-        data_manager.add_question()
-        return redirect(url_for('route_question'))
+        title = request.form['title']
+        message = request.form['message']
+        data_manager.add_question(title, message)
+        return redirect(url_for("route_question", question_id=len(data_manager.question_list)))
     else:
         return render_template('add_question.html')
 
@@ -36,7 +38,8 @@ def route_delete_question(question_id):
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def route_add_answer(question_id):
     if request.method == 'POST':
-        data_manager.add_answer(question_id)
+        message = request.form['message']
+        data_manager.add_answer(question_id, message)
         return redirect(url_for('route_question', question_id=question_id))
     return render_template('add_answer.html', question_id=question_id)
 
@@ -48,7 +51,8 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
-    pass
+    data_manager.vote_question(question_id, 'vote-up')
+    print()
 
 
 @app.route('/question/<question_id>/vote_down')
@@ -69,6 +73,6 @@ def route_answer_vote_down(answer_id):
 if __name__ == "__main__":
     app.run(
         debug=True,
-        host="localhost",
+        host="0",
         port="7070"
     )
