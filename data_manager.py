@@ -32,13 +32,11 @@ def add_answer(question_id, message):
     connection.write_answers(ANSWERS, answers_list)
 
 
-def vote_question(question_id, param):
-    vote_number = question_list[question_id]['vote_number']
-    if param == 'vote-up':
-        question_list[question_id]['vote_number'] = int(vote_number) + 1
-        connection.write_questions(QUESTIONS,question_list)
-    elif param == 'vote-down':
-        question_list[question_id]['vote_number'] = int(vote_number) - 1
-        connection.write_questions(QUESTIONS,question_list)
-
-    print(question_list)
+def vote_question(question_id, option):
+    vote_number = question_list[int(question_id)]['vote_number']
+    if option == 'vote_up':
+        question_list[int(question_id)]['vote_number'] = int(vote_number) + 1
+        connection.write_questions(QUESTIONS, question_list)
+    elif option == 'vote_down':
+        question_list[int(question_id)]['vote_number'] = int(vote_number) - 1
+        connection.write_questions(QUESTIONS, question_list)
