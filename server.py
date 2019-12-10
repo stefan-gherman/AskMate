@@ -1,12 +1,15 @@
 from flask import Flask, render_template, redirect, request, url_for
 import data_manager as data_manager
+import connection as connection
 
 app = Flask(__name__)
 
 
 @app.route('/list')
 def route_index():
-    return render_template('index.html')
+    FILE = 'data/questions.csv'
+    questions = connection.read_questions(FILE)
+    return render_template('index.html', questions=questions)
 
 
 @app.route('/question/<question_id>')

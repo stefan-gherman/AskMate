@@ -19,6 +19,15 @@ def add_question(title, message):
     questions_list.append(new_question)
     connection.write_questions(QUESTIONS, questions_list)
 
+def delete_question(question_id):
+    my_question_list = connection.read_questions('data/questions.csv')
+    data = [element for element in my_question_list if int(element['id']) != int(question_id)]
+    count = 0
+    for d in data:
+        d['id'] = count
+        count += 1
+    connection.write_questions(QUESTIONS, data)
+    return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
     new_answer = {'id': len(answers_list),
@@ -29,6 +38,16 @@ def add_answer(question_id, message):
                   'image': ''}
     answers_list.append(new_answer)
     connection.write_answers(ANSWERS, answers_list)
+    
+def delete_answer(answer_id):
+    my_answers_list = connection.read_answers('data/answers.csv')
+    data = [element for element in my_answers_list if int(element['id']) != int(answer_id)]
+    count = 0
+    for d in data:
+        d['id'] = count
+        count += 1
+    connection.write_answers(ANSWERS, data)
+    return connection.read_answers('data/answers.csv')
 
 
 def vote_question(question_id, option):
