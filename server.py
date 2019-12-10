@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 import data_manager as data_manager
 
 app = Flask(__name__)
@@ -16,8 +16,10 @@ def route_question(question_id):
 
 @app.route('/add-question', methods=['GET', 'POST'])
 def route_add_question():
+    id = data_manager.add_question()
     if request.method == 'POST':
         data_manager.add_question()
+        return redirect(url_for('route_question', question_id=id))
     return render_template('addquestion.html')
 
 
