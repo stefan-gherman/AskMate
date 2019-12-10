@@ -51,13 +51,12 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
-    data_manager.vote_question(question_id, 'vote-up')
-    print()
+    data_manager.vote_question(question_id, 'vote_up')
 
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
-    pass
+    data_manager.vote_question(question_id, 'vote_down')
 
 
 @app.route('/answer/<answer_id>/vote_up')
@@ -73,6 +72,6 @@ def route_answer_vote_down(answer_id):
 if __name__ == "__main__":
     app.run(
         debug=True,
-        host="0",
+        host="localhost",
         port="7070"
     )
