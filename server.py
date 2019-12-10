@@ -1,16 +1,15 @@
-from flask import Flask
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-
+@app.route('/')
 @app.route('/list')
 def route_index():
-    pass
-
+    return render
 
 @app.route('/question/<question_id>')
 def route_question(question_id):
-    pass
+    return render_template('index.html')
 
 
 @app.route('/add-question')
@@ -57,10 +56,12 @@ def route_answer_vote_up(answer_id):
 def route_answer_vote_down(answer_id):
     pass
 
+#test
 
+#test
 if __name__ == "__main__":
     app.run(
         debug=True,
-        host="localhost",
-        port="7070"
+        host="0.0.0.0",
+        port= 7070
     )
