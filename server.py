@@ -32,7 +32,8 @@ def route_edit_question(question_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id):
-    pass
+    questions = data_manager.delete_question(question_id)
+    return render_template('index.html', questions=questions)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
@@ -46,7 +47,8 @@ def route_add_answer(question_id):
 
 @app.route('/answer/<answer_id>/delete')
 def route_delete_answer(answer_id):
-    pass
+    answers = data_manager.delete_answer(answer_id)
+    return render_template('question.html', answers=answers)
 
 
 @app.route('/question/<question_id>/vote_up')
