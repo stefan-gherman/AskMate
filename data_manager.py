@@ -21,4 +21,15 @@ def add_question():
                     }
     question_list.append(new_question)
     connection.write_questions(QUESTIONS, question_list)
-    return new_question['id']
+
+
+def add_answer(question_id):
+    message = request.form['message']
+    new_answer = {'id': len(answers_list),
+                  'submission_time': 0,
+                  'vote_number': 0,
+                  'question_id': question_id,
+                  'message': message,
+                  'image': ''}
+    answers_list.append(new_answer)
+    connection.write_answers(ANSWERS, answers_list)
