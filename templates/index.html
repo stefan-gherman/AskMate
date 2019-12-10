@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Questions List</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style_list.css')}}">
+    </head>
+    <body>
+        <h1>Questions List</h1>
+{#        <p><a href="{{ url_for('route_index') }}">Add new User Story</a></p>#}
+
+        <table>
+        <thead id>
+            <tr><th>Id</th>
+                <th>Submission Time</th>
+                <th>View number</th>
+                <th>Vote number</th>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in questions %}
+            <tr>
+                <td>{{ line.id }}</td>
+                <td>{{ line.submission_time }}</td>
+                <td>{{ line.view_number }}</td>
+                <td>{{ line.vote_number }}</td>
+                <td>{{ line.title }}</td>
+                <td>{{ line.message }} h</td>
+                <td>{{ line.image }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </body>
+</html>
