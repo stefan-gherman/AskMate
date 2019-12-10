@@ -19,7 +19,6 @@ def add_question():
                     'message': message,
                     'image': ''
                     }
-    return new_question['id']
-
     question_list.append(new_question)
     connection.write_questions(QUESTIONS, question_list)
+    return new_question['id']
