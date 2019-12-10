@@ -51,6 +51,7 @@ def route_add_answer(question_id):
 @app.route('/answer/<answer_id>/delete')
 def route_delete_answer(answer_id):
     answers = data_manager.delete_answer(answer_id)
+
     return render_template('question.html', answers=answers)
 
 
@@ -61,6 +62,7 @@ def route_question_vote_up(question_id):
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
+
     data_manager.vote_question(question_id, 'vote_down')
 
 
