@@ -20,7 +20,7 @@ def route_add_question():
         data_manager.add_question()
         return redirect(url_for('route_question'))
     else:
-        return render_template('addquestion.html')
+        return render_template('add_question.html')
 
 
 @app.route('/question/<question_id>/edit')
