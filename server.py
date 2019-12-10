@@ -16,11 +16,11 @@ def route_question(question_id):
 
 @app.route('/add-question', methods=['GET', 'POST'])
 def route_add_question():
-    id = data_manager.add_question()
     if request.method == 'POST':
         data_manager.add_question()
-        return redirect(url_for('route_question', question_id=id))
-    return render_template('addquestion.html')
+        return redirect(url_for('route_question'))
+    else:
+        return render_template('addquestion.html')
 
 
 @app.route('/question/<question_id>/edit')
@@ -33,9 +33,12 @@ def route_delete_question(question_id):
     pass
 
 
-@app.route('/question/<question_id>/new-answer')
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def route_add_answer(question_id):
-    pass
+    if request.method == 'POST':
+        data_manager.add_answer(question_id)
+        return redirect(url_for('route_question', question_id=question_id))
+    return render_template('add_answer.html', question_id=question_id)
 
 
 @app.route('/answer/<answer_id>/delete')
