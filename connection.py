@@ -12,7 +12,6 @@ def read_questions(csv_file):
 
 
 def read_answers(csv_file):
-    answers_list = []
     with open(csv_file, 'r') as csvfile:
         csv_reader = csv.DictReader(csvfile)
         answers_list = [dict(row) for row in csv_reader]
