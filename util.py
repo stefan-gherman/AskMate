@@ -29,14 +29,14 @@ def order_by_value(dataset, param, order='asc'):
         elif order == 'asc':
             ordered_dataset = sorted(dataset, key=lambda i: i[param].lower())
         return ordered_dataset
-
-questions_list = cc.read_questions('data/questions.csv')
-
-paramt = 'title'
-sorted_list = order_by_value(questions_list, paramt)
-print(type(sorted_list))
-
-for elem in sorted_list:
-    print(elem)
+#
+# questions_list = cc.read_questions('data/questions.csv')
+#
+# paramt = 'submission_time'
+# sorted_list = order_by_value(questions_list, paramt, 'desc')
+# print(type(sorted_list))
+#
+# for elem in sorted_list:
+#     print(elem)
 
 

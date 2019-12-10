@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template
-
+from flask import Flask, request, render_template, redirect, url_for
+import connection as con
+import util as ut
 app = Flask(__name__)
 
 @app.route('/')
@@ -57,7 +58,20 @@ def route_answer_vote_down(answer_id):
     pass
 
 #test
-
+question_headers = con.return_questions_headers()
+@app.route('/test_this', methods = ['GET', 'POST'])
+def route_test_this():
+    if request.method == 'GET':
+        questions = con.read_questions('data/questions.csv')
+        return render_template('test_page.html', question_headers = question_headers, questions = questions)
+    if request.method == 'POST':
+        print(request.form.get('param'), request.form.get('sort_ord'))
+        questions = con.read_questions('data/questions.csv')
+        param = request.form.get('param')
+        sort_ord = request.form.get('sort_ord')
+        questions_ordered = ut.order_by_value(questions, param, sort_ord)
+        con.write_questions('data/questions.csv', questions_ordered)
+        return redirect(url_for('route_test_this'))
 #test
 if __name__ == "__main__":
     app.run(
