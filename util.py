@@ -31,6 +31,19 @@ def order_by_value(dataset, param, order='asc'):
             ordered_dataset = sorted(dataset, key=lambda i: i[param].lower())
             return ordered_dataset
 
+def make_compat_display(dataset, html_elem = 'not_textarea'):
+
+    if html_elem == 'not_textarea':
+        for dicto in dataset:
+            for key in dicto.keys():
+                dicto[key] = dicto[key].replace('\n', '<br/>')
+    if html_elem == 'textarea':
+        for dicto in dataset:
+            for key in dicto.keys():
+                dicto[key] = dicto[key].replace('<br/>', '/r/n')
+    return dataset
+
+
 
 
 #

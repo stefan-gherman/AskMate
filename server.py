@@ -8,10 +8,16 @@ app = Flask(__name__)
 def route_index():
     return render
 
-@app.route('/question/<question_id>')
+#test
+@app.route('/question/<question_id>', methods = ['GET', 'POST'])
 def route_question(question_id):
-    return render_template('index.html')
-
+    questions = con.read_questions('data/questions.csv')
+    questions[int(question_id)]['view_number'] = str(int( questions[int(question_id)]['view_number']) + 1)
+    con.write_questions('data/questions.csv', questions)
+    questions = questions[int(question_id)]
+    answers = con.read_answers('data/answers.csv')
+    return render_template('question.html', questions = questions, answers = answers, question_id = question_id)
+#test
 
 @app.route('/add-question')
 def route_add_question():
@@ -66,6 +72,7 @@ def route_test_this():
         questions = con.read_questions('data/questions.csv')
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
+        questions = ut.make_compat_display(questions, 'not_textarea')
         questions_ordered = ut.order_by_value(questions, param, sort_ord)
         if questions_ordered == None:
             con.write_questions('data/questions.csv', questions)

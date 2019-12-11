@@ -11,9 +11,14 @@
     Test QUERY
 </h1>
 {% for elem in questions %}
+Elem:
+    <br>
 <p>
     {% for key in elem %}
+
+    {% autoescape false %}
     {{elem[key]}}
+    {% endautoescape %}
     {% endfor %}}
 </p>
 {% endfor %}
@@ -28,10 +33,10 @@
     </select>
 
     <select name = "sort_ord" id = "sort_ord" >
-        <option value="asc">
+        <option value="asc" selected>
             asc
         </option>
-        <option value = "desc" selected>
+        <option value = "desc" >
             desc
         </option>
     </select>

@@ -1,0 +1,37 @@
+<!doctype HTML>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/main.css')}}">
+    <title>Title</title>
+</head>
+<body>
+<div class="up_banner">
+    <p>AskMate <br><span class="sub">Answers for everything </span></p>
+</div>
+<h1>Question: {{questions['title']}}</h1>
+<div class="msg">
+<p >{% autoescape false%}{{questions['message']}}{% endautoescape %}</p>
+    <p style="text-align: center"> Votes:{{questions['vote_number']}}   Views:{{questions['view_number']}}  Submission Date:{{questions['submission_time']}}</p>
+</div>
+</div>
+<h2> Answers</h2>
+
+
+        {% for dicto in answers %}
+        {% if dicto['question_id'] == questions['id'] %}
+    <div class="answ">
+        <p><a href="{{url_for('route_test_this')}}"> <span class ="links"> Edit </a><span>
+        {% autoescape false %}{{dicto['message']}}{% endautoescape %}
+    <br>
+    <div class="alignc">
+        <a href="{{url_for('route_test_this')}}"><img src="/static/local_ico/Up_Arrow.png" class ="vote"></a> <br>{{dicto['vote_number']}}<br> <a href="{{url_for('route_test_this')}}"><img src="/static/local_ico/Down_Arrow.png" class ="vote"></a>
+    </div>
+    </p>
+</div>
+{% endif %}
+{% endfor %}
+
+</body>
+</html>
