@@ -1,10 +1,12 @@
 from flask import Flask, render_template, redirect, request, url_for
 import data_manager as data_manager
 import connection as connection
+import util as util
 
 app = Flask(__name__)
 
 
+@app.route('/')
 @app.route('/list')
 def route_index():
     FILE = 'data/questions.csv'
@@ -12,9 +14,15 @@ def route_index():
     return render_template('index.html', questions=questions)
 
 
-@app.route('/question/<question_id>')
+# test
+@app.route('/question/<question_id>', methods=['GET', 'POST'])
 def route_question(question_id):
-    return 'google'
+    questions = connection.read_questions('data/questions.csv')
+    questions[int(question_id)]['view_number'] = str(int(questions[int(question_id)]['view_number']) + 1)
+    connection.write_questions('data/questions.csv', questions)
+    questions = questions[int(question_id)]
+    answers = connection.read_answers('data/answers.csv')
+    return render_template('question.html', questions=questions, answers=answers, question_id=question_id)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -59,10 +67,12 @@ def route_question_vote_up(question_id):
     data_manager.vote_question(question_id, 'vote_up')
     return redirect('/list')
 
+
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
     data_manager.vote_question(question_id, 'vote_down')
     return redirect('/list')
+
 
 @app.route('/answer/<answer_id>/vote_up')
 def route_answer_vote_up(answer_id):
@@ -74,9 +84,29 @@ def route_answer_vote_down(answer_id):
     data_manager.vote_answer(answer_id, 'vote_down')
 
 
+@app.route('/test_this', methods=['GET', 'POST'])
+def route_test_this():
+    question_headers = connection.return_questions_headers()
+    if request.method == 'GET':
+        print(request.values.get('param'), request.values.get('sort_ord'))
+        questions = connection.read_questions('data/questions.csv')
+        param = request.values.get('param')
+        sort_ord = request.values.get('sort_ord')
+        questions = util.make_compat_display(questions, 'not_textarea')
+        questions_ordered = util.order_by_value(questions, param, sort_ord)
+        if questions_ordered == None:
+            connection.write_questions('data/questions.csv', questions)
+            questions_ordered = util.order_by_value(questions, 'submission_time', 'desc')
+            return render_template('test_page.html', question_headers=question_headers, questions=questions_ordered)
+        else:
+            connection.write_questions('data/questions.csv', questions_ordered)
+            return render_template('test_page.html', question_headers=question_headers, questions=questions_ordered)
+
+
+# test
 if __name__ == "__main__":
     app.run(
         debug=True,
-        host="localhost",
-        port="7070"
+        host="0.0.0.0",
+        port=7070
     )

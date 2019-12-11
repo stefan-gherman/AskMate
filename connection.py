@@ -10,7 +10,10 @@ def read_questions(csv_file):
         questions_list = [dict(row) for row in csv_reader]
     return questions_list
 
-
+#test
+def return_questions_headers():
+    return QUESTIONS_HEADER[1:-1:1]
+#test
 def read_answers(csv_file):
     with open(csv_file, 'r') as csvfile:
         csv_reader = csv.DictReader(csvfile)
