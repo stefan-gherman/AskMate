@@ -100,10 +100,10 @@ def route_test_this():
         if questions_ordered == None:
             connection.write_questions('data/questions.csv', questions)
             questions_ordered = util.order_by_value(questions, 'submission_time', 'desc')
-            return render_template('test_page.html', question_headers=question_headers, questions=questions_ordered)
+            return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
         else:
             connection.write_questions('data/questions.csv', questions_ordered)
-            return render_template('test_page.html', question_headers=question_headers, questions=questions_ordered)
+            return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
 
 
 # test
