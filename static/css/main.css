@@ -1,0 +1,77 @@
+.up_banner{
+    background-color: seagreen;
+    height: 80px;
+    width: available;
+    border: 2px solid;
+
+
+}
+body {
+    background-color: #BDC3C7;
+}
+.up_banner p{
+    font-size: 25px;
+    font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    font-style: italic;
+    color:white;
+    text-align: center;
+}
+
+.sub{
+    font-size: 15px;
+}
+
+.msg {
+    font-size: 18px;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    color black;
+    background-color: peachpuff;
+}
+.answ {
+     font-size: 18px;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    color:black;
+    background-color: paleturquoise;
+    min-height: 85px;
+    max-height: fit-content;
+    width: 100%;
+}
+
+.vote {
+    height: 30px;
+    width: 30px;
+}
+
+.alignc {
+    float: none;
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+
+.links {
+   font-size: 10px;
+    position: absolute;
+    right: 40px;
+}
+
+. link_right {
+    font-size: 10px;
+    position: absolute;
+    left: 40px;
+
+}
+.sortquestion{
+    background-color: peachpuff;
+    height: 100px;
+    width: available;
+    border: 2px solid black;
+    color: blue;
+}
+table{
+    align: center;
+    border: 2px solid black;
+    background-color: paleturquoise;
+}
+
