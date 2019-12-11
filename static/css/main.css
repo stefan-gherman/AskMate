@@ -64,11 +64,14 @@ body {
 }
 .sortquestion{
     background-color: peachpuff;
-    height: 80px;
+    height: 100px;
     width: available;
-    border: 2px solid;
+    border: 2px solid black;
+    color: blue;
 }
 table{
     align: center;
     border: 2px solid black;
+    background-color: paleturquoise;
 }
+

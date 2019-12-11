@@ -11,7 +11,7 @@
         </div>
         <br>
         <div class="sortquestion">
-            <p>Sort questions</p>
+            <h2>Sort questions</h2>
             <form method="get" action="{{ url_for('route_test_this') }}">
                 <select name="param" id="param">
                     {% for elem in question_headers %}
@@ -48,7 +48,7 @@
                         <a href="{{ url_for('route_delete_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
                     </td>
                     <td>
-                        <a href="{{ url_for('route_question', question_id=line.id) }}"><h2>{{ line.title }}</h2></a>
+                        <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{{ line.title }}</h2></a>
                     </td>
                     <td>
                         <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}"><button type="button" id="buttonplus">Vote +</button></a>
