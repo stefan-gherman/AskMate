@@ -39,7 +39,7 @@ def make_compat_display(dataset, html_elem = 'not_textarea'):
     if html_elem == 'not_textarea':
         for dicto in dataset:
             for key in dicto.keys():
-                dicto[key] = dicto[key].replace('\n', '<br/>')
+                dicto[key] = dicto[key].replace('\r\n', '<br/>')
     if html_elem == 'textarea':
         for dicto in dataset:
             for key in dicto.keys():
