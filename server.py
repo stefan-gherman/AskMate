@@ -34,7 +34,7 @@ def route_add_question():
         title = request.form['title']
         message = request.form['message']
         data_manager.add_question(title, message)
-        return redirect(url_for("route_question", question_id=len(data_manager.questions_list) - 1))
+        return redirect(url_for("route_question", question_id=util.question_list_size() - 1))
     else:
         return render_template('add_question.html')
 
@@ -112,6 +112,6 @@ def route_test_this():
 if __name__ == "__main__":
     app.run(
         debug=True,
-        host="0.0.0.0",
+        host="LOCALHOST",
         port=7070
     )
