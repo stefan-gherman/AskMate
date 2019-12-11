@@ -22,12 +22,16 @@ def add_question(title, message):
 
 def delete_question(question_id):
     questions_list = connection.read_questions(QUESTIONS_FILE)
-    data = [element for element in questions_list if int(element['id']) != int(question_id)]
-    # count = 0
-    # for d in data:
-    #     d['id'] = count
-    #     count += 1
-    connection.write_questions(QUESTIONS_FILE, data)
+    answers_list = connection.read_questions(ANSWERS_FILE)
+    delete_question = [element for element in questions_list if int(element['id']) != int(question_id)]
+    delete_answer = [element for element in answers_list if int(element['question_id']) != int(question_id)]
+
+    count = 0
+    for d in delete_question:
+        d['id'] = count
+        count += 1
+    connection.write_answers(ANSWERS_FILE, delete_answer)
+    connection.write_questions(QUESTIONS_FILE, delete_question)
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
