@@ -23,7 +23,7 @@ def route_add_question():
         title = request.form['title']
         message = request.form['message']
         data_manager.add_question(title, message)
-        return redirect(url_for("route_question", question_id=len(data_manager.question_list)))
+        return redirect(url_for("route_question", question_id=len(data_manager.questions_list)))
     else:
         return render_template('add_question.html')
 
@@ -57,12 +57,12 @@ def route_delete_answer(answer_id):
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
     data_manager.vote_question(question_id, 'vote_up')
-
+    return redirect('/list')
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
     data_manager.vote_question(question_id, 'vote_down')
-
+    return redirect('/list')
 
 @app.route('/answer/<answer_id>/vote_up')
 def route_answer_vote_up(answer_id):
