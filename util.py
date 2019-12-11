@@ -26,9 +26,13 @@ def order_by_value(dataset, param, order='asc'):
     else:
         if order == 'desc':
             ordered_dataset = sorted(dataset, key=lambda i: i[param].lower(), reverse=True)
+            return ordered_dataset
         elif order == 'asc':
             ordered_dataset = sorted(dataset, key=lambda i: i[param].lower())
-        return ordered_dataset
+            return ordered_dataset
+
+
+
 #
 # questions_list = cc.read_questions('data/questions.csv')
 #

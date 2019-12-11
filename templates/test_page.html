@@ -1,0 +1,41 @@
+<!doctype HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Test GET query
+    </title>
+</head>
+<body>
+<h1>
+    Test QUERY
+</h1>
+{% for elem in questions %}
+<p>
+    {% for key in elem %}
+    {{elem[key]}}
+    {% endfor %}}
+</p>
+{% endfor %}
+<form method="get" action="test_this">
+
+
+
+    <select name="param" id="param">
+        {% for elem in question_headers %}
+        <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >{{elem}}</option>
+        {% endfor %}
+    </select>
+
+    <select name = "sort_ord" id = "sort_ord" >
+        <option value="asc">
+            asc
+        </option>
+        <option value = "desc" selected>
+            desc
+        </option>
+    </select>
+    <button type="submit">Sort</button>
+</form>
+</body>
+</html>

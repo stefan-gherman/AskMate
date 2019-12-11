@@ -62,16 +62,18 @@ question_headers = con.return_questions_headers()
 @app.route('/test_this', methods = ['GET', 'POST'])
 def route_test_this():
     if request.method == 'GET':
+        print(request.values.get('param'), request.values.get('sort_ord'))
         questions = con.read_questions('data/questions.csv')
-        return render_template('test_page.html', question_headers = question_headers, questions = questions)
-    if request.method == 'POST':
-        print(request.form.get('param'), request.form.get('sort_ord'))
-        questions = con.read_questions('data/questions.csv')
-        param = request.form.get('param')
-        sort_ord = request.form.get('sort_ord')
+        param = request.values.get('param')
+        sort_ord = request.values.get('sort_ord')
         questions_ordered = ut.order_by_value(questions, param, sort_ord)
-        con.write_questions('data/questions.csv', questions_ordered)
-        return redirect(url_for('route_test_this'))
+        if questions_ordered == None:
+            con.write_questions('data/questions.csv', questions)
+            questions_ordered = ut.order_by_value(questions, 'submission_time', 'desc')
+            return render_template('test_page.html', question_headers=question_headers, questions=questions_ordered)
+        else:
+            con.write_questions('data/questions.csv', questions_ordered)
+            return render_template('test_page.html', question_headers=question_headers, questions=questions_ordered)
 #test
 if __name__ == "__main__":
     app.run(
