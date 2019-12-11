@@ -62,3 +62,13 @@ body {
     left: 40px;
 
 }
+.sortquestion{
+    background-color: peachpuff;
+    height: 80px;
+    width: available;
+    border: 2px solid;
+}
+table{
+    align: center;
+    border: 2px solid black;
+}

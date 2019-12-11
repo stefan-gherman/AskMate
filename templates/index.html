@@ -3,44 +3,67 @@
     <head>
         <meta charset="utf-8">
         <title>Questions List</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style_index.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
     </head>
     <body>
-        <h1>Ask Mate</h1>
-        <fieldset id="sortquestion">
-            <p>Sort questions</p>
-            <select name="sort" id="sort_selector">
-                    <option value="sorttitle" >title</option>
-                    <option value="sortdate" >date</option>
-                    <option value="sortvote" >vote</option>
-                    <option value="sortview" >view</option>
-            </select>
-            <select name="sort" id="sort_selector">
-                    <option value="asc" >ASC</option>
-                    <option value="desc" >DESC</option>
-            </select>
-        </fieldset>
+        <div class="up_banner">
+            <p>AskMate <br><span class="sub">Answers for everything </span></p>
+        </div>
         <br>
-        {% for line in questions %}
-        <div id="container">
-            <div id="divbuttons">
-                <button type="button" id="buttonadd">Add</button>
-                <button type="button" id="buttonedit">Edit</button>
-                <button type="button" id="buttondelete">Delete</button>
-            </div>
-            <div id="divtitle">
-                <h2>{{ line.title }}</h2>
-            </div>
-            <div id="divvote">
-                <button type="button" id="buttonplus">Vote +</button>
-                {{ line.vote_number }}
-                <button type="button" id="buttonminus"> Vote -</button>
-            </div>
-            <div id="divviewnumber">
-                <p>View number: {{ line.view_number }}</p>
-            </div>
-        </div><br><br>
-        {% endfor %}
+        <div class="sortquestion">
+            <p>Sort questions</p>
+            <form method="get" action="{{ url_for('route_test_this') }}">
+                <select name="param" id="param">
+                    {% for elem in question_headers %}
+                    <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >{{elem}}</option>
+                    {% endfor %}
+                </select>
+                <select name = "sort_ord" id = "sort_ord" >
+                    <option value="asc" selected>
+                        asc
+                    </option>
+                    <option value = "desc" >
+                        desc
+                    </option>
+                </select>
+                <button type="submit">Sort questions</button>
+            </form>
+        </div>
+        <br>
+
+            <table id="container" align="center">
+                <thead id ="thead">
+                    <tr><th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for line in questions %}
+                    <tr>
+                    <td>
+                        <a href="{{ url_for('route_add_question') }}"><button type="button" id="buttonadd" >Add</button></a>
+                        <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
+                        <a href="{{ url_for('route_delete_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('route_question', question_id=line.id) }}"><h2>{{ line.title }}</h2></a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}"><button type="button" id="buttonplus">Vote +</button></a>
+                            {{ line.vote_number }}
+                        <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}"><button type="button" id="buttonminus"> Vote -</button></a>
+                    </td>
+                    <td>
+                            <p>View number: {{ line.view_number }}</p>
+
+                    </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
 
     </body>
 </html>
