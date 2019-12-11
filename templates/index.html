@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Questions List</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style_index.css')}}">
+    </head>
+    <body>
+        <h1>Ask Mate</h1>
+        <fieldset id="sortquestion">
+            <p>Sort questions</p>
+            <select name="sort" id="sort_selector">
+                    <option value="sorttitle" >title</option>
+                    <option value="sortdate" >date</option>
+                    <option value="sortvote" >vote</option>
+                    <option value="sortview" >view</option>
+            </select>
+            <select name="sort" id="sort_selector">
+                    <option value="asc" >ASC</option>
+                    <option value="desc" >DESC</option>
+            </select>
+        </fieldset>
+        <br>
+        {% for line in questions %}
+        <div id="container">
+            <div id="divbuttons">
+                <button type="button" id="buttonadd">Add</button>
+                <button type="button" id="buttonedit">Edit</button>
+                <button type="button" id="buttondelete">Delete</button>
+            </div>
+            <div id="divtitle">
+                <h2>{{ line.title }}</h2>
+            </div>
+            <div id="divvote">
+                <button type="button" id="buttonplus">Vote +</button>
+                {{ line.vote_number }}
+                <button type="button" id="buttonminus"> Vote -</button>
+            </div>
+            <div id="divviewnumber">
+                <p>View number: {{ line.view_number }}</p>
+            </div>
+        </div><br><br>
+        {% endfor %}
+
+    </body>
+</html>
