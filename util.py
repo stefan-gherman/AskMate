@@ -1,5 +1,6 @@
-import connection as cc
+import connection as connection
 from datetime import datetime
+import data_manager as data_manager
 
 today = datetime.today()
 
@@ -47,6 +48,9 @@ def make_compat_display(dataset, html_elem = 'not_textarea'):
     return dataset
 
 
+def question_list_size():
+    questions_list = connection.read_questions(data_manager.QUESTIONS_FILE)
+    return len(questions_list)
 
 
 #
