@@ -20,8 +20,7 @@ def add_question(title, message):
     connection.write_questions(QUESTIONS, questions_list)
 
 def delete_question(question_id):
-    my_question_list = connection.read_questions('data/questions.csv')
-    data = [element for element in my_question_list if int(element['id']) != int(question_id)]
+    data = [element for element in questions_list if int(element['id']) != int(question_id)]
     count = 0
     for d in data:
         d['id'] = count
@@ -40,8 +39,7 @@ def add_answer(question_id, message):
     connection.write_answers(ANSWERS, answers_list)
     
 def delete_answer(answer_id):
-    my_answers_list = connection.read_answers('data/answers.csv')
-    data = [element for element in my_answers_list if int(element['id']) != int(answer_id)]
+    data = [element for element in answers_list if int(element['id']) != int(answer_id)]
     count = 0
     for d in data:
         d['id'] = count
