@@ -30,7 +30,12 @@ def delete_question(question_id):
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
-    new_answer = {'id': len(answers_list),
+    answers_list = connection.read_answers(ANSWERS)
+    if len(answers_list) == 0:
+        id = 0
+    else:
+        id = int(answers_list[-1]['id']) + 1
+    new_answer = {'id': id,
                   'submission_time': util.today.strftime("%Y-%m-%d"),
                   'vote_number': 0,
                   'question_id': question_id,
@@ -40,11 +45,15 @@ def add_answer(question_id, message):
     connection.write_answers(ANSWERS, answers_list)
     
 def delete_answer(answer_id):
-    data = [element for element in answers_list if int(element['id']) != int(answer_id)]
-    # count = 0
-    # for d in data:
-    #     d['id'] = count
-    #     count += 1
+    answers = connection.read_answers(ANSWERS)
+    data = [element for element in answers if int(element['id']) != int(answer_id)]
+
+    count = 0
+    for d in data:
+        d['id'] = count
+        count += 1
+    print(d)
+    print(data)
     connection.write_answers(ANSWERS, data)
     return connection.read_answers('data/answers.csv')
 
@@ -60,6 +69,7 @@ def vote_question(question_id, option):
 
 
 def vote_answer(answer_id, option):
+    answers_list = connection.read_answers(ANSWERS)
     vote_number = answers_list[int(answer_id)]['vote_number']
 
     if option == 'vote_up':
@@ -69,3 +79,7 @@ def vote_answer(answer_id, option):
         answers_list[int(answer_id)]['vote_number'] = int(vote_number) - 1
         connection.write_answers(ANSWERS, answers_list)
     print(answers_list)
+
+
+def edit_question(question_id):
+    all_questions = connection.read_questions()

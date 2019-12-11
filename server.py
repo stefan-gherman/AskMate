@@ -62,7 +62,7 @@ def route_add_answer(question_id):
 @app.route('/answer/<answer_id>/delete')
 def route_delete_answer(answer_id):
     answers = data_manager.delete_answer(answer_id)
-    return render_template('question.html', answers=answers)
+    return redirect(request.referrer)
 
 
 @app.route('/question/<question_id>/vote_up')
@@ -80,11 +80,13 @@ def route_question_vote_down(question_id):
 @app.route('/answer/<answer_id>/vote_up')
 def route_answer_vote_up(answer_id):
     data_manager.vote_answer(answer_id, 'vote_up')
+    return redirect(request.referrer)
 
 
 @app.route('/answer/<answer_id>/vote_down')
 def route_answer_vote_down(answer_id):
     data_manager.vote_answer(answer_id, 'vote_down')
+    return redirect(request.referrer)
 
 
 @app.route('/test_this', methods=['GET', 'POST'])
