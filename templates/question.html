@@ -10,6 +10,7 @@
 <div class="up_banner">
     <p>AskMate <br><span class="sub">Answers for everything </span></p>
 </div>
+
 <h1>Question: {{questions['title']}}</h1>
 <div class="msg">
 <p >{% autoescape false%}{{questions['message']}}{% endautoescape %}</p>
@@ -17,7 +18,7 @@
 </div>
 </div>
 <h2> Answers</h2>
-
+<p class ="link_right"><a href="{{url_for('route_test_this')}}">Add a new Answer</a></p>
 
         {% for dicto in answers %}
         {% if dicto['question_id'] == questions['id'] %}

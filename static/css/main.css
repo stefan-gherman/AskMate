@@ -7,7 +7,7 @@
 
 }
 body {
-    background-color: #75B39D3D;
+    background-color: #BDC3C7;
 }
 .up_banner p{
     font-size: 25px;
@@ -54,4 +54,11 @@ body {
    font-size: 10px;
     position: absolute;
     right: 40px;
+}
+
+. link_right {
+    font-size: 10px;
+    position: absolute;
+    left: 40px;
+
 }
