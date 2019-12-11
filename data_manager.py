@@ -1,4 +1,5 @@
 import connection as connection
+import util as util
 
 QUESTIONS = 'data/questions.csv'
 ANSWERS = 'data/answers.csv'
@@ -9,7 +10,7 @@ answers_list = connection.read_answers(ANSWERS)
 
 def add_question(title, message):
     new_question = {'id': len(questions_list),
-                    'submission_time': '',
+                    'submission_time': util.today.strftime("%Y-%m-%d"),
                     'view_number': 0,
                     'vote_number': 0,
                     'title': title,
@@ -21,16 +22,16 @@ def add_question(title, message):
 
 def delete_question(question_id):
     data = [element for element in questions_list if int(element['id']) != int(question_id)]
-    count = 0
-    for d in data:
-        d['id'] = count
-        count += 1
+    # count = 0
+    # for d in data:
+    #     d['id'] = count
+    #     count += 1
     connection.write_questions(QUESTIONS, data)
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
     new_answer = {'id': len(answers_list),
-                  'submission_time': 0,
+                  'submission_time': util.today.strftime("%Y-%m-%d"),
                   'vote_number': 0,
                   'question_id': question_id,
                   'message': message,
@@ -40,10 +41,10 @@ def add_answer(question_id, message):
     
 def delete_answer(answer_id):
     data = [element for element in answers_list if int(element['id']) != int(answer_id)]
-    count = 0
-    for d in data:
-        d['id'] = count
-        count += 1
+    # count = 0
+    # for d in data:
+    #     d['id'] = count
+    #     count += 1
     connection.write_answers(ANSWERS, data)
     return connection.read_answers('data/answers.csv')
 

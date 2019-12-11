@@ -14,13 +14,16 @@ def route_index():
     return render_template('index.html', questions=questions)
 
 
-# test
 @app.route('/question/<question_id>', methods=['GET', 'POST'])
 def route_question(question_id):
     questions = connection.read_questions('data/questions.csv')
-    questions[int(question_id)]['view_number'] = str(int(questions[int(question_id)]['view_number']) + 1)
+    questions[int(question_id)]['view_number'] = int(questions[int(question_id)]['view_number']) + 1
     connection.write_questions('data/questions.csv', questions)
-    questions = questions[int(question_id)]
+    for elem in range(len(questions)):
+        for key in questions[elem].keys():
+            if question_id == questions[elem]['id']:
+                pos = elem
+    questions = questions[pos]
     answers = connection.read_answers('data/answers.csv')
     return render_template('question.html', questions=questions, answers=answers, question_id=question_id)
 
@@ -31,7 +34,7 @@ def route_add_question():
         title = request.form['title']
         message = request.form['message']
         data_manager.add_question(title, message)
-        return redirect(url_for("route_question", question_id=len(data_manager.questions_list)))
+        return redirect(url_for("route_question", question_id=len(data_manager.questions_list) - 1))
     else:
         return render_template('add_question.html')
 

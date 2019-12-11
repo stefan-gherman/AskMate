@@ -1,5 +1,8 @@
 import connection as cc
-from  datetime import datetime
+from datetime import datetime
+
+today = datetime.today()
+
 
 def order_by_value(dataset, param, order='asc'):
     """
