@@ -32,7 +32,7 @@ def delete_question(question_id):
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
-    answers_list = connection.read_answers(ANSWERS)
+    answers_list = connection.read_answers(ANSWERS_FILE)
     if len(answers_list) == 0:
         id = 0
     else:
@@ -47,15 +47,13 @@ def add_answer(question_id, message):
     connection.write_answers(ANSWERS_FILE, answers_list)
     
 def delete_answer(answer_id):
-    answers = connection.read_answers(ANSWERS)
+    answers = connection.read_answers(ANSWERS_FILE)
     data = [element for element in answers if int(element['id']) != int(answer_id)]
     count = 0
     for d in data:
         d['id'] = count
         count += 1
-    print(d)
-    print(data)
-    connection.write_answers(ANSWERS, data)
+    connection.write_answers(ANSWERS_FILE, data)
     return connection.read_answers('data/answers.csv')
 
 
@@ -70,7 +68,7 @@ def vote_question(question_id, option):
 
 
 def vote_answer(answer_id, option):
-    answers_list = connection.read_answers(ANSWERS)
+    answers_list = connection.read_answers(ANSWERS_FILE)
     vote_number = answers_list[int(answer_id)]['vote_number']
     if option == 'vote_up':
         answers_list[int(answer_id)]['vote_number'] = int(vote_number) + 1
