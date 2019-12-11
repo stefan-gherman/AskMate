@@ -26,7 +26,6 @@
         <p><a href="{{url_for('route_delete_answer', answer_id = dicto['id'])}}"> <span class ="links"> Delete </a><span>
             {% autoescape false %}{{dicto['message']}}{% endautoescape %}
     <br>
-            {{ dicto }}
     <div class="alignc">
         <a href="{{url_for('route_answer_vote_up', answer_id = dicto['id'])}}"><img src="/static/local_ico/Up_Arrow.png" class ="vote"></a> <br>{{dicto['vote_number']}}<br> <a href="{{url_for('route_answer_vote_down', answer_id = dicto['id'])}}"><img src="/static/local_ico/Down_Arrow.png" class ="vote"></a>
     </div>
