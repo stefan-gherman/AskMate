@@ -3,20 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Question</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
 </head>
 <body>
 {% if edit_me %}
 <h1>Edit Questions</h1>
 {% else %}
-<h1>Add Your Question</h1>
+<div class="divquestion">
+        <p>Add Your Question</p>
+</div>
+<br>
 {% endif %}
 <form {% if edit_me %} {% if question %} action = '/question/{{id_q}}/edit' {% endif %} {% else %} action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
     <label id="question">{% if edit_me %}
         Edit Question Title
         {% else %}
-        Add question title
-        {% endif %}</label><br>
-    <input type="text" name="title" id="title" title="message" maxlength="50" {% if edit_me %}style="min-width: 450px"
+        <label id="question">Add question title<br>
+        {% endif %}
+    <input type="text" name="title" id="title" title="message" class="message" maxlength="50" {% if edit_me %}style="min-width: 450px"></label><br>
            {% if question %}
            value="{{ question['title'] }}"
            {% endif %}
@@ -26,8 +30,9 @@
     {% else %}
         Add question message
     {% endif %}</label><br>
-    <textarea name="message" id="message" title="message" cols="50" rows="10" style="resize: none"
-              required>{% if edit_me %}{% if question %}{{ question['message'] }}{% endif %}{% endif %}</textarea><br>
+
+    <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
+              required>{% if edit_me %}{% if question %}{{ question['message'] }}{% endif %}{% endif %}</textarea></label><br>
     {% if edit_me %}
 
     {% else %}
