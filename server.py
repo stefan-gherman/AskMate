@@ -53,7 +53,7 @@ def route_add_question():
     if request.method == 'POST':
         random_file_name = util.random_string()
         title = request.form['title']
-        message = request.form['message']
+        message = util.make_compat_display(request.form['message'])
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
@@ -103,7 +103,7 @@ def route_add_answer(question_id):
     update_views = False
     if request.method == 'POST':
         random_file_name = util.random_string()
-        message = request.form['message']
+        message = util.make_compat_display(request.form['message'])
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
