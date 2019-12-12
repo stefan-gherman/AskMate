@@ -12,7 +12,8 @@
         <br>
         <div class="sortquestion">
             <h2>Sort questions</h2>
-            <form method="get" action="{{ url_for('route_test_this') }}">
+
+            <form method="get" action="{{ url_for('route_index') }}">
                 <select name="param" id="param">
                     {% for elem in question_headers %}
                     <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >{{elem}}</option>
@@ -30,6 +31,8 @@
             </form>
         </div>
         <br>
+        <a href="{{ url_for('route_add_question') }}"><button type="button" id="buttonadd" >Add a new Question</button></a>
+        <br>
 
             <table id="container" align="center">
                 <thead id ="thead">
@@ -43,13 +46,15 @@
                 {% for line in questions %}
                     <tr>
                     <td>
-                        <a href="{{ url_for('route_add_question') }}"><button type="button" id="buttonadd" >Add</button></a>
                         <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
                         <a href="{{ url_for('route_delete_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
                     </td>
                     <td>
                         <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{{ line.title }}</h2></a>
                     </td>
+                        <td>
+                            {{line.id}}
+                        </td>
                     <td>
                         <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}"><button type="button" id="buttonplus">Vote +</button></a>
                             {{ line.vote_number }}
@@ -59,6 +64,9 @@
                             <p>View number: {{ line.view_number }}</p>
 
                     </td>
+                        <td>
+                            <p> Submission TIme: {{line.submission_time}}</p>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
