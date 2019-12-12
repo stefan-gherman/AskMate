@@ -10,7 +10,7 @@
 <div class="up_banner">
     <p>AskMate <br><span class="sub">Answers for everything </span></p>
 </div>
-
+<p class="link_righr"> <a href="{{url_for('route_index')}}">Go Back </a></p>
 <h1>Question: {{questions['title']}}</h1>
 <div class="msg">
 <p >{% autoescape false%}{{questions['message']}}{% endautoescape %}</p>
