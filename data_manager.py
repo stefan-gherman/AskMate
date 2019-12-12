@@ -35,6 +35,7 @@ def delete_question(question_id):
         d['id'] = count
         count += 1
     connection.write_questions(QUESTIONS_FILE, data)
+    
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
@@ -66,12 +67,16 @@ def delete_answer(answer_id):
 
 def vote_question(question_id, option):
     questions_list = connection.read_questions(QUESTIONS_FILE)
-    vote_number = questions_list[int(question_id)]['vote_number']
+    for elem in range(len(questions_list)):
+        for key in questions_list[elem].keys():
+            if str(questions_list[elem]['id']) == str(question_id):
+                pos = elem
+    vote_number = int(questions_list[pos]['vote_number'])
     if option == 'vote_up':
-        questions_list[int(question_id)]['vote_number'] = int(vote_number) + 1
+        questions_list[pos]['vote_number'] = str(vote_number + 1)
         connection.write_questions(QUESTIONS_FILE, questions_list)
     elif option == 'vote_down':
-        questions_list[int(question_id)]['vote_number'] = int(vote_number) - 1
+        questions_list[pos]['vote_number'] = str(vote_number - 1)
         connection.write_questions(QUESTIONS_FILE, questions_list)
 
 
