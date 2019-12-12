@@ -1,16 +1,20 @@
 import connection as connection
 import util as util
+import os
 
 QUESTIONS_FILE = 'data/questions.csv'
 ANSWERS_FILE = 'data/answers.csv'
+UPLOAD_FOLDER = 'static/img'
+ALLOWED_EXTENSIONS = {'png', 'jpg'}
+
 
 # questions_list = connection.read_questions(QUESTIONS_FILE)
 # answers_list = connection.read_answers(ANSWERS_FILE)
 
 
-def add_question(title, message):
+def add_question(title, message, file):
     questions_list = connection.read_questions(QUESTIONS_FILE)
-    questions_list = util.order_by_value(questions_list,'id', 'asc')
+    questions_list = util.order_by_value(questions_list, 'id', 'asc')
     if len(questions_list) == 0:
         id = 0
     else:
@@ -22,7 +26,7 @@ def add_question(title, message):
                     'vote_number': '0',
                     'title': title,
                     'message': message,
-                    'image': ''
+                    'image': "../" + UPLOAD_FOLDER + "/" + str(file)
                     }
 
     new_question = util.make_compat_display([new_question], 'not_textarea')
@@ -32,13 +36,18 @@ def add_question(title, message):
 def delete_question(question_id):
     answers_list = connection.read_answers(ANSWERS_FILE)
     questions_list = connection.read_questions(QUESTIONS_FILE)
+    for question in questions_list:
+        if '../static/img/' != question['image']:
+            if int(question['id']) == int(question_id):
+                image_path = question['image'][3:]
+                os.remove(image_path)
     data = [element for element in questions_list if int(element['id']) != int(question_id)]
     count = 0
     for d in data:
         d['id'] = count
         count += 1
     connection.write_questions(QUESTIONS_FILE, data)
-    data_answers = [element for element in answers_list if int(element['question_id'] ) != int(question_id)]
+    data_answers = [element for element in answers_list if int(element['question_id']) != int(question_id)]
     for elem in data_answers:
         if int(elem['question_id']) > int(question_id):
             elem['question_id'] = int(elem['question_id']) - 1
@@ -98,6 +107,9 @@ def vote_answer(answer_id, option):
         connection.write_answers(ANSWERS_FILE, answers_list)
 
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def edit_question(question_id):
     all_questions = connection.read_questions()
