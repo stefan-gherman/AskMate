@@ -1,2 +1,7 @@
 id,submission_time,vote_number,question_id,message,image
-
+0,2019-12-12,-1,0,C,../static/img/
+1,2019-12-12,4,0,B,../static/img/
+2,2019-12-12,1,0,E,../static/img/
+3,2019-12-12,1,1,10,../static/img/
+4,2019-12-12,1,1,10<br/>,../static/img/
+5,2019-12-12,4,1,8 since your thumbs don't count,../static/img/

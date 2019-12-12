@@ -1,6 +1,6 @@
 .up_banner{
     background-color: seagreen;
-    height: 80px;
+    height: 175px;
     width: available;
     border: 2px solid;
 
@@ -9,19 +9,22 @@
 body {
     background-color: #BDC3C7;
 }
-.up_banner p{
+.up_banner p {
     font-size: 25px;
     font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
     font-style: italic;
-    color:white;
+    color: white;
     text-align: center;
 }
 
-.divquestion{
-    font-size: 25px;
+.divquestion {
+    margin-top: 0px;
+    padding-top: 20px;
+    padding-bottom: 25px;
+    font-size: 35px;
     font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
     font-style: italic;
-    color:white;
+    color: white;
     background-color: seagreen;
     height: 100px;
     text-align: center;
@@ -38,9 +41,9 @@ body {
     background-color: peachpuff;
 }
 .answ {
-     font-size: 18px;
+    font-size: 25px;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
-    color:black;
+    color: black;
     background-color: paleturquoise;
     min-height: 85px;
     max-height: fit-content;
@@ -61,25 +64,26 @@ body {
 
 
 .links {
-   font-size: 10px;
+    font-size: 20px;
     position: absolute;
-    right: 40px;
+    right: 30px;
 }
 
 .link_back {
-    font-size: 15px;
+    font-size: 20px;
     background-color: seagreen;
     color: white;
 }
-.sortquestion{
+.sortquestion {
     background-color: peachpuff;
-    height: 100px;
+    height: 120px;
     width: available;
     border: 2px solid black;
     color: blue;
+    font-size: 20px;
 }
-.link_right{
-    font-size: 15px;
+.link_right {
+    font-size: 20px;
     background-color: seagreen;
     color: white;
 }
@@ -92,9 +96,22 @@ button {
     border-radius: 12px;
     background-color: seagreen;
     color: white;
-    font-size: 15px;
-}
-.message{
-    border: 2px solid black;
+    font-size: 20px;
 }
 
+.message {
+    border: 2px solid black;
+    font-size: 15px;
+}
+
+#question {
+    font-size: 20px;
+}
+
+#title {
+    font-size: 15px;
+}
+
+select {
+    font-size: 20px;
+}
