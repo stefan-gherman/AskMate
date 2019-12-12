@@ -36,16 +36,25 @@ def add_question(title, message, file):
 def delete_question(question_id):
     answers_list = connection.read_answers(ANSWERS_FILE)
     questions_list = connection.read_questions(QUESTIONS_FILE)
+
     for question in questions_list:
         if '../static/img/' != question['image']:
             if int(question['id']) == int(question_id):
                 image_path = question['image'][3:]
                 os.remove(image_path)
+
+    for answers in answers_list:
+        if '../static/img/' != answers['image']:
+            if int(answers['question_id']) == int(question_id):
+                image_path = answers['image'][3:]
+                os.remove(image_path)
+
     data = [element for element in questions_list if int(element['id']) != int(question_id)]
     count = 0
     for d in data:
         d['id'] = count
         count += 1
+
     connection.write_questions(QUESTIONS_FILE, data)
     data_answers = [element for element in answers_list if int(element['question_id']) != int(question_id)]
     for elem in data_answers:
@@ -54,7 +63,8 @@ def delete_question(question_id):
     connection.write_answers(ANSWERS_FILE, data_answers)
     return connection.read_questions('data/questions.csv')
 
-def add_answer(question_id, message):
+
+def add_answer(question_id, message, file):
     answers_list = connection.read_answers(ANSWERS_FILE)
     if len(answers_list) == 0:
         id = 0
@@ -65,7 +75,7 @@ def add_answer(question_id, message):
                   'vote_number': '0',
                   'question_id': question_id,
                   'message': message,
-                  'image': ''}
+                  'image': "../" + UPLOAD_FOLDER + "/" + str(file)}
     new_answer = util.make_compat_display([new_answer], 'not_textarea')
     answers_list.append(new_answer[0])
     connection.write_answers(ANSWERS_FILE, answers_list)
@@ -74,6 +84,11 @@ def delete_answer(answer_id):
     answers = connection.read_answers(ANSWERS_FILE)
     data = [element for element in answers if int(element['id']) != int(answer_id)]
     count = 0
+    for answer in answers:
+        if '../static/img/' != answer['image']:
+            if int(answer['id']) == int(answer_id):
+                image_path = answer['image'][3:]
+                os.remove(image_path)
     for d in data:
         d['id'] = count
         count += 1
