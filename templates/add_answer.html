@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Answer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <div class="divquestion">
-            <p>Add Answer</p>
-    </div><br>
 
+<div class="divquestion">
+    <p>Add Answer</p>
+</div>
+<br>
+<a href="{{ url_for('route_index') }}">
+    <button type="submit" class="link_back">Go Back</button>
+</a>
+<br>
 <form action='/question/{{ question_id }}/new-answer' method="post" enctype=multipart/form-data>
     <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
               required></textarea><br>
