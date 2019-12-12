@@ -18,7 +18,7 @@ update_views = True
 def route_question(question_id):
     global update_views
     questions = connection.read_questions('data/questions.csv')
-    print(update_views)
+    print('update_views', update_views, type(update_views))
     if update_views == True:
         questions[int(question_id)]['view_number'] = int(questions[int(question_id)]['view_number']) + 1
         connection.write_questions('data/questions.csv', questions)
@@ -109,20 +109,22 @@ def route_answer_vote_down(answer_id):
 @app.route('/list', methods=['GET', 'POST'])
 def route_index():
     global update_views
-    update_views = True
+
+    print('update_views', update_views)
     question_headers = connection.return_questions_headers()
     if request.method == 'GET':
-        print(request.values.get('param'), request.values.get('sort_ord'))
         questions = connection.read_questions('data/questions.csv')
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
         questions = util.make_compat_display(questions, 'not_textarea')
         questions_ordered = util.order_by_value(questions, param, sort_ord)
         if questions_ordered == None:
+            update_views = True
             connection.write_questions('data/questions.csv', questions)
             questions_ordered = util.order_by_value(questions, 'submission_time', 'desc')
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
         else:
+            update_views = True
             connection.write_questions('data/questions.csv', questions_ordered)
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
 

@@ -22,7 +22,6 @@ def read_answers(csv_file):
 
 
 def write_questions(csv_file, data):
-    print('data:', data)
     with open(csv_file, 'w+', newline='') as csvfile:
         csv_writer = csv.DictWriter(csvfile, fieldnames=QUESTIONS_HEADER)
         csv_writer.writeheader()

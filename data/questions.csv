@@ -1,5 +1,5 @@
 id,submission_time,view_number,vote_number,title,message,image
-0,2018-04-02,1733,63,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.<br/><br/>This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
-1,2019-12-12,15,0,This,Ask,
-2,2019-12-12,5,0,SOme Question,Some Question Text,
-3,2019-12-12,15,0,Another Question,Another Question Message,
+0,2018-04-02,1743,64,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.<br/><br/>This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
+1,2019-12-12,32,1,This,Ask,
+2,2019-12-12,13,1,SOme Question,Some Question Text,
+3,2019-12-12,76,1,Another Question,Another Question Message,
