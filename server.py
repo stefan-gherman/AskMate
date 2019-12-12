@@ -107,6 +107,7 @@ def route_add_answer(question_id):
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
+            print(file)
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -150,12 +151,12 @@ def route_answer_vote_down(answer_id):
     data_manager.vote_answer(answer_id, 'vote_down')
     return redirect(request.referrer)
 
+
 @app.route('/')
 @app.route('/list', methods=['GET', 'POST'])
 def route_index():
     global update_views
     update_views = True
-    print('update_views', update_views)
     question_headers = connection.return_questions_headers()
     if request.method == 'GET':
         questions = connection.read_questions('data/questions.csv')
@@ -178,7 +179,8 @@ def route_index():
         sort_ord = request.values.get('sort_ord')
         questions = util.make_compat_display(questions, 'not_textarea')
         questions_ordered = util.order_by_value(questions, param, sort_ord)
-# test
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
