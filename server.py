@@ -1,10 +1,12 @@
 from flask import Flask, render_template, redirect, request, url_for
+import os
 import data_manager as data_manager
 import connection as connection
 import util as util
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
 
 # @app.route('/')
 # @app.route('/list')
@@ -13,7 +15,15 @@ app = Flask(__name__)
 #     questions = connection.read_questions(FILE)
 #     return render_template('index.html', questions=questions)
 
+# @app.after_request
+# def after_request(response):
+#     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#     return response
+
+
 update_views = True
+
+
 @app.route('/question/<question_id>', methods=['GET', 'POST'])
 def route_question(question_id):
     global update_views
@@ -41,10 +51,18 @@ def route_question(question_id):
 def route_add_question():
     global update_views
     if request.method == 'POST':
+        random_file_name = util.random_string()
         title = request.form['title']
         message = request.form['message']
-        data_manager.add_question(title, message)
-        questions_list = connection.read_questions(data_manager.QUESTIONS_FILE)
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        if file and data_manager.allowed_file(file.filename):
+            # filename = secure_filename(file.filename)
+            extension = filename[-4:]
+            filename = str(random_file_name) + extension
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        data_manager.add_question(title, message, filename)
+
         update_views = False
         return redirect(url_for("route_index"))
     else:
@@ -84,8 +102,15 @@ def route_add_answer(question_id):
     global update_views
     update_views = False
     if request.method == 'POST':
+        random_file_name = util.random_string()
         message = request.form['message']
-        data_manager.add_answer(question_id, message)
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        if file and data_manager.allowed_file(file.filename):
+            extension = filename[-4:]
+            filename = str(random_file_name) + extension
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        data_manager.add_answer(question_id, message, filename)
         return redirect(url_for('route_question', question_id=question_id))
     return render_template('add_answer.html', question_id=question_id)
 

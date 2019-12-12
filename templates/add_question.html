@@ -10,7 +10,7 @@
 {% else %}
 <h1>Add Your Question</h1>
 {% endif %}
-<form {% if edit_me %} {% if question %} action = '/question/{{id_q}}/edit' {% endif %} {% else %} action='/add-question' {% endif %} method="post">
+<form {% if edit_me %} {% if question %} action = '/question/{{id_q}}/edit' {% endif %} {% else %} action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
     <label id="question">{% if edit_me %}
         Edit Question Title
         {% else %}
@@ -28,9 +28,10 @@
         {% endif %}</label><br>
     <textarea name="message" id="message" title="message" cols="50" rows="10" style="resize: none"
               required>{% if edit_me %}{% if question %}{{question['message']}}{% endif %}{% endif %}</textarea><br>
-
+        {% if edit_me is not None %}
+    <input type=file name=file> <br><br>
+        {% endif %}
     <button title="submit">Submit</button>
-</form>
 </body>
 </html>
 
