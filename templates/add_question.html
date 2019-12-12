@@ -7,32 +7,37 @@
 </head>
 <body>
 {% if edit_me %}
-<h1>Edit Questions</h1>
-{% else %}
-<div class="divquestion">
-        <p>Add Your Question</p>
-</div>
-<br>
-{% endif %}
-<form {% if edit_me %} {% if question %} action = '/question/{{id_q}}/edit' {% endif %} {% else %} action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
-    <label id="question">{% if edit_me %}
-        Edit Question Title
-        {% else %}
-        <label id="question">Add question title<br>
-        {% endif %}
-    <input type="text" name="title" id="title" title="message" class="message" maxlength="50" {% if edit_me %}style="min-width: 450px"></label><br>
-           {% if question %}
-           value="{{ question['title'] }}"
-           {% endif %}
-    {% endif %} required><br>
-    <label id="message">{% if edit_me %}
-        Edit question message
-    {% else %}
-        Add question message
-    {% endif %}</label><br>
+    <div class="divquestion">
+        <p>Edit Question</p>
+    </div><br>
 
-    <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
-              required>{% if edit_me %}{% if question %}{{ question['message'] }}{% endif %}{% endif %}</textarea></label><br>
+{% else %}
+    <div class="divquestion">
+        <p>Add Your Question</p>
+    </div>
+    <br>
+{% endif %}
+<form {% if edit_me %} {% if question %} action='/question/{{ id_q }}/edit' {% endif %} {% else %}
+                                         action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
+    <label id="question">{% if edit_me %}
+        Title<br>
+    {% else %}
+        <label id="question">Add question title<br>
+    {% endif %}</label>
+        <input type="text" name="title" id="title" title="message" class="message" maxlength="50" {% if edit_me %}
+            {% if question %}
+               value="{{ question['title'] }}"
+            {% endif %}
+        {% endif %} style="min-width: 470px" required><br><br>
+        <label id="message">{% if edit_me %}
+            Edit question message
+        {% else %}
+            Add question message
+        {% endif %}</label><br>
+
+        <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
+                  required>{% if edit_me %}{% if question %}{{ question['message'] }}
+        {% endif %}{% endif %}</textarea></label><br>
     {% if edit_me %}
 
     {% else %}

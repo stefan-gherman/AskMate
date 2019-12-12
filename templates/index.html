@@ -6,14 +6,14 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
     </head>
     <body>
-        <div class="up_banner">
-            <p>AskMate <br><span class="sub">Answers for everything </span></p>
-        </div>
-        <br>
-        <div class="sortquestion">
-            <h2>Sort questions</h2>
+    <div class="up_banner">
+        <p><span style="font-size: 70px">AskMate</span> <br><span class="sub">Answers for everything </span></p>
+    </div>
+    <br>
+    <div class="sortquestion">
+        <h2>Sort questions</h2>
 
-            <form method="get" action="{{ url_for('route_index') }}">
+        <form method="get" action="{{ url_for('route_index') }}">
                 <select name="param" id="param">
                     {% for elem in question_headers %}
                     <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >{{elem}}</option>
@@ -46,32 +46,41 @@
                 <tbody>
                 {% for line in questions %}
                     <tr>
-                    <td>
-                        <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
-                        <a href="{{ url_for('route_delete_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
-                    </td>
-                    <td>
-                        <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{{ line.title }}</h2></a>
-                    </td>
                         <td>
-                            {{line.id}}
+                            <a href="{{ url_for('route_edit_question', question_id=line.id) }}">
+                                <button type="button" id="buttonedit">Edit</button>
+                            </a>
+                            <a href="{{ url_for('route_delete_question', question_id=line.id) }}">
+                                <button type="button" id="buttondelete">Delete</button>
+                            </a>
                         </td>
-                    <td>
-                        <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}"><button type="button" id="buttonplus">Vote +</button></a>
-                            {{ line.vote_number }}
-                        <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}"><button type="button" id="buttonminus"> Vote -</button></a>
-                    </td>
-                    <td>
-                            <p>View number: {{ line.view_number }}</p>
-
-                    </td>
                         <td>
-                            <p> Submission TIme: {{line.submission_time}}</p>
+                            <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink">
+                                <h2>{{ line.title }}</h2></a>
+                        </td>
+
+                        <td>
+                            <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}">
+                                <button type="button" id="buttonplus">Vote +</button>
+                            </a>
+                            <span style="font-size: 20px; color: red; font-weight: bold">{{ line.vote_number }} </span>
+                            <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}">
+                                <button type="button" id="buttonminus"> Vote -</button>
+                            </a>
+                        </td>
+                        <td>
+                            <p style="font-size: 20px;">View number: <span
+                                    style="font-size: 20px; color: red; font-weight: bold">{{ line.view_number }}</span>
+                            </p>
+
+                        </td>
+                        <td>
+                            <p style="font-size: 20px;"> Submission TIme: {{ line.submission_time }}</p>
                         </td>
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
 
     </body>
