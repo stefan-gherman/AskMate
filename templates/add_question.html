@@ -6,6 +6,7 @@
      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
 </head>
 <body>
+
 {% if edit_me %}
     <div class="divquestion">
         <p>Edit Question</p>
@@ -17,6 +18,11 @@
     </div>
     <br>
 {% endif %}
+
+<a href="{{ url_for('route_index') }}">
+    <button type="submit" class="link_back">Go Back</button>
+</a>
+<br>
 <form {% if edit_me %} {% if question %} action='/question/{{ id_q }}/edit' {% endif %} {% else %}
                                          action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
     <label id="question">{% if edit_me %}
@@ -44,6 +50,7 @@
         <input type=file name=file accept=".png, .jpeg"> <br><br>
     {% endif %}
     <button title="submit">Submit</button>
+
 </form>
 </body>
 </html>
