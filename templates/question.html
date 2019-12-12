@@ -1,55 +1,56 @@
 <!doctype HTML>
 
 <html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/main.css')}}">
-    <title>Title</title>
-</head>
-<body>
-<div class="up_banner">
-    <p>AskMate <br><span class="sub">Answers for everything </span></p>
-</div>
-<p class="link_righr"> <a href="{{url_for('route_index')}}">Go Back </a></p>
-<h1>Question: {{questions['title']}}</h1>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/main.css')}}">
+        <title>Title</title>
+    </head>
+    <body>
+        <div class="up_banner">
+            <p>AskMate <br><span class="sub">Answers for everything </span></p>
+        </div>
+        <br>
+            <a href="{{url_for('route_index')}}"><button type="submit" class="link_back" >Go Back </button></a>
+        <br>
+        <h1>Question: {{questions['title']}}</h1>
 
-<div class="msg">
+        <div class="msg">
 
-<p >{% autoescape false%}{{questions['message']}}{% endautoescape %}</p>
-    {% if questions['image'] != '../static/img/' %}
-        <img  src="{{ questions['image'] }}" alt="question image" id="image" width="300px" height="300px">
-    {% endif %}
-    <p style="text-align: center"> Votes:{{questions['vote_number']}}   Views:{{questions['view_number']}}  Submission Date:{{questions['submission_time']}}</p>
+        <p >{% autoescape false%}{{questions['message']}}{% endautoescape %}</p>
+            {% if questions['image'] != '../static/img/' %}
+                <img  src="{{ questions['image'] }}" alt="question image" id="image" width="300px" height="300px">
+            {% endif %}
+            <p style="text-align: center"> Votes:{{questions['vote_number']}}   Views:{{questions['view_number']}}  Submission Date:{{questions['submission_time']}}</p>
+        </div>
 
-</div>
 
+        </div>
+        <h2> Answers</h2>
+        <a href="{{ url_for('route_add_answer', question_id = question_id) }}"><button type="submit" class="link_right" >Add a new Answer</button></a>
 
-</div>
-<h2> Answers</h2>
-<p class="link_right"><a href="{{ url_for('route_add_answer', question_id = question_id) }}">Add a new Answer</a></p>
+        {% for dicto in answers %}
+        {% if dicto['question_id'] == questions['id'] %}
+        <div class="answ">
+            <p><a href="{{ url_for('route_delete_answer', answer_id = dicto['id']) }}"> <span class="links"> Delete </a><span>
 
-{% for dicto in answers %}
-{% if dicto['question_id'] == questions['id'] %}
-<div class="answ">
-    <p><a href="{{ url_for('route_delete_answer', answer_id = dicto['id']) }}"> <span class="links"> Delete </a><span>
+                    {% autoescape false %}{{ dicto['message'] }}{% endautoescape %}
 
-            {% autoescape false %}{{ dicto['message'] }}{% endautoescape %}
-
-    <br>
-        {% if dicto['image'] != '../static/img/' %}
-            <img src="{{ dicto['image'] }}" alt="question image" id="image" width="300px" height="300px">
+            <br>
+                {% if dicto['image'] != '../static/img/' %}
+                    <img src="{{ dicto['image'] }}" alt="question image" id="image" width="300px" height="300px">
+                {% endif %}
+                <div class="alignc">
+                <a href="{{ url_for('route_answer_vote_up', answer_id = dicto['id']) }}"><img
+                        src="/static/local_ico/Up_Arrow.png" class="vote"></a> <br>{{ dicto['vote_number'] }}<br> <a
+                        href="{{ url_for('route_answer_vote_down', answer_id = dicto['id']) }}"><img
+                        src="/static/local_ico/Down_Arrow.png" class="vote"></a>
+            </div>
+            </p>
+        </div>
         {% endif %}
-        <div class="alignc">
-        <a href="{{ url_for('route_answer_vote_up', answer_id = dicto['id']) }}"><img
-                src="/static/local_ico/Up_Arrow.png" class="vote"></a> <br>{{ dicto['vote_number'] }}<br> <a
-                href="{{ url_for('route_answer_vote_down', answer_id = dicto['id']) }}"><img
-                src="/static/local_ico/Down_Arrow.png" class="vote"></a>
-    </div>
-    </p>
-</div>
-{% endif %}
-{% endfor %}
+        {% endfor %}
 
-</body>
+    </body>
 
 </html>
