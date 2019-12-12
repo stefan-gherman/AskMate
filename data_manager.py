@@ -8,11 +8,13 @@ UPLOAD_FOLDER = 'static/img'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 
+
 # questions_list = connection.read_questions(QUESTIONS_FILE)
 # answers_list = connection.read_answers(ANSWERS_FILE)
 
 
-def add_question(title, message, file):
+def add_question(title, message):
+    date = util.datetime.today()
     questions_list = connection.read_questions(QUESTIONS_FILE)
     questions_list = util.order_by_value(questions_list, 'id', 'asc')
     if len(questions_list) == 0:
@@ -21,7 +23,7 @@ def add_question(title, message, file):
         id = int(questions_list[-1]['id']) + 1
     print('id: ', id)
     new_question = {'id': str(id),
-                    'submission_time': util.today.strftime("%Y-%m-%d"),
+                    'submission_time': date.strftime("%Y-%m-%d-%H:%M:%S"),
                     'view_number': '0',
                     'vote_number': '0',
                     'title': title,
@@ -32,6 +34,24 @@ def add_question(title, message, file):
     new_question = util.make_compat_display([new_question], 'not_textarea')
     questions_list.append(new_question[0])
     connection.write_questions(QUESTIONS_FILE, questions_list)
+
+
+def edit_question(question_id, title, message):
+    all_questions = connection.read_questions(QUESTIONS_FILE)
+    for elem in range(len(all_questions)):
+        if str(all_questions[elem]['id']) == str(question_id):
+            pos = elem
+            submission_time = str(all_questions[elem]['submission_time'])
+            view_number = str(all_questions[elem]['view_number'])
+            vote_number = str(all_questions[elem]['vote_number'])
+            q_id = str(all_questions[elem]['id'])
+
+    all_questions.pop(pos)
+    question_edit = {'id': q_id, 'submission_time': submission_time, 'view_number': view_number, 'vote_number': vote_number, 'title': title, 'message': message, 'image': ''}
+    question_edit = util.make_compat_display([question_edit], 'not_textarea')
+    all_questions.append(question_edit[0])
+    connection.write_questions(QUESTIONS_FILE, all_questions)
+
 
 def delete_question(question_id):
     answers_list = connection.read_answers(ANSWERS_FILE)
@@ -79,7 +99,8 @@ def add_answer(question_id, message, file):
     new_answer = util.make_compat_display([new_answer], 'not_textarea')
     answers_list.append(new_answer[0])
     connection.write_answers(ANSWERS_FILE, answers_list)
-    
+
+
 def delete_answer(answer_id):
     answers = connection.read_answers(ANSWERS_FILE)
     data = [element for element in answers if int(element['id']) != int(answer_id)]
@@ -121,11 +142,6 @@ def vote_answer(answer_id, option):
         answers_list[int(answer_id)]['vote_number'] = int(vote_number) - 1
         connection.write_answers(ANSWERS_FILE, answers_list)
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def edit_question(question_id):
-    all_questions = connection.read_questions()
-

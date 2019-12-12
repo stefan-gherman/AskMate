@@ -69,11 +69,26 @@ def route_add_question():
         return render_template('add_question.html')
 
 
-@app.route('/question/<question_id>/edit')
+@app.route('/question/<question_id>/edit', methods = ['GET', 'POST'])
 def route_edit_question(question_id):
     global update_views
     update_views = False
-    pass
+    edit_me = True
+    questions = connection.read_questions('data/questions.csv')
+    for elem in range(len(questions)):
+       if str(questions[elem]['id']) == str(question_id):
+           pos = elem
+    question = questions[pos]
+    if request.method == 'POST':
+        title = request.form['title']
+        message = request.form['message']
+        message = util.make_compat_display(message,'not_textarea')
+        data_manager.edit_question(question_id,title,message)
+        return redirect(url_for("route_index"))
+    if request.method == 'GET':
+        question['message'] = util.make_compat_display(question['message'], 'textarea')
+        id_q = question['id']
+        return render_template('add_question.html', edit_me = edit_me, question = question, id_q = id_q)
 
 
 @app.route('/question/<question_id>/delete')
@@ -157,8 +172,12 @@ def route_index():
             update_views = True
             connection.write_questions('data/questions.csv', questions_ordered)
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
-
-
+    elif request.metho == 'POST':
+        questions = connection.read_questions('data/questions.csv')
+        param = request.values.get('param')
+        sort_ord = request.values.get('sort_ord')
+        questions = util.make_compat_display(questions, 'not_textarea')
+        questions_ordered = util.order_by_value(questions, param, sort_ord)
 # test
 if __name__ == "__main__":
     app.run(
