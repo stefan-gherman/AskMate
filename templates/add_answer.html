@@ -5,10 +5,12 @@
     <title>Add Answer</title>
 </head>
 <body>
-    <h1>Add Answer</h1>
-    <form action='/question/{{ question_id }}/new-answer' method="post">
-        <textarea name="message" id="message" title="message" cols="50" rows="10" style="resize: none" required></textarea><br>
-        <button name="submit">Submit</button>
-    </form>
+<h1>Add Answer</h1>
+<form action='/question/{{ question_id }}/new-answer' method="post" enctype=multipart/form-data>
+    <textarea name="message" id="message" title="message" cols="50" rows="10" style="resize: none"
+              required></textarea><br>
+    <input type=file name=file> <br><br>
+    <button name="submit">Submit</button>
+</form>
 </body>
 </html>
