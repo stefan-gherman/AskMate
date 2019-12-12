@@ -12,7 +12,7 @@ def read_questions(csv_file):
 
 #test
 def return_questions_headers():
-    return QUESTIONS_HEADER[1:-1:1]
+    return QUESTIONS_HEADER[1:-2:1]
 #test
 def read_answers(csv_file):
     with open(csv_file, 'r') as csvfile:

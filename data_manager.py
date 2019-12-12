@@ -9,7 +9,12 @@ answers_list = connection.read_answers(ANSWERS_FILE)
 
 
 def add_question(title, message):
-    new_question = {'id': str(len(questions_list)),
+    questions_list = connection.read_questions(QUESTIONS_FILE)
+    if len(questions_list) == 0:
+        id = 0
+    else:
+        id = int(questions_list[-1]['id']) + 1
+    new_question = {'id': str(id),
                     'submission_time': util.today.strftime("%Y-%m-%d"),
                     'view_number': '0',
                     'vote_number': '0',
@@ -23,11 +28,12 @@ def add_question(title, message):
     connection.write_questions(QUESTIONS_FILE, questions_list)
 
 def delete_question(question_id):
+    questions_list = connection.read_questions(QUESTIONS_FILE)
     data = [element for element in questions_list if int(element['id']) != int(question_id)]
-    # count = 0
-    # for d in data:
-    #     d['id'] = count
-    #     count += 1
+    count = 0
+    for d in data:
+        d['id'] = count
+        count += 1
     connection.write_questions(QUESTIONS_FILE, data)
     return connection.read_questions('data/questions.csv')
 
@@ -37,13 +43,14 @@ def add_answer(question_id, message):
         id = 0
     else:
         id = int(answers_list[-1]['id']) + 1
-    new_answer = {'id': id,
+    new_answer = {'id': str(id),
                   'submission_time': util.today.strftime("%Y-%m-%d"),
-                  'vote_number': 0,
+                  'vote_number': '0',
                   'question_id': question_id,
                   'message': message,
                   'image': ''}
-    answers_list.append(new_answer)
+    new_answer = util.make_compat_display([new_answer], 'not_textarea')
+    answers_list.append(new_answer[0])
     connection.write_answers(ANSWERS_FILE, answers_list)
     
 def delete_answer(answer_id):
@@ -58,6 +65,7 @@ def delete_answer(answer_id):
 
 
 def vote_question(question_id, option):
+    questions_list = connection.read_questions(QUESTIONS_FILE)
     vote_number = questions_list[int(question_id)]['vote_number']
     if option == 'vote_up':
         questions_list[int(question_id)]['vote_number'] = int(vote_number) + 1

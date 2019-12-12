@@ -1,5 +1,4 @@
 id,submission_time,view_number,vote_number,title,message,image
-2,2018-04-02,1730,57,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.<br/><br/>This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
-1,2010-05-03,50,9,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $('.myBook').booklet();<br/><br/>I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.<br/><br/>BUT in my theme i also using jquery via webpack so the loading order is now following:<br/><br/>jquery<br/>booklet<br/>app.js (bundled file with webpack, including jquery)",images/image1.png
-0,2015-03-08,61,7,How to make lists in Python?,"I am totally new to this, any hints?",
-
+0,2018-04-02,1731,63,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.<br/><br/>This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
+1,2019-12-12,8,0,This,Ask,
+2,2019-12-12,5,0,SOme Question,Some Question Text,
