@@ -26,21 +26,29 @@
 
 </div>
 <h2> Answers</h2>
-<p class ="link_right"><a href="{{url_for('route_add_answer', question_id = question_id)}}">Add a new Answer</a></p>
+<p class="link_right"><a href="{{ url_for('route_add_answer', question_id = question_id) }}">Add a new Answer</a></p>
 
-        {% for dicto in answers %}
-            {% if dicto['question_id'] == questions['id'] %}
-    <div class="answ">
-        <p><a href="{{url_for('route_delete_answer', answer_id = dicto['id'])}}"> <span class ="links"> Delete </a><span>
-            {% autoescape false %}{{dicto['message']}}{% endautoescape %}
+{% for dicto in answers %}
+{% if dicto['question_id'] == questions['id'] %}
+<div class="answ">
+    <p><a href="{{ url_for('route_delete_answer', answer_id = dicto['id']) }}"> <span class="links"> Delete </a><span>
+
+            {% autoescape false %}{{ dicto['message'] }}{% endautoescape %}
+
     <br>
-    <div class="alignc">
-        <a href="{{url_for('route_answer_vote_up', answer_id = dicto['id'])}}"><img src="/static/local_ico/Up_Arrow.png" class ="vote"></a> <br>{{dicto['vote_number']}}<br> <a href="{{url_for('route_answer_vote_down', answer_id = dicto['id'])}}"><img src="/static/local_ico/Down_Arrow.png" class ="vote"></a>
+        {% if dicto['image'] != '../static/img/' %}
+            <img src="{{ dicto['image'] }}" alt="question image" id="image" width="300px" height="300px">
+        {% endif %}
+        <div class="alignc">
+        <a href="{{ url_for('route_answer_vote_up', answer_id = dicto['id']) }}"><img
+                src="/static/local_ico/Up_Arrow.png" class="vote"></a> <br>{{ dicto['vote_number'] }}<br> <a
+                href="{{ url_for('route_answer_vote_down', answer_id = dicto['id']) }}"><img
+                src="/static/local_ico/Down_Arrow.png" class="vote"></a>
     </div>
     </p>
 </div>
-            {% endif %}
-        {% endfor %}
+{% endif %}
+{% endfor %}
 
 </body>
 
