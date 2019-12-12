@@ -1,7 +1,3 @@
 id,submission_time,vote_number,question_id,message,image
-0,2019-12-11,28,0,huijkkjj,
-1,2019-12-12,13,0,Kill yourself,
-2,2019-12-12,13,0,a<br/>b<br/>c<br/>d,
-3,2019-12-12,30,1,"No, don't do it!",
-4,2019-12-12,14,2,New Answer<br/>,
-5,2019-12-12,-2,1,New Answer,
+0,2015-03-01,13,0,You need to use brackets: my_list = []<br>Wink,
+1,2012-02-13,43,0,Look it up in the Python docs<br>...<br> Raspuns de electronica.,

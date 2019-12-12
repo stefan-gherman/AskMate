@@ -4,8 +4,8 @@ import util as util
 QUESTIONS_FILE = 'data/questions.csv'
 ANSWERS_FILE = 'data/answers.csv'
 
-questions_list = connection.read_questions(QUESTIONS_FILE)
-answers_list = connection.read_answers(ANSWERS_FILE)
+# questions_list = connection.read_questions(QUESTIONS_FILE)
+# answers_list = connection.read_answers(ANSWERS_FILE)
 
 
 def add_question(title, message):
@@ -13,7 +13,7 @@ def add_question(title, message):
     if len(questions_list) == 0:
         id = 0
     else:
-        id = int(questions_list[-1]['id']) + 1
+        id = int(questions_list[0]['id']) + 1
     new_question = {'id': str(id),
                     'submission_time': util.today.strftime("%Y-%m-%d"),
                     'view_number': '0',

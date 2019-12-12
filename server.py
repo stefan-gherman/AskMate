@@ -19,13 +19,17 @@ def route_question(question_id):
     global update_views
     questions = connection.read_questions('data/questions.csv')
     print('update_views', update_views, type(update_views))
-    if update_views == True:
-        questions[int(question_id)]['view_number'] = int(questions[int(question_id)]['view_number']) + 1
-        connection.write_questions('data/questions.csv', questions)
+    connection.write_questions('data/questions.csv', questions)
+    questions = connection.read_questions('data/questions.csv')
     for elem in range(len(questions)):
         for key in questions[elem].keys():
-            if question_id == questions[elem]['id']:
+            if str(question_id) == str(questions[elem]['id']):
                 pos = elem
+                if update_views == True and key == 'view_number':
+                    print('sum to be assigned:', str(int(questions[elem]['view_number']) + 1) )
+                    questions[elem]['view_number'] = str(int(questions[elem]['view_number']) + 1)
+                connection.write_questions('data/questions.csv', questions)
+                questions = connection.read_questions('data/questions.csv')
     questions = questions[pos]
     answers = connection.read_answers('data/answers.csv')
     update_views = False
@@ -40,7 +44,7 @@ def route_add_question():
         message = request.form['message']
         data_manager.add_question(title, message)
         questions_list = connection.read_questions(data_manager.QUESTIONS_FILE)
-        update_views = True
+        update_views = False
         return redirect(url_for("route_question", question_id=str(len(questions_list) - 1)))
     else:
         return render_template('add_question.html')
@@ -109,7 +113,7 @@ def route_answer_vote_down(answer_id):
 @app.route('/list', methods=['GET', 'POST'])
 def route_index():
     global update_views
-
+    update_views = True
     print('update_views', update_views)
     question_headers = connection.return_questions_headers()
     if request.method == 'GET':
