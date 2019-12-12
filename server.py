@@ -28,6 +28,7 @@ def route_question(question_id):
                 pos = elem
     questions = questions[pos]
     answers = connection.read_answers('data/answers.csv')
+    update_views = False
     return render_template('question.html', questions=questions, answers=answers, question_id=question_id)
 
 
