@@ -1,6 +1,8 @@
 import connection as connection
 from datetime import datetime
 import data_manager as data_manager
+import random
+import string
 
 today = datetime.today()
 
@@ -52,6 +54,10 @@ def question_list_size():
     questions_list = connection.read_questions(data_manager.QUESTIONS_FILE)
     return len(questions_list)
 
+
+def random_string(string_length = 10):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for x in range(string_length))
 
 #
 # questions_list = cc.read_questions('data/questions.csv')
