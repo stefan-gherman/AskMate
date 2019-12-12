@@ -25,6 +25,7 @@ def route_question(question_id):
         for key in questions[elem].keys():
             if str(question_id) == str(questions[elem]['id']):
                 pos = elem
+                print(pos)
                 if update_views == True and key == 'view_number':
                     print('sum to be assigned:', str(int(questions[elem]['view_number']) + 1) )
                     questions[elem]['view_number'] = str(int(questions[elem]['view_number']) + 1)

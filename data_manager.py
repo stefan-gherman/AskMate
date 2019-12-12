@@ -10,10 +10,12 @@ ANSWERS_FILE = 'data/answers.csv'
 
 def add_question(title, message):
     questions_list = connection.read_questions(QUESTIONS_FILE)
+    questions_list = util.order_by_value(questions_list,'id', 'asc')
     if len(questions_list) == 0:
         id = 0
     else:
-        id = int(questions_list[0]['id']) + 1
+        id = int(questions_list[-1]['id']) + 1
+    print('id: ', id)
     new_question = {'id': str(id),
                     'submission_time': util.today.strftime("%Y-%m-%d"),
                     'view_number': '0',
@@ -28,6 +30,7 @@ def add_question(title, message):
     connection.write_questions(QUESTIONS_FILE, questions_list)
 
 def delete_question(question_id):
+    answers_list = connection.read_answers(ANSWERS_FILE)
     questions_list = connection.read_questions(QUESTIONS_FILE)
     data = [element for element in questions_list if int(element['id']) != int(question_id)]
     count = 0
@@ -35,7 +38,11 @@ def delete_question(question_id):
         d['id'] = count
         count += 1
     connection.write_questions(QUESTIONS_FILE, data)
-
+    data_answers = [element for element in answers_list if int(element['question_id'] ) != int(question_id)]
+    for elem in data_answers:
+        if int(elem['question_id']) > int(question_id):
+            elem['question_id'] = int(elem['question_id']) - 1
+    connection.write_answers(ANSWERS_FILE, data_answers)
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
