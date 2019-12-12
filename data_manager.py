@@ -35,7 +35,7 @@ def delete_question(question_id):
         d['id'] = count
         count += 1
     connection.write_questions(QUESTIONS_FILE, data)
-    
+
     return connection.read_questions('data/questions.csv')
 
 def add_answer(question_id, message):
