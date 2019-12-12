@@ -13,7 +13,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg'}
 # answers_list = connection.read_answers(ANSWERS_FILE)
 
 
-def add_question(title, message):
+def add_question(title, message, file):
     date = util.datetime.today()
     questions_list = connection.read_questions(QUESTIONS_FILE)
     questions_list = util.order_by_value(questions_list, 'id', 'asc')
@@ -44,10 +44,12 @@ def edit_question(question_id, title, message):
             submission_time = str(all_questions[elem]['submission_time'])
             view_number = str(all_questions[elem]['view_number'])
             vote_number = str(all_questions[elem]['vote_number'])
+            img = str(all_questions[elem]['image'])
             q_id = str(all_questions[elem]['id'])
 
     all_questions.pop(pos)
-    question_edit = {'id': q_id, 'submission_time': submission_time, 'view_number': view_number, 'vote_number': vote_number, 'title': title, 'message': message, 'image': ''}
+    question_edit = {'id': q_id, 'submission_time': submission_time, 'view_number': view_number,
+                     'vote_number': vote_number, 'title': title, 'message': message, 'image': img}
     question_edit = util.make_compat_display([question_edit], 'not_textarea')
     all_questions.append(question_edit[0])
     connection.write_questions(QUESTIONS_FILE, all_questions)
