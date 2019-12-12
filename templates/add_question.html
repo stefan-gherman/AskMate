@@ -16,26 +16,24 @@
         {% else %}
         Add question title
         {% endif %}</label><br>
-    <input type="text" name="title" id="title" title="message"  maxlength="50" {% if edit_me %}style="min-width: 450px"
+    <input type="text" name="title" id="title" title="message" maxlength="50" {% if edit_me %}style="min-width: 450px"
            {% if question %}
-           value = "{{question['title']}}"
+           value="{{ question['title'] }}"
            {% endif %}
-{% endif %} required><br>
+    {% endif %} required><br>
     <label id="message">{% if edit_me %}
         Edit question message
-        {% else %}
+    {% else %}
         Add question message
-        {% endif %}</label><br>
+    {% endif %}</label><br>
     <textarea name="message" id="message" title="message" cols="50" rows="10" style="resize: none"
-              required>{% if edit_me %}{% if question %}{{question['message']}}{% endif %}{% endif %}</textarea><br>
-        {% if edit_me is not None %}
-    <input type=file name=file> <br><br>
-        {% endif %}
+              required>{% if edit_me %}{% if question %}{{ question['message'] }}{% endif %}{% endif %}</textarea><br>
+    {% if edit_me %}
+
+    {% else %}
+        <input type=file name=file accept=".png, .jpeg"> <br><br>
+    {% endif %}
     <button title="submit">Submit</button>
+</form>
 </body>
 </html>
-
-
-{% if edit_me %}
-{% else %}
-{% endif %}
