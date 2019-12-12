@@ -54,12 +54,7 @@ def route_add_question():
         random_file_name = util.random_string()
         title = request.form['title']
         message = request.form['message']
-        if 'file' not in request.files:
-            return redirect(request.url)
         file = request.files['file']
-        # if file == '':
-        #     filename = ''
-        print('filename', file)
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
             # filename = secure_filename(file.filename)
@@ -67,9 +62,9 @@ def route_add_question():
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         data_manager.add_question(title, message, filename)
-        questions_list = connection.read_questions(data_manager.QUESTIONS_FILE)
+
         update_views = False
-        return redirect(url_for("route_index", question_id=str(len(questions_list) - 1)))
+        return redirect(url_for("route_index"))
     else:
         return render_template('add_question.html')
 
@@ -92,8 +87,15 @@ def route_add_answer(question_id):
     global update_views
     update_views = False
     if request.method == 'POST':
+        random_file_name = util.random_string()
         message = request.form['message']
-        data_manager.add_answer(question_id, message)
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        if file and data_manager.allowed_file(file.filename):
+            extension = filename[-4:]
+            filename = str(random_file_name) + extension
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        data_manager.add_answer(question_id, message, filename)
         return redirect(url_for('route_question', question_id=question_id))
     return render_template('add_answer.html', question_id=question_id)
 
