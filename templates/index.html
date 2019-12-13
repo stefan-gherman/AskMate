@@ -46,7 +46,6 @@
                 <tbody>
                 {% for line in questions %}
                     <tr>
-
                       <td>
                           <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
                           <a href="{{ url_for('route_delete_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
@@ -56,19 +55,10 @@
                       </td>
 
                       <td>
-                          <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}"><button type="button" id="buttonplus">Vote +</button></a>
-                              {{ line.vote_number }}
-                          <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}"><button type="button" id="buttonminus"> Vote -</button></a>
-                      </td>
-                      <td>
-                              <p>View number: {{ line.view_number }}</p>
-
-
-                        <td>
                             <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}">
                                 <button type="button" id="buttonplus">Vote +</button>
                             </a>
-                            <span style="font-size: 20px; color: red; font-weight: bold">{{ line.vote_number }} </span>
+                            <span style="font-size: 20px; color: red; font-weight: bold">{{ line.vote_number }}</span>
                             <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}">
                                 <button type="button" id="buttonminus"> Vote -</button>
                             </a>
