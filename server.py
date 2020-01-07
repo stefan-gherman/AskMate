@@ -202,18 +202,48 @@ def list_questions():
     return render_template('list_questions.html', questions=questions)
 
 
+@app.route('/list_all_answers')
+def list_answers():
+    answers_to_display = data_manager.list_all_the_answers()
+
+    return render_template('list_questions.html', answers_to_display=answers_to_display)
+
+
 @app.route('/question/<question_id>/')
 def delete_sql_question(question_id):
-    print("asd")
     question_to_delete = int(question_id)
     data_manager.delete_sql_questions(question_to_delete)
 
     return render_template('list_questions.html')
 
 
+@app.route('/answer/<answer_id>/')
+def delete_sql_answer(answer_id):
+    answer_to_delete = int(answer_id)
+    data_manager.delete_sql_answers(answer_to_delete)
+
+    return render_template('list_questions.html')
+
+
+@app.route('/add_image_question/<path>/<question_id>/')
+def add_image_to_question(path, question_id):
+    id_to_insert_image = int(question_id)
+    question_with_image=data_manager.add_image_in_question(path, id_to_insert_image)
+
+    return render_template('list_questions.html', question_with_image=question_with_image)
+
+
+@app.route('/add_image_answer/<path>/<answer_id>/')
+def add_image_to_answer(path, answer_id):
+    id_to_insert_image = int(answer_id)
+    answer_with_image=data_manager.add_image_in_answer(path, id_to_insert_image)
+
+    return render_template('list_questions.html', answer_with_image=answer_with_image)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
         host="0.0.0.0",
-        port=6371
+        port=6372
     )
