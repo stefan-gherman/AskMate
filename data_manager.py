@@ -14,28 +14,45 @@ ALLOWED_EXTENSIONS = {'png', 'jpg'}
 # questions_list = connection.read_questions(QUESTIONS_FILE)
 # answers_list = connection.read_answers(ANSWERS_FILE)
 
+#
+# def add_question(title, message, file):
+#
+#
+#     date = util.datetime.today()
+#
+#     questions_list = connection.read_questions(QUESTIONS_FILE)
+#     questions_list = util.order_by_value(questions_list, 'id', 'asc')
+#     if len(questions_list) == 0:
+#         id = 0
+#     else:
+#         id = int(questions_list[-1]['id']) + 1
+#     new_question = {'id': str(id),
+#                     'submission_time': date.strftime("%Y-%m-%d-%H:%M:%S"),
+#                     'view_number': '0',
+#                     'vote_number': '0',
+#                     'title': title,
+#                     'message': message,
+#                     'image': "../" + UPLOAD_FOLDER + "/" + str(file)
+#                     }
+#
+#     new_question = util.make_compat_display([new_question], 'not_textarea')
+#     questions_list.append(new_question[0])
+#     connection.write_questions(QUESTIONS_FILE, questions_list)
 
-def add_question(title, message, file):
+
+@connection.connection_handler
+def add_question(cursor, title, message, file):
     date = util.datetime.today()
-    questions_list = connection.read_questions(QUESTIONS_FILE)
-    questions_list = util.order_by_value(questions_list, 'id', 'asc')
-    if len(questions_list) == 0:
-        id = 0
-    else:
-        id = int(questions_list[-1]['id']) + 1
-    print('id: ', id)
-    new_question = {'id': str(id),
-                    'submission_time': date.strftime("%Y-%m-%d-%H:%M:%S"),
-                    'view_number': '0',
-                    'vote_number': '0',
-                    'title': title,
-                    'message': message,
-                    'image': "../" + UPLOAD_FOLDER + "/" + str(file)
-                    }
-
-    new_question = util.make_compat_display([new_question], 'not_textarea')
-    questions_list.append(new_question[0])
-    connection.write_questions(QUESTIONS_FILE, questions_list)
+    submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
+    image = "../" + UPLOAD_FOLDER + "/" + str(file)
+    cursor.execute(
+        """
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
+        VALUES ('{submission_time}','0','0', '{title}', '{message}', '{image}');
+        """.format(submission_time=submission_time,
+                   title=title,
+                   message=message,
+                   image=image))
 
 
 def edit_question(question_id, title, message):
@@ -154,7 +171,7 @@ def allowed_file(filename):
 
 @connection.connection_handler
 def sort_questions(cursor, parameter, order):
-    if order=='asc':
+    if order == 'asc':
         cursor.execute(
             sql.SQL("SELECT * FROM {table} ORDER BY {col1} ASC;")
                 .format(table=sql.Identifier('question'), col1=sql.Identifier(parameter), order=sql.Identifier(order))

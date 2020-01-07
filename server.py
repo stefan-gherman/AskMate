@@ -57,12 +57,10 @@ def route_add_question():
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
-            # filename = secure_filename(file.filename)
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         data_manager.add_question(title, message, filename)
-
         update_views = False
         return redirect(url_for("route_index"))
     else:
@@ -107,7 +105,6 @@ def route_add_answer(question_id):
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
-            print(file)
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -163,11 +160,11 @@ def route_index():
         questions = connection.read_questions('data/questions.csv')
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
-        print(reset_default)
+
         if reset_default is False:
             param = None
             sort_ord = None
-        print(param, sort_ord)
+
         questions = util.make_compat_display(questions, 'not_textarea')
         #print(questions_ordered)
         if param is None and sort_ord is None:
@@ -175,7 +172,7 @@ def route_index():
             connection.write_questions('data/questions.csv', questions)
             questions_ordered = data_manager.sort_questions('submission_time', 'asc')
             reset_default = True
-            print(reset_default)
+
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
 
         else:
