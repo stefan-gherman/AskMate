@@ -194,9 +194,26 @@ def route_index():
         questions_ordered = data_manager.sort_questions(param, sort_ord)
 
 
+# @app.route('/')
+@app.route('/list_questions')
+def list_questions():
+    questions = data_manager.list_first_questions()
+
+    return render_template('list_questions.html', questions=questions)
+
+
+@app.route('/question/<question_id>/')
+def delete_sql_question(question_id):
+    print("asd")
+    question_to_delete = int(question_id)
+    data_manager.delete_sql_questions(question_to_delete)
+
+    return render_template('list_questions.html')
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,
         host="0.0.0.0",
-        port=7070
+        port=6371
     )

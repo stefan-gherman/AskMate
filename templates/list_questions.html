@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Questions List</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    </head>
+
+
+<body>
+
+
+    <h2>List questions:</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>time</th>
+                <th>view</th>
+                <th>vote</th>
+                <th>title</th>
+                <th>message</th>
+                <th>image</th>
+            </tr>
+        </thead>
+        <tbody>
+
+                {% for question in questions %}
+                    <tr>
+                    <td><a href="{{ url_for('delete_sql_question', question_id=question.id) }}"><button type="button" id="buttondelete">Delete</button></a></td>
+                    <td>{{ question.submission_time}}</td>
+                    <td>{{ question.view_number}}</td>
+                    <td>{{ question.vote_number}}</td>
+                    <td>{{ question.title}}</td>
+                    <td>{{ question.message}}</td>
+                    <td>{{ question.image}}</td>
+                    </tr>
+                {% endfor%}
+
+        </tbody>
+    </table>
+
+
+</body>
+</html>

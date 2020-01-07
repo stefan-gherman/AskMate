@@ -166,3 +166,49 @@ def sort_questions(cursor, parameter, order):
         )
     sorted_questions = cursor.fetchall()
     return sorted_questions
+
+
+@connection.connection_handler
+def list_first_questions(cursor):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} LIMIT 5;")
+            .format(table=sql.Identifier('question'))
+        )
+    names = cursor.fetchall()
+    return names
+
+
+@connection.connection_handler
+def delete_sql_questions(cursor, id_to_delete):
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('comment'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+
+    cursor.execute(
+        sql.SQL("SELECT id FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('answer'), col=sql.Identifier('question_id')), [id_to_delete]
+
+    )
+    answers = cursor.fetchall()
+
+    for answer in answers:
+        answer=int(answer["id"])
+        cursor.execute(
+            sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+                .format(table=sql.Identifier('comment'), col=sql.Identifier('id')), [answer]
+        )
+
+
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('answer'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('question_tag'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('question'), col=sql.Identifier('id')), [id_to_delete]
+    )
