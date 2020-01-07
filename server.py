@@ -157,28 +157,41 @@ def route_answer_vote_down(answer_id):
 def route_index():
     global update_views
     update_views = True
+    reset_default = None
     question_headers = connection.return_questions_headers()
     if request.method == 'GET':
         questions = connection.read_questions('data/questions.csv')
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
+        print(reset_default)
+        if reset_default is False:
+            param = None
+            sort_ord = None
+        print(param, sort_ord)
         questions = util.make_compat_display(questions, 'not_textarea')
-        questions_ordered = util.order_by_value(questions, param, sort_ord)
-        if questions_ordered == None:
+        #print(questions_ordered)
+        if param is None and sort_ord is None:
             update_views = True
             connection.write_questions('data/questions.csv', questions)
-            questions_ordered = util.order_by_value(questions, 'submission_time', 'desc')
+            questions_ordered = data_manager.sort_questions('submission_time', 'asc')
+            reset_default = True
+            print(reset_default)
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
+
         else:
             update_views = True
+            reset_default = False
+            print(reset_default)
+            questions_ordered = data_manager.sort_questions(param, sort_ord)
             connection.write_questions('data/questions.csv', questions_ordered)
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
-    elif request.metho == 'POST':
+
+    elif request.method == 'POST':
         questions = connection.read_questions('data/questions.csv')
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
         questions = util.make_compat_display(questions, 'not_textarea')
-        questions_ordered = util.order_by_value(questions, param, sort_ord)
+        questions_ordered = data_manager.sort_questions(param, sort_ord)
 
 
 if __name__ == "__main__":

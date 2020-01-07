@@ -1,12 +1,14 @@
 import connection as connection
 import util as util
 import os
+import psycopg2
+import psycopg2.extras
+from psycopg2 import sql
 
 QUESTIONS_FILE = 'data/questions.csv'
 ANSWERS_FILE = 'data/answers.csv'
 UPLOAD_FOLDER = 'static/img'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
-
 
 
 # questions_list = connection.read_questions(QUESTIONS_FILE)
@@ -144,6 +146,23 @@ def vote_answer(answer_id, option):
         answers_list[int(answer_id)]['vote_number'] = int(vote_number) - 1
         connection.write_answers(ANSWERS_FILE, answers_list)
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@connection.connection_handler
+def sort_questions(cursor, parameter, order):
+    if order=='asc':
+        cursor.execute(
+            sql.SQL("SELECT * FROM {table} ORDER BY {col1} ASC;")
+                .format(table=sql.Identifier('question'), col1=sql.Identifier(parameter), order=sql.Identifier(order))
+        )
+    else:
+        cursor.execute(
+            sql.SQL("SELECT * FROM {table} ORDER BY {col1} DESC;")
+                .format(table=sql.Identifier('question'), col1=sql.Identifier(parameter))
+        )
+    sorted_questions = cursor.fetchall()
+    return sorted_questions

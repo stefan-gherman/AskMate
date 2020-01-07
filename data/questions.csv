@@ -1,3 +1,13 @@
 id,submission_time,view_number,vote_number,title,message,image
-0,2019-12-12-17:40:10,1,0,"Among the alphabet letters, which makes honey?",There is only one letter,../static/img/
-1,2019-12-12-17:43:32,1,0,How many fingers do we have?,I'm curious about this if people have the same answer as me,../static/img/
+2,2017-05-01 10:41:00,1364,57,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
+",
+0,2017-04-28 08:29:00,29,7,How to make lists in Python?,"I am totally new to this, any hints?",
+1,2017-04-29 09:19:00,15,9,Wordpress loading multiple jQuery Versions,"I developed a plugin that uses the jquery booklet plugin (http://builtbywill.com/booklet/#/) this plugin binds a function to $ so I cann call $("".myBook"").booklet();
+
+I could easy managing the loading order with wp_enqueue_script so first I load jquery then I load booklet so everything is fine.
+
+BUT in my theme i also using jquery via webpack so the loading order is now following:
+
+jquery
+booklet
+app.js (bundled file with webpack, including jquery)",images/image1.png
