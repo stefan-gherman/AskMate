@@ -48,7 +48,7 @@
                     <tr>
                       <td>
                           <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
-                          <a href="{{ url_for('route_delete_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
+                          <a href="{{ url_for('delete_sql_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
                       </td>
                       <td>
                           <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{{ line.title }}</h2></a>
