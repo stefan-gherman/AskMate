@@ -117,17 +117,6 @@ def sort_questions(cursor, parameter, order):
 
 
 @connection.connection_handler
-def list_first_questions(cursor):
-    cursor.execute(
-        sql.SQL("SELECT * FROM {table} LIMIT 5;")
-            .format(table=sql.Identifier('question'))
-        )
-    names = cursor.fetchall()
-    return names
-
-
-
-@connection.connection_handler
 def delete_sql_questions(cursor, id_to_delete):
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
@@ -267,3 +256,31 @@ def add_tag(cursor, tag_name, question_id):
             .format(table=sql.Identifier('question_tag')), [question_id, id_to_add]
     )
 
+
+@connection.connection_handler
+def list_tag_questions(cursor):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table};")
+            .format(table=sql.Identifier('tag'))
+        )
+    names = cursor.fetchall()
+    return names
+
+
+@connection.connection_handler
+def get_tag_questions(cursor, question_id):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} WHERE {col1}=%s;")
+            .format(table=sql.Identifier('question_tag'), col1=sql.Identifier('question_id'),), [question_id]
+        )
+    all_tag_ids = cursor.fetchall()
+    tag_list=[]
+    for tag_to_print in all_tag_ids:
+        tag_to_print=int(tag_to_print['tag_id'])
+        cursor.execute(
+            sql.SQL("SELECT * FROM {table} WHERE {col}=%s;")
+                .format(table=sql.Identifier('tag'), col=sql.Identifier('id')),[tag_to_print]
+        )
+        names = cursor.fetchall()
+        tag_list.append(names)
+    return tag_list

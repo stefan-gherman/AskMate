@@ -31,8 +31,12 @@
             Submission Date:{{ questions.submission_time}}</p>
     </div>
 
-
+    <div >
+        {% for tag in tags %}
+            <div class="tags">{{ tag[0]['name'] }}</div>
+        {% endfor %}
     </div>
+
     <h2 style="font-size: 2em"> Answers</h2>
     <a href="{{ url_for('route_add_answer', question_id = question_id) }}">
         <button type="submit" class="link_right">Add a new Answer</button>

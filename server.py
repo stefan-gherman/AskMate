@@ -28,6 +28,8 @@ update_views = True
 def route_question(question_id):
     if question_id != '' and question_id is not None:
         question_id_conv = int(question_id)
+
+    tags = data_manager.get_tag_questions(question_id_conv)
     global update_views
 
     if update_views == True:
@@ -35,7 +37,7 @@ def route_question(question_id):
     questions = dict(data_manager.display_question(question_id_conv).pop())
     answers = data_manager.display_answers(question_id_conv)
     update_views = False
-    return render_template('question.html', questions=questions, answers=answers, question_id=question_id_conv)
+    return render_template('question.html', questions=questions, answers=answers, question_id=question_id_conv, tags=tags)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -170,14 +172,6 @@ def route_index():
     #     questions_ordered = data_manager.sort_questions(param, sort_ord)
 
 
-# @app.route('/')
-@app.route('/list_questions')
-def list_questions():
-    questions = data_manager.list_first_questions()
-
-    return render_template('tag_question.html', questions=questions)
-
-
 @app.route('/question/<question_id>/')
 def delete_sql_question(question_id):
     question_to_delete = int(question_id)
@@ -225,5 +219,5 @@ if __name__ == "__main__":
     app.run(
         debug=True,
         host="0.0.0.0",
-        port=6372
+        port=6374
     )
