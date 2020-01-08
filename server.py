@@ -113,13 +113,15 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
-    data_manager.vote_question(question_id, 'vote_up')
+    question_id_conv = int(question_id)
+    data_manager.vote_item_up_down(question_id_conv,'question','up')
     return redirect('/list')
 
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
-    data_manager.vote_question(question_id, 'vote_down')
+    question_id_conv = int(question_id)
+    data_manager.vote_item_up_down(question_id_conv, 'question', 'down')
     return redirect('/list')
 
 
@@ -127,7 +129,8 @@ def route_question_vote_down(question_id):
 def route_answer_vote_up(answer_id):
     global update_views
     update_views = False
-    data_manager.vote_answer(answer_id, 'vote_up')
+    answer_id_conv = int(answer_id)
+    data_manager.vote_item_up_down(answer_id_conv,'answer','up')
     return redirect(request.referrer)
 
 
@@ -135,7 +138,8 @@ def route_answer_vote_up(answer_id):
 def route_answer_vote_down(answer_id):
     global update_views
     update_views = False
-    data_manager.vote_answer(answer_id, 'vote_down')
+    answer_id_conv = int(answer_id)
+    data_manager.vote_item_up_down(answer_id_conv, 'answer', 'down')
     return redirect(request.referrer)
 
 
@@ -148,7 +152,6 @@ def route_index():
     if request.method == 'GET':
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
-        print(param, sort_ord)
         if param is None and sort_ord is None:
             update_views = True
             questions_ordered = data_manager.sort_questions('submission_time', 'asc')

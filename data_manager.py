@@ -208,3 +208,38 @@ def update_question(cursor, parameter, message, title):
                     col1=sql.Identifier('id'),
                     col3=sql.Identifier('title')), [message, title, parameter]
     )
+
+
+@connection.connection_handler
+def vote_item_up_down(cursor, parameter, type, direction):
+    if type == 'question':
+        if direction == "up":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col=sql.Identifier('vote_number'),
+                    col2=sql.Identifier('id')), [parameter]
+            )
+        elif direction == "down":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col=sql.Identifier('vote_number'),
+                    col2=sql.Identifier('id')), [parameter]
+            )
+
+    elif type == 'answer':
+        if direction == "up":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('answer'),
+                    col=sql.Identifier('vote_number'),
+                    col2=sql.Identifier('id')), [parameter]
+            )
+        elif direction == "down":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('answer'),
+                col=sql.Identifier('vote_number'),
+                col2=sql.Identifier('id')), [parameter]
+            )
