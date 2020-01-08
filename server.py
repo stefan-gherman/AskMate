@@ -201,7 +201,6 @@ def route_index():
     #     questions = util.make_compat_display(questions, 'not_textarea')
     #     questions_ordered = data_manager.sort_questions(param, sort_ord)
 
-
 # @app.route('/')
 @app.route('/list_questions')
 def list_questions():

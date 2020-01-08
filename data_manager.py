@@ -256,3 +256,4 @@ def vote_item_up_down(cursor, parameter, type, direction):
                 col=sql.Identifier('vote_number'),
                 col2=sql.Identifier('id')), [parameter]
             )
+
