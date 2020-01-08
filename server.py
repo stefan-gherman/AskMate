@@ -34,8 +34,14 @@ def route_question(question_id):
         data_manager.update_views(question_id_conv)
     questions = dict(data_manager.display_question(question_id_conv).pop())
     answers = data_manager.display_answers(question_id_conv)
+    question_comments = util.read_question_comments(question_id)
     update_views = False
-    return render_template('question.html', questions=questions, answers=answers, question_id=question_id_conv)
+    return render_template('question.html',
+                           questions=questions,
+                           answers=answers,
+                           question_id=question_id_conv,
+                           question_comments=question_comments
+                           )
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -67,15 +73,14 @@ def route_edit_question(question_id):
     if request.method == 'POST':
         title = request.form['title']
         message = request.form['message']
-        message = util.make_compat_display(message,'not_textarea')
+        message = util.make_compat_display(message, 'not_textarea')
         data_manager.update_question(question_id_conv, message, title)
         return redirect(url_for("route_index"))
     if request.method == 'GET':
         question = data_manager.display_question(question_id_conv)
         question[0]['message'] = util.make_compat_display(question[0]['message'], 'textarea')
         id_q = question[0]['id']
-        return render_template('add_question.html', edit_me = edit_me, question = question, id_q = id_q)
-
+        return render_template('add_question.html', edit_me=edit_me, question=question, id_q=id_q)
 
 
 @app.route('/question/<question_id>/delete')
@@ -113,7 +118,7 @@ def route_delete_answer(answer_id):
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
     question_id_conv = int(question_id)
-    data_manager.vote_item_up_down(question_id_conv,'question','up')
+    data_manager.vote_item_up_down(question_id_conv, 'question', 'up')
     return redirect('/list')
 
 
@@ -129,7 +134,7 @@ def route_answer_vote_up(answer_id):
     global update_views
     update_views = False
     answer_id_conv = int(answer_id)
-    data_manager.vote_item_up_down(answer_id_conv,'answer','up')
+    data_manager.vote_item_up_down(answer_id_conv, 'answer', 'up')
     return redirect(request.referrer)
 
 
@@ -193,6 +198,16 @@ def delete_sql_answer(answer_id):
 
     return redirect(request.referrer)
 
+
+@app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+def route_add_question_comment(question_id):
+    if request.method == 'POST':
+        message = request.form['message']
+        data_manager.add_question_comment(message=message,
+                                          question_id=question_id)
+        return redirect(url_for('route_question', question_id=question_id))
+
+    return render_template('add_comment.html', question_id=question_id)
 
 
 if __name__ == "__main__":
