@@ -26,25 +26,16 @@ update_views = True
 
 @app.route('/question/<question_id>', methods=['GET', 'POST'])
 def route_question(question_id):
+    if question_id != '' and question_id is not None:
+        question_id_conv = int(question_id)
     global update_views
-    questions = connection.read_questions('data/questions.csv')
-    print('update_views', update_views, type(update_views))
-    connection.write_questions('data/questions.csv', questions)
-    questions = connection.read_questions('data/questions.csv')
-    for elem in range(len(questions)):
-        for key in questions[elem].keys():
-            if str(question_id) == str(questions[elem]['id']):
-                pos = elem
-                print(pos)
-                if update_views == True and key == 'view_number':
-                    print('sum to be assigned:', str(int(questions[elem]['view_number']) + 1))
-                    questions[elem]['view_number'] = str(int(questions[elem]['view_number']) + 1)
-                connection.write_questions('data/questions.csv', questions)
-                questions = connection.read_questions('data/questions.csv')
-    questions = questions[pos]
-    answers = connection.read_answers('data/answers.csv')
+
+    if update_views == True:
+        data_manager.update_views(question_id_conv)
+    questions = dict(data_manager.display_question(question_id_conv).pop())
+    answers = data_manager.display_answers(question_id_conv)
     update_views = False
-    return render_template('question.html', questions=questions, answers=answers, question_id=question_id)
+    return render_template('question.html', questions=questions, answers=answers, question_id=question_id_conv)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -69,24 +60,22 @@ def route_add_question():
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
+    question_id_conv = int(question_id)
     global update_views
     update_views = False
     edit_me = True
-    questions = connection.read_questions('data/questions.csv')
-    for elem in range(len(questions)):
-        if str(questions[elem]['id']) == str(question_id):
-            pos = elem
-    question = questions[pos]
     if request.method == 'POST':
         title = request.form['title']
         message = request.form['message']
-        message = util.make_compat_display(message, 'not_textarea')
-        data_manager.edit_question(question_id, title, message)
+        message = util.make_compat_display(message,'not_textarea')
+        data_manager.update_question(question_id_conv, message, title)
         return redirect(url_for("route_index"))
     if request.method == 'GET':
-        question['message'] = util.make_compat_display(question['message'], 'textarea')
-        id_q = question['id']
-        return render_template('add_question.html', edit_me=edit_me, question=question, id_q=id_q)
+        question = data_manager.display_question(question_id_conv)
+        question[0]['message'] = util.make_compat_display(question[0]['message'], 'textarea')
+        id_q = question[0]['id']
+        return render_template('add_question.html', edit_me = edit_me, question = question, id_q = id_q)
+
 
 
 @app.route('/question/<question_id>/delete')
@@ -123,13 +112,15 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
-    data_manager.vote_question(question_id, 'vote_up')
+    question_id_conv = int(question_id)
+    data_manager.vote_item_up_down(question_id_conv,'question','up')
     return redirect('/list')
 
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
-    data_manager.vote_question(question_id, 'vote_down')
+    question_id_conv = int(question_id)
+    data_manager.vote_item_up_down(question_id_conv, 'question', 'down')
     return redirect('/list')
 
 
@@ -137,7 +128,8 @@ def route_question_vote_down(question_id):
 def route_answer_vote_up(answer_id):
     global update_views
     update_views = False
-    data_manager.vote_answer(answer_id, 'vote_up')
+    answer_id_conv = int(answer_id)
+    data_manager.vote_item_up_down(answer_id_conv,'answer','up')
     return redirect(request.referrer)
 
 
@@ -145,7 +137,8 @@ def route_answer_vote_up(answer_id):
 def route_answer_vote_down(answer_id):
     global update_views
     update_views = False
-    data_manager.vote_answer(answer_id, 'vote_down')
+    answer_id_conv = int(answer_id)
+    data_manager.vote_item_up_down(answer_id_conv, 'answer', 'down')
     return redirect(request.referrer)
 
 
@@ -154,46 +147,79 @@ def route_answer_vote_down(answer_id):
 def route_index():
     global update_views
     update_views = True
-    reset_default = None
     question_headers = connection.return_questions_headers()
     if request.method == 'GET':
-        questions = connection.read_questions('data/questions.csv')
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
 
-        if reset_default is False:
-            param = None
-            sort_ord = None
-
-        questions = util.make_compat_display(questions, 'not_textarea')
-        # print(questions_ordered)
         if param is None and sort_ord is None:
             update_views = True
-            connection.write_questions('data/questions.csv', questions)
             questions_ordered = data_manager.sort_questions('submission_time', 'asc')
-            reset_default = True
 
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
-
         else:
             update_views = True
-            reset_default = False
-            print(reset_default)
             questions_ordered = data_manager.sort_questions(param, sort_ord)
-            connection.write_questions('data/questions.csv', questions_ordered)
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
 
-    elif request.method == 'POST':
-        questions = connection.read_questions('data/questions.csv')
-        param = request.values.get('param')
-        sort_ord = request.values.get('sort_ord')
-        questions = util.make_compat_display(questions, 'not_textarea')
-        questions_ordered = data_manager.sort_questions(param, sort_ord)
+    # elif request.method == 'POST':
+    #     questions = connection.read_questions('data/questions.csv')
+    #     param = request.values.get('param')
+    #     sort_ord = request.values.get('sort_ord')
+    #     questions = util.make_compat_display(questions, 'not_textarea')
+    #     questions_ordered = data_manager.sort_questions(param, sort_ord)
+
+
+# @app.route('/')
+@app.route('/list_questions')
+def list_questions():
+    questions = data_manager.list_first_questions()
+
+    return render_template('list_questions.html', questions=questions)
+
+
+@app.route('/list_all_answers')
+def list_answers():
+    answers_to_display = data_manager.list_all_the_answers()
+
+    return render_template('list_questions.html', answers_to_display=answers_to_display)
+
+
+@app.route('/question/<question_id>/')
+def delete_sql_question(question_id):
+    question_to_delete = int(question_id)
+    data_manager.delete_sql_questions(question_to_delete)
+
+    return render_template('list_questions.html')
+
+
+@app.route('/answer/<answer_id>/')
+def delete_sql_answer(answer_id):
+    answer_to_delete = int(answer_id)
+    data_manager.delete_sql_answers(answer_to_delete)
+
+    return render_template('list_questions.html')
+
+
+@app.route('/add_image_question/<path>/<question_id>/')
+def add_image_to_question(path, question_id):
+    id_to_insert_image = int(question_id)
+    question_with_image=data_manager.add_image_in_question(path, id_to_insert_image)
+
+    return render_template('list_questions.html', question_with_image=question_with_image)
+
+
+@app.route('/add_image_answer/<path>/<answer_id>/')
+def add_image_to_answer(path, answer_id):
+    id_to_insert_image = int(answer_id)
+    answer_with_image=data_manager.add_image_in_answer(path, id_to_insert_image)
+
+    return render_template('list_questions.html', answer_with_image=answer_with_image)
 
 
 if __name__ == "__main__":
     app.run(
         debug=True,
         host="0.0.0.0",
-        port=7070
+        port=6372
     )

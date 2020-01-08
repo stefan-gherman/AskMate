@@ -156,3 +156,162 @@ def sort_questions(cursor, parameter, order):
         )
     sorted_questions = cursor.fetchall()
     return sorted_questions
+
+
+@connection.connection_handler
+
+def list_first_questions(cursor):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} LIMIT 5;")
+            .format(table=sql.Identifier('question'))
+        )
+    names = cursor.fetchall()
+    return names
+
+
+@connection.connection_handler
+def list_all_the_answers(cursor):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table};")
+            .format(table=sql.Identifier('answer'))
+        )
+    names = cursor.fetchall()
+    return names
+
+
+@connection.connection_handler
+def delete_sql_questions(cursor, id_to_delete):
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('comment'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("SELECT id FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('answer'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+    answers = cursor.fetchall()
+
+    for answer in answers:
+        answer=int(answer["id"])
+        cursor.execute(
+            sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+                .format(table=sql.Identifier('comment'), col=sql.Identifier('id')), [answer]
+        )
+
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('answer'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('question_tag'), col=sql.Identifier('question_id')), [id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('question'), col=sql.Identifier('id')), [id_to_delete]
+    )
+
+
+@connection.connection_handler
+def delete_sql_answers(cursor, id_to_delete):
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('comment'), col=sql.Identifier('answer_id')), [id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('answer'), col=sql.Identifier('id')), [id_to_delete]
+    )
+
+
+# UPDATE question SET image='images/image3' WHERE id=0;
+
+@connection.connection_handler
+def add_image_in_question(cursor, path, id_to_add_image):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col1}=%s WHERE {col2}=%s;")
+            .format(table=sql.Identifier('question'), col1=sql.Identifier('image'), col2=sql.Identifier('id')), [path, id_to_add_image]
+    )
+
+@connection.connection_handler
+def add_image_in_answer(cursor, path, id_to_add_image):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col1}=%s WHERE {col2}=%s;")
+            .format(table=sql.Identifier('answer'), col1=sql.Identifier('image'), col2=sql.Identifier('id')), [path, id_to_add_image]
+    )
+
+def display_question(cursor, parameter):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} where {col} = %s;").format(table=sql.Identifier('question'),
+                                                                  col=sql.Identifier('id')), [parameter]
+    )
+    question = cursor.fetchall()
+    return question
+
+
+@connection.connection_handler
+def display_answers(cursor, parameter):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} where {col} = %s ORDER BY {col2} ASC;")
+            .format(table=sql.Identifier('answer'),
+                    col=sql.Identifier('question_id'),
+                    col2=sql.Identifier('id')), [parameter]
+    )
+    answers = cursor.fetchall()
+    return answers
+
+
+@connection.connection_handler
+def update_views(cursor, parameter):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col}={col} + 1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col=sql.Identifier('view_number'),
+                    col2=sql.Identifier('id')), [parameter]
+    )
+
+
+@connection.connection_handler
+def update_question(cursor, parameter, message, title):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col2}=%s, {col3} =%s WHERE {col1} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col2=sql.Identifier('message'),
+                    col1=sql.Identifier('id'),
+                    col3=sql.Identifier('title')), [message, title, parameter]
+    )
+
+
+@connection.connection_handler
+def vote_item_up_down(cursor, parameter, type, direction):
+    if type == 'question':
+        if direction == "up":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col=sql.Identifier('vote_number'),
+                    col2=sql.Identifier('id')), [parameter]
+            )
+        elif direction == "down":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col=sql.Identifier('vote_number'),
+                    col2=sql.Identifier('id')), [parameter]
+            )
+
+    elif type == 'answer':
+        if direction == "up":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('answer'),
+                    col=sql.Identifier('vote_number'),
+                    col2=sql.Identifier('id')), [parameter]
+            )
+        elif direction == "down":
+            cursor.execute(
+            sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('answer'),
+                col=sql.Identifier('vote_number'),
+                col2=sql.Identifier('id')), [parameter]
+            )

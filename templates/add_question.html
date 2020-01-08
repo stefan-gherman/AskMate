@@ -32,7 +32,7 @@
     {% endif %}</label>
         <input type="text" name="title" id="title" title="message" class="message" maxlength="50" {% if edit_me %}
             {% if question %}
-               value="{{ question['title'] }}"
+               value="{{ question[0].title}}"
             {% endif %}
         {% endif %} style="min-width: 470px" required><br><br>
         <label id="message">{% if edit_me %}
@@ -42,7 +42,7 @@
         {% endif %}</label><br>
 
         <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
-                  required>{% if edit_me %}{% if question %}{{ question['message'] }}
+                  required>{% if edit_me %}{% if question %}{{ question[0].message}}
         {% endif %}{% endif %}</textarea></label><br>
     {% if edit_me %}
 
