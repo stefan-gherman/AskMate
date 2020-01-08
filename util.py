@@ -90,6 +90,19 @@ def read_answers_sql(cursor):
 
     answers = cursor.fetchall()
 
+@connection.connection_handler
+def read_question_comments(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM comment
+        WHERE question_id='{id}'
+        """.format(id=question_id)
+    )
+
+    question_comments = cursor.fetchall()
+    return question_comments
+
+print(read_question_comments(29))
 
 @connection.connection_handler
 def order_questions_by(cursor, order):
