@@ -29,6 +29,7 @@ def route_question(question_id):
     if question_id != '' and question_id is not None:
         question_id_conv = int(question_id)
     global update_views
+
     if update_views == True:
         data_manager.update_views(question_id_conv)
     questions = dict(data_manager.display_question(question_id_conv).pop())
@@ -47,19 +48,17 @@ def route_add_question():
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
-            # filename = secure_filename(file.filename)
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         data_manager.add_question(title, message, filename)
-
         update_views = False
         return redirect(url_for("route_index"))
     else:
         return render_template('add_question.html')
 
 
-@app.route('/question/<question_id>/edit', methods = ['GET', 'POST'])
+@app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
     question_id_conv = int(question_id)
     global update_views
@@ -78,6 +77,7 @@ def route_edit_question(question_id):
         return render_template('add_question.html', edit_me = edit_me, question = question, id_q = id_q)
 
 
+
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id):
     questions = data_manager.delete_question(question_id)
@@ -94,7 +94,6 @@ def route_add_answer(question_id):
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
-            print(file)
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -152,9 +151,11 @@ def route_index():
     if request.method == 'GET':
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
+
         if param is None and sort_ord is None:
             update_views = True
             questions_ordered = data_manager.sort_questions('submission_time', 'asc')
+
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
         else:
             update_views = True

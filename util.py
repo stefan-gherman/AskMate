@@ -3,6 +3,7 @@ from datetime import datetime
 import data_manager as data_manager
 import random
 import string
+from psycopg2 import sql
 
 today = datetime.today()
 
@@ -25,7 +26,8 @@ def order_by_value(dataset, param, order='asc'):
         return ordered_dataset
     elif param == 'submission_time':
         if order == 'desc':
-            ordered_dataset = sorted(dataset, key=lambda i: datetime.strptime(i[param], "%Y-%m-%d-%H:%M:%S"), reverse=True)
+            ordered_dataset = sorted(dataset, key=lambda i: datetime.strptime(i[param], "%Y-%m-%d-%H:%M:%S"),
+                                     reverse=True)
         elif order == 'asc':
             ordered_dataset = sorted(dataset, key=lambda i: datetime.strptime(i[param], "%Y-%m-%d-%H:%M:%S"))
         return ordered_dataset
@@ -37,8 +39,8 @@ def order_by_value(dataset, param, order='asc'):
             ordered_dataset = sorted(dataset, key=lambda i: i[param].lower())
             return ordered_dataset
 
-def make_compat_display(dataset, html_elem = 'not_textarea'):
 
+def make_compat_display(dataset, html_elem='not_textarea'):
     if type(dataset) == dict:
         if html_elem == 'not_textarea':
             for dicto in dataset:
@@ -61,18 +63,51 @@ def question_list_size():
     return len(questions_list)
 
 
-def random_string(string_length = 10):
+def random_string(string_length=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for x in range(string_length))
 
-#
-# questions_list = cc.read_questions('data/questions.csv')
-#
-# paramt = 'submission_time'
-# sorted_list = order_by_value(questions_list, paramt, 'desc')
-# print(type(sorted_list))
-#
-# for elem in sorted_list:
-#     print(elem)
+
+@connection.connection_handler
+def read_questions_sql(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM question;
+        """
+    )
+
+    questions = cursor.fetchall()
+    return questions
 
 
+@connection.connection_handler
+def read_answers_sql(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        """
+    )
+
+    answers = cursor.fetchall()
+
+
+@connection.connection_handler
+def order_questions_by(cursor, order):
+    if order == 'asc':
+        cursor.execute(
+            """
+            SELECT * FROM question
+            ORDER BY id asc ;
+            """
+        )
+        questions_ordered = cursor.fetchall()
+        return questions_ordered
+    elif order == 'desc':
+        cursor.execute(
+            """
+            SELECT * FROM question
+            ORDER BY id desc ;
+            """
+        )
+        questions_ordered = cursor.fetchall()
+        return questions_ordered
