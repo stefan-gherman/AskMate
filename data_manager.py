@@ -154,7 +154,7 @@ def allowed_file(filename):
 
 @connection.connection_handler
 def sort_questions(cursor, parameter, order):
-    if order=='asc':
+    if order == 'asc':
         cursor.execute(
             sql.SQL("SELECT * FROM {table} ORDER BY {col1} ASC;")
                 .format(table=sql.Identifier('question'), col1=sql.Identifier(parameter), order=sql.Identifier(order))
@@ -166,3 +166,45 @@ def sort_questions(cursor, parameter, order):
         )
     sorted_questions = cursor.fetchall()
     return sorted_questions
+
+
+@connection.connection_handler
+def display_question(cursor, parameter):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} where {col} = %s;").format(table=sql.Identifier('question'),
+                                                                  col=sql.Identifier('id')), [parameter]
+    )
+    question = cursor.fetchall()
+    return question
+
+
+@connection.connection_handler
+def display_answers(cursor, parameter):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} where {col} = %s;")
+            .format(table=sql.Identifier('answer'),
+                    col=sql.Identifier('question_id')), [parameter]
+    )
+    answers = cursor.fetchall()
+    return answers
+
+
+@connection.connection_handler
+def update_views(cursor, parameter):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col}={col} + 1 WHERE {col2} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col=sql.Identifier('view_number'),
+                    col2=sql.Identifier('id')), [parameter]
+    )
+
+
+@connection.connection_handler
+def update_question(cursor, parameter, message, title):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col2}=%s, {col3} =%s WHERE {col1} = %s;")
+            .format(table=sql.Identifier('question'),
+                    col2=sql.Identifier('message'),
+                    col1=sql.Identifier('id'),
+                    col3=sql.Identifier('title')), [message, title, parameter]
+    )
