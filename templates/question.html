@@ -14,6 +14,10 @@
     <a href="{{ url_for('route_index') }}">
         <button type="submit" class="link_back">Go Back</button>
     </a>
+
+    <a href="{{ url_for('question_tag',question_id=question_id)}}">
+            <button class="links">Add tag</button>
+        </a>
     <br>
     <h1>Question: {{ questions.title }}</h1>
 

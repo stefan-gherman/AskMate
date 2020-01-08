@@ -175,7 +175,7 @@ def route_index():
 def list_questions():
     questions = data_manager.list_first_questions()
 
-    return render_template('list_questions.html', questions=questions)
+    return render_template('tag_question.html', questions=questions)
 
 
 @app.route('/question/<question_id>/')
@@ -193,6 +193,32 @@ def delete_sql_answer(answer_id):
 
     return redirect(request.referrer)
 
+
+@app.route('/question-new-tag/<question_id>')
+def question_tag(question_id):
+    question_id_to_add = int(question_id)
+    return render_template('tag_question.html', question_id=question_id_to_add)
+
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+def chose_question_tag(question_id):
+    question_id_to_add = int(question_id)
+    if request.method == 'GET':
+
+        return render_template('tag_question.html', question_id=question_id_to_add)
+
+    if request.method == 'POST':
+        tag1_input = request.form.get('tag1')
+        tag2_input = request.form.get('tag2')
+        tag3_input = request.form.get('tag3')
+        new_tag_input = request.form.get('new_tag')
+
+    tag_name_list = [tag1_input, tag2_input, tag3_input, new_tag_input]
+
+    for tag in tag_name_list:
+        if tag is not None and tag != '':
+            data_manager.add_tag(tag, question_id_to_add)
+
+    return route_question(question_id_to_add)
 
 
 if __name__ == "__main__":

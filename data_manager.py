@@ -248,3 +248,22 @@ def vote_item_up_down(cursor, parameter, type, direction):
                 col=sql.Identifier('vote_number'),
                 col2=sql.Identifier('id')), [parameter]
             )
+
+@connection.connection_handler
+def max_id(cursor):
+    cursor.execute("""SELECT MAX(id) FROM tag""")
+    maxim_id = cursor.fetchall()
+    return maxim_id
+
+@connection.connection_handler
+def add_tag(cursor, tag_name, question_id):
+    id_to_add = max_id()[0]['max'] + 1
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
+            .format(table=sql.Identifier('tag')), [id_to_add, tag_name]
+    )
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
+            .format(table=sql.Identifier('question_tag')), [question_id, id_to_add]
+    )
+
