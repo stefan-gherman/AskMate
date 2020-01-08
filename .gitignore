@@ -3,3 +3,5 @@ static/img/*
 enviro_vars.venv
 .idea/
 venv/*
+*.txt
+data/*
