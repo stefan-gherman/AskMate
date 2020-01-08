@@ -1,61 +1,70 @@
 <!doctype HTML>
 
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/main.css')}}">
-        <title>{{questions.title}}</title>
-    </head>
-    <body>
-    <div class="up_banner">
-        <p><span style="font-size: 70px">AskMate</span><br><span class="sub">Answers for everything </span></p>
-    </div>
-    <br>
-    <a href="{{ url_for('route_index') }}">
-        <button type="submit" class="link_back">Go Back</button>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/main.css') }}">
+    <title>{{ questions.title }}</title>
+</head>
+<body>
+<div class="up_banner">
+    <p><span style="font-size: 70px">AskMate</span><br><span class="sub">Answers for everything </span></p>
+</div>
+<br>
+<a href="{{ url_for('route_index') }}">
+    <button type="submit" class="link_back">Go Back</button>
+</a>
+<br>
+<h1>Question: {{ questions.title }}</h1>
+
+<div class="msg">
+
+    <p style="font-size: 25px">{% autoescape false %}{{ questions.message }}{% endautoescape %}</p>
+    {% if questions['image'] != '../static/img/' %}
+        <img src="{{ questions.image }}" alt="question image" id="image" width="300px" height="300px">
+
+    {% endif %}
+    <a href="{{ url_for('route_add_question_comment', question_id=questions.id )}}">
+        <button type="submit" class="add-comment">Add Comment</button>
     </a>
-    <br>
-    <h1>Question: {{ questions.title }}</h1>
+    <p style="text-align: center"> Votes:{{ questions.vote_number }} Views:{{ questions.view_number }}
+        Submission Date:{{ questions.submission_time }}</p>
 
-    <div class="msg">
-
-        <p style="font-size: 25px">{% autoescape false %}{{ questions.message }}{% endautoescape %}</p>
-        {% if questions['image'] != '../static/img/' %}
-            <img src="{{ questions.image}}" alt="question image" id="image" width="300px" height="300px">
-        {% endif %}
-        <p style="text-align: center"> Votes:{{ questions.vote_number }} Views:{{ questions.view_number }}
-            Submission Date:{{ questions.submission_time}}</p>
-    </div>
-
-
-    </div>
-    <h2 style="font-size: 2em"> Answers</h2>
-    <a href="{{ url_for('route_add_answer', question_id = question_id) }}">
-        <button type="submit" class="link_right">Add a new Answer</button>
-    </a>
-
-    {% for answer in answers %}
-    <div class="answ">
-        <p><a href="{{ url_for('delete_sql_answer', answer_id = answer.id) }}">
-            <button class="links"> Delete</button>
-        </a>
-
-            {% autoescape false %}{{ answer.message }}{% endautoescape %}
-
-            <br><br>
-            {% if answer.image != '../static/img/' %}
-                <img src="{{ answer.image }}" alt="question image" id="image" width="300px" height="300px">
-            {% endif %}
-        <div class="alignc">
-            <a href="{{ url_for('route_answer_vote_up', answer_id = answer.id) }}"><img
-                    src="/static/local_ico/Up_Arrow.png" class="vote"></a> <br>{{ answer.vote_number }}<br> <a
-                        href="{{ url_for('route_answer_vote_down', answer_id = answer.id) }}"><img
-                        src="/static/local_ico/Down_Arrow.png" class="vote"></a>
-            </div>
-            </p>
-        </div>
+    <div class="question-comments">
+        {% for comment in question_comments %}
+            {{ comment.message }}
+            {{ comment.submission_time }}<br>
         {% endfor %}
+    </div>
 
-    </body>
+</div>
+<h2 style="font-size: 2em"> Answers</h2>
+<a href="{{ url_for('route_add_answer', question_id = question_id) }}">
+    <button type="submit" class="link_right">Add a new Answer</button>
+</a>
+
+{% for answer in answers %}
+<div class="answ">
+    <p><a href="{{ url_for('delete_sql_answer', answer_id = answer.id) }}">
+        <button class="links"> Delete</button>
+    </a>
+
+        {% autoescape false %}{{ answer.message }}{% endautoescape %}
+
+        <br><br>
+        {% if answer.image != '../static/img/' %}
+            <img src="{{ answer.image }}" alt="question image" id="image" width="300px" height="300px">
+        {% endif %}
+    <div class="alignc">
+        <a href="{{ url_for('route_answer_vote_up', answer_id = answer.id) }}"><img
+                src="/static/local_ico/Up_Arrow.png" class="vote"></a> <br>{{ answer.vote_number }}<br> <a
+            href="{{ url_for('route_answer_vote_down', answer_id = answer.id) }}"><img
+            src="/static/local_ico/Down_Arrow.png" class="vote"></a>
+    </div>
+    </p>
+</div>
+{% endfor %}
+
+</body>
 
 </html>
