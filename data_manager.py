@@ -181,9 +181,10 @@ def display_question(cursor, parameter):
 @connection.connection_handler
 def display_answers(cursor, parameter):
     cursor.execute(
-        sql.SQL("SELECT * FROM {table} where {col} = %s;")
+        sql.SQL("SELECT * FROM {table} where {col} = %s ORDER BY {col2} ASC;")
             .format(table=sql.Identifier('answer'),
-                    col=sql.Identifier('question_id')), [parameter]
+                    col=sql.Identifier('question_id'),
+                    col2=sql.Identifier('id')), [parameter]
     )
     answers = cursor.fetchall()
     return answers
