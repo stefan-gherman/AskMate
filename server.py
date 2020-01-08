@@ -215,6 +215,15 @@ def chose_question_tag(question_id):
     return route_question(question_id_to_add)
 
 
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def delete_one_tag(question_id, tag_id):
+    question_on_page = int(question_id)
+    tag_to_delete = int(tag_id)
+    data_manager.delete_tag_questions(question_on_page, tag_to_delete)
+
+    return route_question(question_on_page)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,

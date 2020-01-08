@@ -258,16 +258,6 @@ def add_tag(cursor, tag_name, question_id):
 
 
 @connection.connection_handler
-def list_tag_questions(cursor):
-    cursor.execute(
-        sql.SQL("SELECT * FROM {table};")
-            .format(table=sql.Identifier('tag'))
-        )
-    names = cursor.fetchall()
-    return names
-
-
-@connection.connection_handler
 def get_tag_questions(cursor, question_id):
     cursor.execute(
         sql.SQL("SELECT * FROM {table} WHERE {col1}=%s;")
@@ -284,3 +274,16 @@ def get_tag_questions(cursor, question_id):
         names = cursor.fetchall()
         tag_list.append(names)
     return tag_list
+
+
+@connection.connection_handler
+def delete_tag_questions(cursor, question_id, tag_id_to_delete):
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col1}=%s AND {col2}=%s;")
+            .format(table=sql.Identifier('question_tag'), col1=sql.Identifier('question_id'),
+                    col2=sql.Identifier('tag_id')), [question_id, tag_id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
+    )
