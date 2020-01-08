@@ -37,7 +37,7 @@ def route_question(question_id):
                 pos = elem
                 print(pos)
                 if update_views == True and key == 'view_number':
-                    print('sum to be assigned:', str(int(questions[elem]['view_number']) + 1) )
+                    print('sum to be assigned:', str(int(questions[elem]['view_number']) + 1))
                     questions[elem]['view_number'] = str(int(questions[elem]['view_number']) + 1)
                 connection.write_questions('data/questions.csv', questions)
                 questions = connection.read_questions('data/questions.csv')
@@ -67,26 +67,26 @@ def route_add_question():
         return render_template('add_question.html')
 
 
-@app.route('/question/<question_id>/edit', methods = ['GET', 'POST'])
+@app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
     global update_views
     update_views = False
     edit_me = True
     questions = connection.read_questions('data/questions.csv')
     for elem in range(len(questions)):
-       if str(questions[elem]['id']) == str(question_id):
-           pos = elem
+        if str(questions[elem]['id']) == str(question_id):
+            pos = elem
     question = questions[pos]
     if request.method == 'POST':
         title = request.form['title']
         message = request.form['message']
-        message = util.make_compat_display(message,'not_textarea')
-        data_manager.edit_question(question_id,title,message)
+        message = util.make_compat_display(message, 'not_textarea')
+        data_manager.edit_question(question_id, title, message)
         return redirect(url_for("route_index"))
     if request.method == 'GET':
         question['message'] = util.make_compat_display(question['message'], 'textarea')
         id_q = question['id']
-        return render_template('add_question.html', edit_me = edit_me, question = question, id_q = id_q)
+        return render_template('add_question.html', edit_me=edit_me, question=question, id_q=id_q)
 
 
 @app.route('/question/<question_id>/delete')
@@ -166,7 +166,7 @@ def route_index():
             sort_ord = None
 
         questions = util.make_compat_display(questions, 'not_textarea')
-        #print(questions_ordered)
+        # print(questions_ordered)
         if param is None and sort_ord is None:
             update_views = True
             connection.write_questions('data/questions.csv', questions)

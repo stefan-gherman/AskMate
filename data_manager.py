@@ -11,35 +11,6 @@ UPLOAD_FOLDER = 'static/img'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 
-# questions_list = connection.read_questions(QUESTIONS_FILE)
-# answers_list = connection.read_answers(ANSWERS_FILE)
-
-#
-# def add_question(title, message, file):
-#
-#
-#     date = util.datetime.today()
-#
-#     questions_list = connection.read_questions(QUESTIONS_FILE)
-#     questions_list = util.order_by_value(questions_list, 'id', 'asc')
-#     if len(questions_list) == 0:
-#         id = 0
-#     else:
-#         id = int(questions_list[-1]['id']) + 1
-#     new_question = {'id': str(id),
-#                     'submission_time': date.strftime("%Y-%m-%d-%H:%M:%S"),
-#                     'view_number': '0',
-#                     'vote_number': '0',
-#                     'title': title,
-#                     'message': message,
-#                     'image': "../" + UPLOAD_FOLDER + "/" + str(file)
-#                     }
-#
-#     new_question = util.make_compat_display([new_question], 'not_textarea')
-#     questions_list.append(new_question[0])
-#     connection.write_questions(QUESTIONS_FILE, questions_list)
-
-
 @connection.connection_handler
 def add_question(cursor, title, message, file):
     date = util.datetime.today()
@@ -53,6 +24,25 @@ def add_question(cursor, title, message, file):
                    title=title,
                    message=message,
                    image=image))
+
+
+@connection.connection_handler
+def add_answer(cursor, question_id, message, file):
+    date = util.datetime.today()
+    submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
+    answers_list = util.read_answers_sql()
+    image = "../" + UPLOAD_FOLDER + "/" + str(file)
+    cursor.execute(
+        """
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
+        VALUES ('{submission_time}', '0', '{question_id}', '{message}', '{image}' )
+        """.format(submission_time=submission_time,
+                   question_id=question_id,
+                   message=message,
+                   image=image
+
+                   )
+    )
 
 
 def edit_question(question_id, title, message):
@@ -103,23 +93,6 @@ def delete_question(question_id):
             elem['question_id'] = int(elem['question_id']) - 1
     connection.write_answers(ANSWERS_FILE, data_answers)
     return connection.read_questions('data/questions.csv')
-
-
-def add_answer(question_id, message, file):
-    answers_list = connection.read_answers(ANSWERS_FILE)
-    if len(answers_list) == 0:
-        id = 0
-    else:
-        id = int(answers_list[-1]['id']) + 1
-    new_answer = {'id': str(id),
-                  'submission_time': util.today.strftime("%Y-%m-%d"),
-                  'vote_number': '0',
-                  'question_id': question_id,
-                  'message': message,
-                  'image': "../" + UPLOAD_FOLDER + "/" + str(file)}
-    new_answer = util.make_compat_display([new_answer], 'not_textarea')
-    answers_list.append(new_answer[0])
-    connection.write_answers(ANSWERS_FILE, answers_list)
 
 
 def delete_answer(answer_id):

@@ -81,6 +81,17 @@ def read_questions_sql(cursor):
 
 
 @connection.connection_handler
+def read_answers_sql(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM answer
+        """
+    )
+
+    answers = cursor.fetchall()
+
+
+@connection.connection_handler
 def order_questions_by(cursor, order):
     if order == 'asc':
         cursor.execute(
@@ -100,7 +111,3 @@ def order_questions_by(cursor, order):
         )
         questions_ordered = cursor.fetchall()
         return questions_ordered
-
-
-def add_breaks_html(message):
-    pass
