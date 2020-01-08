@@ -201,15 +201,27 @@ def vote_item_up_down(cursor, parameter, type, direction):
             )
 
 @connection.connection_handler
-def add_question_comment(cursor, message, question_id):
+def add_question_comment(cursor, message, question_id, answer_id):
     date = util.datetime.today()
     submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
-    cursor.execute(
-        """
-        INSERT INTO comment (question_id, message, submission_time, edited_count) 
-        VALUES ('{question_id}', '{message}', '{submission_time}', '0');
-        """.format(question_id=question_id,
-                   message=message,
-                   submission_time=submission_time)
+    print(question_id)
+    print(answer_id)
+    if question_id is not None:
+        cursor.execute(
+            """
+            INSERT INTO comment (question_id, message, submission_time, edited_count) 
+            VALUES ('{question_id}', '{message}', '{submission_time}', '0');
+            """.format(question_id=question_id,
+                       message=message,
+                       submission_time=submission_time)
     )
+    else:
+        cursor.execute(
+            """
+            INSERT INTO comment (answer_id, message, submission_time, edited_count) 
+            VALUES ('{answer_id}', '{message}', '{submission_time}', '0');
+            """.format(answer_id=answer_id,
+                       message=message,
+                       submission_time=submission_time)
+        )
 
