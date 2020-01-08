@@ -214,6 +214,14 @@ def update_question(cursor, parameter, message, title):
                     col3=sql.Identifier('title')), [message, title, parameter]
     )
 
+@connection.connection_handler
+def update_answer(cursor, parameter, message):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col2} = %s WHERE {col1} = %s;")
+        .format(table=sql.Identifier('answer'),
+                col1=sql.Identifier('id'),
+                col2=sql.Identifier('message')), [message,parameter]
+    )
 
 @connection.connection_handler
 def vote_item_up_down(cursor, parameter, type, direction):

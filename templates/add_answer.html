@@ -8,17 +8,36 @@
 <body>
 
 <div class="divquestion">
+    {% if edit_me %}
+    <p>Edit Answer</p>
+    {% else %}
     <p>Add Answer</p>
+    {% endif %}
 </div>
 <br>
-<a href="{{ url_for('route_index') }}">
+<br>
+{% if edit_me %}
+{% if answer %}
+<a href="{{ url_for('route_question', question_id = answer.question_id) }}">
     <button type="submit" class="link_back">Go Back</button>
 </a>
+{% endif %}
+{% else %}
+<a href="{{ url_for('route_question', question_id = question_id) }}">
+    <button type="submit" class="link_back">Go Back</button>
+</a>
+{% endif %}
 <br>
-<form action='/question/{{ question_id }}/new-answer' method="post" enctype=multipart/form-data>
+<br>
+<form {% if edit_me %} {% if answer %} action='/question/{{ id_q }}/{{id_a}}/edit' {% endif %} {% else %} action='/question/{{question_id}}/new-answer' {% endif %} method="post" enctype=multipart/form-data>
     <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
-              required></textarea><br>
+              required>{% if edit_me %}{% if answer %}{{ answer.message}}
+        {% endif %}{% endif %}</textarea><br>
+    {% if edit_me %}
+
+    {% else %}
     <input type=file name=file accept=".png, .jpeg"> <br><br>
+    {% endif %}
     <button name="submit">Submit</button>
 </form>
 </body>
