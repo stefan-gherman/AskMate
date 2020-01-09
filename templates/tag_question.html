@@ -11,9 +11,16 @@
 
         <form action="{{ url_for('chose_question_tag', question_id=question_id)}}" method="post">
             <fieldset>
-                <input type="checkbox" name="tag1" value="tag1"> Tag 1<br>
-                <input type="checkbox" name="tag2" value="tag2"> Tag 2<br>
-                <input type="checkbox" name="tag3" value="tag3"> Tag 3<br><br>
+                <input type="checkbox" name="css" value="CSS"> CSS<br>
+                <input type="checkbox" name="html" value="HTML"> HTML<br>
+                <input type="checkbox" name="sql" value="SQL"> SQL<br>
+                <input type="checkbox" name="php" value="PHP"> PHP<br>
+                <input type="checkbox" name="java" value="Java"> Java<br>
+                <input type="checkbox" name="cplus" value="C++"> C++<br>
+                <input type="checkbox" name="javascript" value="Javascript"> Javascript<br>
+                <input type="checkbox" name="python" value="Python"> Python<br>
+
+                <br>
             </fieldset>
             <label> Define new tag:
                 <input type="text" name="new_tag"></label>

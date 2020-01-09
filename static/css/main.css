@@ -26,6 +26,7 @@
 
 body {
     background-image: url('metal_paint_rust_154151_3840x2400.jpg');
+    background-attachment: fixed;
     background-size: cover;
     /*background-color: rgba(255,255,255,0.3);*/
     /*background-blend-mode: lighten;*/

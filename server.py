@@ -269,12 +269,17 @@ def chose_question_tag(question_id):
         return render_template('tag_question.html', question_id=question_id_to_add)
 
     if request.method == 'POST':
-        tag1_input = request.form.get('tag1')
-        tag2_input = request.form.get('tag2')
-        tag3_input = request.form.get('tag3')
+        tag1_input = request.form.get('css')
+        tag2_input = request.form.get('html')
+        tag3_input = request.form.get('sql')
+        tag4_input = request.form.get('php')
+        tag5_input = request.form.get('java')
+        tag6_input = request.form.get('cplus')
+        tag7_input = request.form.get('javascript')
+        tag8_input = request.form.get('python')
         new_tag_input = request.form.get('new_tag')
 
-    tag_name_list = [tag1_input, tag2_input, tag3_input, new_tag_input]
+    tag_name_list = [tag1_input, tag2_input, tag3_input, tag4_input, tag5_input, tag6_input, tag7_input, tag8_input, new_tag_input]
 
     for tag in tag_name_list:
         if tag is not None and tag != '':
