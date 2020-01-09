@@ -50,7 +50,6 @@ def route_question(question_id):
                            )
 
 
-
 @app.route('/add-question', methods=['GET', 'POST'])
 def route_add_question():
     global update_views
@@ -213,7 +212,7 @@ def route_index():
             questions_ordered = data_manager.sort_questions('submission_time', 'desc')
 
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered,
-                                   param_display='Submission Time', order_display='Descending', show_sort =show_sort)
+                                   param_display='Submission Time', order_display='Descending', show_sort=show_sort)
         else:
             update_views = True
             questions_ordered = data_manager.sort_questions(param, sort_ord)
@@ -230,7 +229,7 @@ def route_index():
             elif param == 'view_number':
                 param_display = 'View Number'
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered,
-                                   order_display=order_display, param_display=param_display, show_sort = show_sort)
+                                   order_display=order_display, param_display=param_display, show_sort=show_sort)
 
     # elif request.method == 'POST':
     #     questions = connection.read_questions('data/questions.csv')
@@ -255,17 +254,16 @@ def delete_sql_answer(answer_id):
     return redirect(request.referrer)
 
 
-
 @app.route('/question-new-tag/<question_id>')
 def question_tag(question_id):
     question_id_to_add = int(question_id)
     return render_template('tag_question.html', question_id=question_id_to_add)
 
+
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
 def chose_question_tag(question_id):
     question_id_to_add = int(question_id)
     if request.method == 'GET':
-
         return render_template('tag_question.html', question_id=question_id_to_add)
 
     if request.method == 'POST':
@@ -295,7 +293,6 @@ def delete_one_tag(question_id, tag_id):
     data_manager.delete_tag_questions(question_on_page, tag_to_delete)
 
     return route_question(question_on_page)
-  
 
 questions_found = []
 phrase_for_query = ""
@@ -326,7 +323,6 @@ def return_search():
         for question in questions_found:
             print('This is a question',question)
         return render_template("index.html", questions = questions_found, show_sort = show_sort)
-
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
@@ -362,6 +358,36 @@ def route_add_answer_comment(answer_id):
                            answer_id=answer_id,
                            id=question_id)
 
+
+@app.route('/comment/<comment_id>/edit', methods=['GET', 'POST'])
+def route_edit_comments(comment_id):
+    edited_count = data_manager.get_edit_count_comments(comment_id)
+    edited_count = edited_count[0]['edited_count']
+    comment_message = data_manager.get_comment_message(comment_id)
+    answer_id = data_manager.get_answer_by_comment_id(comment_id)
+    try:
+        question_id = util.read_question_id(answer_id[0]['answer_id'])
+    except:
+        question_id = data_manager.get_answer_by_comment_id(comment_id)
+    if request.method == 'POST':
+        message = request.form['message']
+        edited_count += 1
+        data_manager.edit_comment(message=message,
+                                  edited_count=edited_count,
+                                  comment_id=comment_id)
+        return redirect(url_for('route_question', question_id=question_id[0]['question_id']))
+    return render_template('edit_comment.html',
+                           comment_id=comment_id,
+                           comment_message=comment_message,
+                           answer_id=answer_id,
+                           question_id=question_id,
+                           edited_count=edited_count)
+
+
+@app.route('/comment/<comment_id>/delete')
+def route_delete_comment(comment_id):
+    data_manager.delete_comment_by_id(comment_id)
+    return redirect(request.referrer)
 
 
 if __name__ == "__main__":

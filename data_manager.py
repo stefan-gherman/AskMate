@@ -246,7 +246,7 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
                     col2=sql.Identifier('tag_id')), [question_id, tag_id_to_delete]
     )
     cursor.execute(
-        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+        sql.SQL("DELETE FROM {table} WHERE {col}=%;")
             .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
     )
 
@@ -269,8 +269,6 @@ def search_for_phrase(cursor, phrase_for_query):
 def add_question_comment(cursor, message, question_id, answer_id):
     date = util.datetime.today()
     submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(question_id)
-    print(answer_id)
     if question_id is not None:
         cursor.execute(
             """
@@ -289,3 +287,119 @@ def add_question_comment(cursor, message, question_id, answer_id):
                        message=message,
                        submission_time=submission_time)
         )
+
+
+@connection.connection_handler
+def edit_comment(cursor, comment_id, message, edited_count):
+    try:
+        cursor.execute(
+            sql.SQL("UPDATE {table} SET {message}=%s, {edited_count} =%s WHERE {id} = %s;")
+                .format(table=sql.Identifier('comment'),
+                        message=sql.Identifier('message'),
+                        edited_count=sql.Identifier('edited_count'),
+                        id=sql.Identifier('id')), [message, edited_count, comment_id]
+        )
+    except:
+        cursor.execute(
+            sql.SQL("UPDATE {table} SET {message}=%s, {edited_count} =%s WHERE {id} = %s;")
+                .format(table=sql.Identifier('comment'),
+                        message=sql.Identifier('message'),
+                        edited_count=sql.Identifier('edited_count'),
+                        id=sql.Identifier('id')), [message, edited_count, comment_id]
+        )
+
+@connection.connection_handler
+def get_comment_message(cursor, comment_id):
+    cursor.execute(
+        sql.SQL(
+            """
+            SELECT message from comment
+            WHERE id = '{comment_id}'
+            """.format(comment_id=comment_id)
+        )
+    )
+    message = cursor.fetchall()
+    return message
+
+
+@connection.connection_handler
+def get_answer_by_comment_id(cursor, comment_id):
+    try:
+        cursor.execute(
+            sql.SQL("SELECT {answer_id} FROM {table} WHERE {comment_id} = %s;")
+            .format(answer_id=sql.Identifier('answer_id'),
+                    table=sql.Identifier('comment'),
+                    comment_id=sql.Identifier('id')), [comment_id]
+        )
+    except:
+        cursor.execute(
+            sql.SQL("SELECT {question_id} FROM {table} WHERE {comment_id} = %s;")
+            .format(answer_id=sql.Identifier('question_id'),
+                    table=sql.Identifier('comment'),
+                    comment_id=sql.Identifier('id')), [comment_id]
+        )
+    question_id_by_comment_id = cursor.fetchall()
+    return question_id_by_comment_id
+
+
+
+
+@connection.connection_handler
+def get_edit_count_comments(cursor, comment_id):
+
+    cursor.execute(
+        """
+        SELECT edited_count from comment
+        WHERE id = '{comment_id}'
+        """.format(comment_id=comment_id)
+    )
+    try:
+        edited_count = cursor.fetchall()
+    except:
+        pass
+
+    return edited_count
+
+
+@connection.connection_handler
+def get_question_id_by_comment_id(cursor, comment_id):
+    cursor.execute(
+        sql.SQL("SELECT {question_id} FROM {table} WHERE {id} = %s;").format(
+            question_id=sql.Identifier('question_id'),
+            table=sql.Identifier('comment'),
+            id=sql.Identifier('id')
+        ), [comment_id]
+    )
+
+    question_id = cursor.fetchall()
+    return question_id
+
+
+@connection.connection_handler
+def get_answer_id_by_comment_id(cursor, comment_id):
+    cursor.execute(
+        sql.Sql(
+            """
+            SELECT {answer_id} FROM {table}
+            WHERE {id} = %s;
+            """.format(table=sql.Identifier('comment'),
+                       question_id=sql.Identifier('question_id'),
+                       id=sql.Identifier('id')),
+        ), [comment_id]
+    )
+
+    answer_id = cursor.fetchall()
+    return
+
+
+@connection.connection_handler
+def delete_comment_by_id(cursor, id):
+    cursor.execute(
+        """
+        DELETE FROM comment
+        WHERE id = '{id}'
+        """.format(id=id)
+    )
+
+
+delete_comment_by_id(64)
