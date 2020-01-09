@@ -277,7 +277,8 @@ def chose_question_tag(question_id):
         tag8_input = request.form.get('python')
         new_tag_input = request.form.get('new_tag')
 
-    tag_name_list = [tag1_input, tag2_input, tag3_input, tag4_input, tag5_input, tag6_input, tag7_input, tag8_input, new_tag_input]
+    tag_name_list = [tag1_input, tag2_input, tag3_input, tag4_input, tag5_input, tag6_input, tag7_input, tag8_input,
+                     new_tag_input]
 
     for tag in tag_name_list:
         if tag is not None and tag != '':
@@ -294,35 +295,38 @@ def delete_one_tag(question_id, tag_id):
 
     return route_question(question_on_page)
 
+
 questions_found = []
 phrase_for_query = ""
+
+
 @app.route('/search', methods=['GET', 'POST'])
 def return_search():
-        show_sort = False
-        global questions_found
-        global search_phrase
-        global phrase_for_query
-        search_phrase = request.values.get('search')
-        search_phrase_for_highlighting = search_phrase
-        if search_phrase is None:
-            questions_found = data_manager.search_for_phrase(phrase_for_query)
-            search_phrase_for_highlighting = phrase_for_query
-            for question in questions_found:
-                question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
-                question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-            return render_template("index.html", questions = questions_found, show_sort = show_sort)
-
-        search_phrase = search_phrase.split()
-        print("Search phrase",search_phrase)
-        phrase_for_query = str.join("&", search_phrase)
-        print("Phrase for query",phrase_for_query)
+    show_sort = False
+    global questions_found
+    global search_phrase
+    global phrase_for_query
+    search_phrase = request.values.get('search')
+    search_phrase_for_highlighting = search_phrase
+    if search_phrase is None:
         questions_found = data_manager.search_for_phrase(phrase_for_query)
+        search_phrase_for_highlighting = phrase_for_query
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
             question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-        for question in questions_found:
-            print('This is a question',question)
-        return render_template("index.html", questions = questions_found, show_sort = show_sort)
+        return render_template("index.html", questions=questions_found, show_sort=show_sort)
+
+    search_phrase = search_phrase.split()
+    print("Search phrase", search_phrase)
+    phrase_for_query = str.join("&", search_phrase)
+    print("Phrase for query", phrase_for_query)
+    questions_found = data_manager.search_for_phrase(phrase_for_query)
+    for question in questions_found:
+        question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
+        question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
+    for question in questions_found:
+        print('This is a question', question)
+    return render_template("index.html", questions=questions_found, show_sort=show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
@@ -368,7 +372,7 @@ def route_edit_comments(comment_id):
     try:
         question_id = util.read_question_id(answer_id[0]['answer_id'])
     except:
-        question_id = data_manager.get_answer_by_comment_id(comment_id)
+        question_id = data_manager.get_question_id_by_comment_id(comment_id)
     if request.method == 'POST':
         message = request.form['message']
         edited_count += 1
@@ -393,6 +397,6 @@ def route_delete_comment(comment_id):
 if __name__ == "__main__":
     app.run(
         debug=True,
-        host="0.0.0.0",
+        host="localhost",
         port=6374
     )

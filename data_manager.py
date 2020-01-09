@@ -246,9 +246,10 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
                     col2=sql.Identifier('tag_id')), [question_id, tag_id_to_delete]
     )
     cursor.execute(
-        sql.SQL("DELETE FROM {table} WHERE {col}=%;")
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
     )
+
 
 @connection.connection_handler
 def search_for_phrase(cursor, phrase_for_query):
@@ -291,22 +292,16 @@ def add_question_comment(cursor, message, question_id, answer_id):
 
 @connection.connection_handler
 def edit_comment(cursor, comment_id, message, edited_count):
-    try:
-        cursor.execute(
-            sql.SQL("UPDATE {table} SET {message}=%s, {edited_count} =%s WHERE {id} = %s;")
-                .format(table=sql.Identifier('comment'),
-                        message=sql.Identifier('message'),
-                        edited_count=sql.Identifier('edited_count'),
-                        id=sql.Identifier('id')), [message, edited_count, comment_id]
-        )
-    except:
-        cursor.execute(
-            sql.SQL("UPDATE {table} SET {message}=%s, {edited_count} =%s WHERE {id} = %s;")
-                .format(table=sql.Identifier('comment'),
-                        message=sql.Identifier('message'),
-                        edited_count=sql.Identifier('edited_count'),
-                        id=sql.Identifier('id')), [message, edited_count, comment_id]
-        )
+
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {message}=%s, {edited_count} =%s WHERE {id} = %s;")
+            .format(table=sql.Identifier('comment'),
+                    message=sql.Identifier('message'),
+                    edited_count=sql.Identifier('edited_count'),
+                    id=sql.Identifier('id')), [message, edited_count, comment_id]
+    )
+
+
 
 @connection.connection_handler
 def get_comment_message(cursor, comment_id):
@@ -327,26 +322,23 @@ def get_answer_by_comment_id(cursor, comment_id):
     try:
         cursor.execute(
             sql.SQL("SELECT {answer_id} FROM {table} WHERE {comment_id} = %s;")
-            .format(answer_id=sql.Identifier('answer_id'),
-                    table=sql.Identifier('comment'),
-                    comment_id=sql.Identifier('id')), [comment_id]
+                .format(answer_id=sql.Identifier('answer_id'),
+                        table=sql.Identifier('comment'),
+                        comment_id=sql.Identifier('id')), [comment_id]
         )
     except:
         cursor.execute(
             sql.SQL("SELECT {question_id} FROM {table} WHERE {comment_id} = %s;")
-            .format(answer_id=sql.Identifier('question_id'),
-                    table=sql.Identifier('comment'),
-                    comment_id=sql.Identifier('id')), [comment_id]
+                .format(answer_id=sql.Identifier('question_id'),
+                        table=sql.Identifier('comment'),
+                        comment_id=sql.Identifier('id')), [comment_id]
         )
     question_id_by_comment_id = cursor.fetchall()
     return question_id_by_comment_id
 
 
-
-
 @connection.connection_handler
 def get_edit_count_comments(cursor, comment_id):
-
     cursor.execute(
         """
         SELECT edited_count from comment
