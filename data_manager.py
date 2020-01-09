@@ -46,55 +46,6 @@ def add_answer(cursor, question_id, message, file):
 
 
 
-# def delete_question(question_id):
-#     answers_list = connection.read_answers(ANSWERS_FILE)
-#     questions_list = connection.read_questions(QUESTIONS_FILE)
-#
-#     for question in questions_list:
-#         if '../static/img/' != question['image']:
-#             if int(question['id']) == int(question_id):
-#                 image_path = question['image'][3:]
-#                 os.remove(image_path)
-#
-#     for answers in answers_list:
-#         if '../static/img/' != answers['image']:
-#             if int(answers['question_id']) == int(question_id):
-#                 image_path = answers['image'][3:]
-#                 os.remove(image_path)
-#
-#     data = [element for element in questions_list if int(element['id']) != int(question_id)]
-#     count = 0
-#     for d in data:
-#         d['id'] = count
-#         count += 1
-#
-#     connection.write_questions(QUESTIONS_FILE, data)
-#     data_answers = [element for element in answers_list if int(element['question_id']) != int(question_id)]
-#     for elem in data_answers:
-#         if int(elem['question_id']) > int(question_id):
-#             elem['question_id'] = int(elem['question_id']) - 1
-#     connection.write_answers(ANSWERS_FILE, data_answers)
-#     return connection.read_questions('data/questions.csv')
-
-
-# def delete_answer(answer_id):
-#     answers = connection.read_answers(ANSWERS_FILE)
-#     data = [element for element in answers if int(element['id']) != int(answer_id)]
-#     count = 0
-#     for answer in answers:
-#         if '../static/img/' != answer['image']:
-#             if int(answer['id']) == int(answer_id):
-#                 image_path = answer['image'][3:]
-#                 os.remove(image_path)
-#     for d in data:
-#         d['id'] = count
-#         count += 1
-#     connection.write_answers(ANSWERS_FILE, data)
-#     return connection.read_answers('data/answers.csv')
-
-
-
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -256,4 +207,30 @@ def vote_item_up_down(cursor, parameter, type, direction):
                 col=sql.Identifier('vote_number'),
                 col2=sql.Identifier('id')), [parameter]
             )
+
+
+@connection.connection_handler
+def add_question_comment(cursor, message, question_id, answer_id):
+    date = util.datetime.today()
+    submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(question_id)
+    print(answer_id)
+    if question_id is not None:
+        cursor.execute(
+            """
+            INSERT INTO comment (question_id, message, submission_time, edited_count) 
+            VALUES ('{question_id}', '{message}', '{submission_time}', '0');
+            """.format(question_id=question_id,
+                       message=message,
+                       submission_time=submission_time)
+    )
+    else:
+        cursor.execute(
+            """
+            INSERT INTO comment (answer_id, message, submission_time, edited_count) 
+            VALUES ('{answer_id}', '{message}', '{submission_time}', '0');
+            """.format(answer_id=answer_id,
+                       message=message,
+                       submission_time=submission_time)
+        )
 

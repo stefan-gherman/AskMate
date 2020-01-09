@@ -67,6 +67,17 @@ def random_string(string_length=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for x in range(string_length))
 
+@connection.connection_handler
+def read_comments_sql(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM comment;
+        """
+    )
+
+    comments = cursor.fetchall()
+    return comments
+
 
 @connection.connection_handler
 def read_questions_sql(cursor):
@@ -90,6 +101,43 @@ def read_answers_sql(cursor):
 
     answers = cursor.fetchall()
 
+
+@connection.connection_handler
+def read_question_comments(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM comment
+        WHERE question_id='{id}'
+        """.format(id=question_id)
+    )
+
+    question_comments = cursor.fetchall()
+    return question_comments
+
+
+@connection.connection_handler
+def read_question_id(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT question_id FROM answer
+        WHERE id = '{answer_id}'
+        """.format(answer_id=answer_id)
+    )
+    question_id = cursor.fetchall()
+    return question_id
+
+# @connection.connection_handler
+# def read_answer_id(cursor, question_id):
+#     cursor.execute(
+#         """
+#         SELECT id FROM answer
+#         WHERE question_id = '{question_id}'
+#         """.format(question_id=question_id)
+#     )
+#     question_id = cursor.fetchall()
+#     return question_id
+#
+# print(read_answer_id(29))
 
 @connection.connection_handler
 def order_questions_by(cursor, order):
