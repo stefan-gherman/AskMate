@@ -58,8 +58,14 @@
         <div class="question-comments">
             {% for comment in question_comments %}
                 {{ comment.message }}
-              Submission Date:  {{ comment.submission_time }}
-              <a href="{{ url_for('route_edit_comments', comment_id=comment.id) }}"><button type="button" class="">Edit Comment</button> </a><br>
+                Submission Date:  {{ comment.submission_time }}
+                <a href="{{ url_for('route_edit_comments', comment_id=comment.id) }}">
+                    <button type="button" class="">Edit Comment</button>
+                </a>
+                <a href="{{ url_for('route_delete_comment', comment_id = comment.id) }}">
+                    <button type="button">X</button>
+                </a><br>
+
 
             {% endfor %}
         </div>
@@ -102,8 +108,13 @@
         {% for comment in comments %}
             {% if comment.answer_id == answer.id %}
                 {{ comment.message }}
-               Submission Date: {{ comment.submission_time }}
-                <a href="{{ url_for('route_edit_comments', comment_id=comment.id) }}"><button type="button" class="">Edit Comment</button> </a><br>
+                Submission Date: {{ comment.submission_time }}
+                <a href="{{ url_for('route_edit_comments', comment_id=comment.id) }}">
+                    <button type="button" class="">Edit Comment</button>
+                </a>
+                <a href="{{ url_for('route_delete_comment', comment_id = comment.id) }}">
+                    <button type="button">X</button>
+                </a><br>
             {% endif %}
         {% endfor %}
     </div>

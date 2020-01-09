@@ -370,6 +370,12 @@ def route_edit_comments(comment_id):
                            edited_count=edited_count)
 
 
+@app.route('/comment/<comment_id>/delete')
+def route_delete_comment(comment_id):
+    data_manager.delete_comment_by_id(comment_id)
+    return redirect(request.referrer)
+
+
 if __name__ == "__main__":
     app.run(
         debug=True,

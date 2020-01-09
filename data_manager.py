@@ -354,8 +354,52 @@ def get_edit_count_comments(cursor, comment_id):
         """.format(comment_id=comment_id)
     )
     try:
-        edited_count=cursor.fetchall()
+        edited_count = cursor.fetchall()
     except:
         pass
 
     return edited_count
+
+
+@connection.connection_handler
+def get_question_id_by_comment_id(cursor, comment_id):
+    cursor.execute(
+        sql.SQL("SELECT {question_id} FROM {table} WHERE {id} = %s;").format(
+            question_id=sql.Identifier('question_id'),
+            table=sql.Identifier('comment'),
+            id=sql.Identifier('id')
+        ), [comment_id]
+    )
+
+    question_id = cursor.fetchall()
+    return question_id
+
+
+@connection.connection_handler
+def get_answer_id_by_comment_id(cursor, comment_id):
+    cursor.execute(
+        sql.Sql(
+            """
+            SELECT {answer_id} FROM {table}
+            WHERE {id} = %s;
+            """.format(table=sql.Identifier('comment'),
+                       question_id=sql.Identifier('question_id'),
+                       id=sql.Identifier('id')),
+        ), [comment_id]
+    )
+
+    answer_id = cursor.fetchall()
+    return
+
+
+@connection.connection_handler
+def delete_comment_by_id(cursor, id):
+    cursor.execute(
+        """
+        DELETE FROM comment
+        WHERE id = '{id}'
+        """.format(id=id)
+    )
+
+
+delete_comment_by_id(64)
