@@ -146,19 +146,20 @@ def route_delete_answer(answer_id):
 def route_question_vote_up(question_id):
     question_id_conv = int(question_id)
     data_manager.vote_item_up_down(question_id_conv, 'question', 'up')
-    return redirect('/list')
+    return redirect(request.referrer)
 
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
     question_id_conv = int(question_id)
     data_manager.vote_item_up_down(question_id_conv, 'question', 'down')
-    return redirect('/list')
+    return redirect(request.referrer)
 
 
 @app.route('/answer/<answer_id>/vote_up')
 def route_answer_vote_up(answer_id):
     global update_views
+    global questions_found
     update_views = False
     answer_id_conv = int(answer_id)
     data_manager.vote_item_up_down(answer_id_conv, 'answer', 'up')
@@ -168,10 +169,15 @@ def route_answer_vote_up(answer_id):
 @app.route('/answer/<answer_id>/vote_down')
 def route_answer_vote_down(answer_id):
     global update_views
+    global questions_found
     update_views = False
     answer_id_conv = int(answer_id)
     data_manager.vote_item_up_down(answer_id_conv, 'answer', 'down')
     return redirect(request.referrer)
+
+
+param = None
+sort_ord = None
 
 
 @app.route('/')
@@ -179,20 +185,37 @@ def route_answer_vote_down(answer_id):
 def route_index():
     global update_views
     update_views = True
+    global param
+    global sort_ord
+    show_sort = True
     question_headers = connection.return_questions_headers()
     if request.method == 'GET':
         param = request.values.get('param')
         sort_ord = request.values.get('sort_ord')
-
+        print(param, sort_ord)
         if param is None and sort_ord is None:
             update_views = True
-            questions_ordered = data_manager.sort_questions('submission_time', 'asc')
+            questions_ordered = data_manager.sort_questions('submission_time', 'desc')
 
-            return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
+            return render_template('index.html', question_headers=question_headers, questions=questions_ordered,
+                                   param_display='Submission Time', order_display='Descending', show_sort =show_sort)
         else:
             update_views = True
             questions_ordered = data_manager.sort_questions(param, sort_ord)
-            return render_template('index.html', question_headers=question_headers, questions=questions_ordered)
+            if sort_ord == 'asc':
+                order_display = 'Ascending'
+            elif sort_ord == 'desc':
+                order_display = 'Descending'
+            if param == 'submission_time':
+                param_display = 'Submission Time'
+            elif param == 'title':
+                param_display = 'Title'
+            elif param == 'vote_number':
+                param_display = 'Vote Number'
+            elif param == 'view_number':
+                param_display = 'View Number'
+            return render_template('index.html', question_headers=question_headers, questions=questions_ordered,
+                                   order_display=order_display, param_display=param_display, show_sort = show_sort)
 
     # elif request.method == 'POST':
     #     questions = connection.read_questions('data/questions.csv')
@@ -200,6 +223,7 @@ def route_index():
     #     sort_ord = request.values.get('sort_ord')
     #     questions = util.make_compat_display(questions, 'not_textarea')
     #     questions_ordered = data_manager.sort_questions(param, sort_ord)
+
 
 # @app.route('/')
 @app.route('/list_questions')
@@ -211,9 +235,9 @@ def list_questions():
 
 @app.route('/question/<question_id>/')
 def delete_sql_question(question_id):
+    global questions_found
     question_to_delete = int(question_id)
     data_manager.delete_sql_questions(question_to_delete)
-
     return redirect(request.referrer)
 
 
@@ -221,10 +245,28 @@ def delete_sql_question(question_id):
 def delete_sql_answer(answer_id):
     answer_to_delete = int(answer_id)
     data_manager.delete_sql_answers(answer_to_delete)
-
     return redirect(request.referrer)
 
-
+search_phrase = False
+questions_found = []
+@app.route('/search', methods=['GET', 'POST'])
+def return_search():
+        show_sort = False
+        global questions_found
+        global search_phrase
+        search_phrase = request.values.get('search')
+        search_phrase_for_highlighting = search_phrase
+        if search_phrase is None:
+            return render_template("index.html", questions = questions_found, show_sort = show_sort)
+        search_phrase = search_phrase.split()
+        phrase_for_query = str.join("&", search_phrase)
+        questions_found = data_manager.search_for_phrase(phrase_for_query)
+        for question in questions_found:
+            question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
+            question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
+        for question in questions_found:
+            print('This is a question',question)
+        return render_template("index.html", questions = questions_found, show_sort = show_sort)
 if __name__ == "__main__":
     app.run(
         debug=True,

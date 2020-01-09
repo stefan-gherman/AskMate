@@ -257,3 +257,15 @@ def vote_item_up_down(cursor, parameter, type, direction):
                 col2=sql.Identifier('id')), [parameter]
             )
 
+@connection.connection_handler
+def search_for_phrase(cursor, phrase_for_query):
+    cursor.execute(
+        sql.SQL("SELECT * from {table} WHERE to_tsvector({col1}) @@ to_tsquery(%s) OR to_tsvector({col2}) @@ to_tsquery(%s) ORDER BY {col3} desc;")
+            .format(table=sql.Identifier('question'),
+                    col1=sql.Identifier('title'),
+                    col2=sql.Identifier('message'),
+                    col3=sql.Identifier('vote_number')), [phrase_for_query, phrase_for_query]
+    )
+
+    questions_found = cursor.fetchall()
+    return questions_found
