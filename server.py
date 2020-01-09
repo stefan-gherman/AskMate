@@ -56,6 +56,7 @@ def route_add_question():
     if request.method == 'POST':
         random_file_name = util.random_string()
         title = request.form['title']
+        title = title.rstrip('?')
         message = util.make_compat_display(request.form['message'])
         message = message.replace("'", "''")
         title = title.replace("'", "''")
@@ -80,6 +81,7 @@ def route_edit_question(question_id):
     edit_me = True
     if request.method == 'POST':
         title = request.form['title']
+        title = title.rstrip('?')
         message = request.form['message']
         message = util.make_compat_display(message, 'not_textarea')
         data_manager.update_question(question_id_conv, message, title)
@@ -265,12 +267,17 @@ def chose_question_tag(question_id):
         return render_template('tag_question.html', question_id=question_id_to_add)
 
     if request.method == 'POST':
-        tag1_input = request.form.get('tag1')
-        tag2_input = request.form.get('tag2')
-        tag3_input = request.form.get('tag3')
+        tag1_input = request.form.get('css')
+        tag2_input = request.form.get('html')
+        tag3_input = request.form.get('sql')
+        tag4_input = request.form.get('php')
+        tag5_input = request.form.get('java')
+        tag6_input = request.form.get('cplus')
+        tag7_input = request.form.get('javascript')
+        tag8_input = request.form.get('python')
         new_tag_input = request.form.get('new_tag')
 
-    tag_name_list = [tag1_input, tag2_input, tag3_input, new_tag_input]
+    tag_name_list = [tag1_input, tag2_input, tag3_input, tag4_input, tag5_input, tag6_input, tag7_input, tag8_input, new_tag_input]
 
     for tag in tag_name_list:
         if tag is not None and tag != '':
@@ -287,28 +294,35 @@ def delete_one_tag(question_id, tag_id):
 
     return route_question(question_on_page)
 
-
+questions_found = []
+phrase_for_query = ""
 @app.route('/search', methods=['GET', 'POST'])
 def return_search():
-    show_sort = False
-    global questions_found
-    global search_phrase
-    search_phrase = request.values.get('search')
-    search_phrase_for_highlighting = search_phrase
-    if search_phrase is None:
-        return render_template("index.html", questions=questions_found, show_sort=show_sort)
+        show_sort = False
+        global questions_found
+        global search_phrase
+        global phrase_for_query
+        search_phrase = request.values.get('search')
+        search_phrase_for_highlighting = search_phrase
+        if search_phrase is None:
+            questions_found = data_manager.search_for_phrase(phrase_for_query)
+            search_phrase_for_highlighting = phrase_for_query
+            for question in questions_found:
+                question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
+                question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
+            return render_template("index.html", questions = questions_found, show_sort = show_sort)
 
-    search_phrase = search_phrase.split()
-    print("Search phrase", search_phrase)
-    phrase_for_query = str.join("&", search_phrase)
-    print("Phrase for query", phrase_for_query)
-    questions_found = data_manager.search_for_phrase(phrase_for_query)
-    for question in questions_found:
-        question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
-        question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-    for question in questions_found:
-        print('This is a question', question)
-    return render_template("index.html", questions=questions_found, show_sort=show_sort)
+        search_phrase = search_phrase.split()
+        print("Search phrase",search_phrase)
+        phrase_for_query = str.join("&", search_phrase)
+        print("Phrase for query",phrase_for_query)
+        questions_found = data_manager.search_for_phrase(phrase_for_query)
+        for question in questions_found:
+            question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
+            question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
+        for question in questions_found:
+            print('This is a question',question)
+        return render_template("index.html", questions = questions_found, show_sort = show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])

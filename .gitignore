@@ -5,3 +5,4 @@ enviro_vars.venv
 venv/*
 *.txt
 data/*
+*.jpg

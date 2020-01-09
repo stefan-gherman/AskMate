@@ -6,7 +6,7 @@
      <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
 </head>
 <body>
-
+<div class="border">
 {% if edit_me %}
     <div class="divquestion">
         <p>Edit Question</p>
@@ -25,17 +25,17 @@
 <br>
 <form {% if edit_me %} {% if question %} action='/question/{{ id_q }}/edit' {% endif %} {% else %}
                                          action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
-    <label id="question">{% if edit_me %}
+    <label class="labelinput">{% if edit_me %}
         Title<br>
     {% else %}
-        <label id="question">Add question title<br>
+        <label class="labelinput">Add question title<br>
     {% endif %}</label>
         <input type="text" name="title" id="title" title="message" class="message" maxlength="50" {% if edit_me %}
             {% if question %}
                value="{{ question[0].title}}"
             {% endif %}
-        {% endif %} style="min-width: 470px" required><br><br>
-        <label id="message">{% if edit_me %}
+        {% endif %} style="min-width: 470px" required class="labelinput"><br><br>
+        <label id="message" class="labelinput">{% if edit_me %}
             Edit question message
         {% else %}
             Add question message
@@ -52,5 +52,6 @@
     <button title="submit">Submit</button>
 
 </form>
+</div>
 </body>
 </html>
