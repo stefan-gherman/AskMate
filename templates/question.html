@@ -39,9 +39,10 @@
         {% endfor %}
     </div>
 
-    <h2 style="font-size: 2em"> Answers</h2>
-    <a href="{{ url_for('route_add_answer', question_id = question_id) }}">
-        <button type="submit" class="link_right">Add a new Answer</button>
+<!--&lt;!&ndash;    <h2 style="font-size: 2em"> Answers</h2>&ndash;&gt;-->
+<!--    <a href="{{ url_for('route_add_answer', question_id = question_id) }}">-->
+<!--        <button type="submit" class="link_right">Add a new Answer</button>-->
+<!--    </a>-->
     <p style="font-size: 25px">{% autoescape false %}{{ questions.message }}{% endautoescape %}</p>
     {% if questions['image'] != '../static/img/' %}
         <img src="{{ questions.image }}" alt="question image" id="image" width="300px" height="300px">
@@ -69,6 +70,9 @@
             <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
             <button class="links">Edit</button>
 </div>
+-->
+</div>
+    </div>
 <h2 style="font-size: 2em"> Answers</h2>
 <a href="{{ url_for('route_add_answer', question_id = question_id) }}">
     <button type="submit" class="link_right">Add a new Answer</button>
@@ -81,10 +85,12 @@
         <button class="links"> Delete</button>
     </a>
         <a href="{{ url_for('route_add_answer_comment', answer_id = answer.id) }}">
-            <button type="submit" class="add-comment">Add Comment</button>
+            <button type="submit" class="links">Add Comment</button>
 
--->
+
         </a>
+        <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
+            <button class="links">Edit</button></a>
         {% autoescape false %}{{ answer.message }}{% endautoescape %}
 
         <br><br>
@@ -110,7 +116,7 @@
     </p>
 </div>
 {% endfor %}
-
+{% endfor %}
 </body>
 
 </html>

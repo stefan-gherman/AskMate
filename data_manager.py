@@ -45,7 +45,6 @@ def add_answer(cursor, question_id, message, file):
     )
 
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -80,7 +79,7 @@ def delete_sql_questions(cursor, id_to_delete):
     answers = cursor.fetchall()
 
     for answer in answers:
-        answer=int(answer["id"])
+        answer = int(answer["id"])
         cursor.execute(
             sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
                 .format(table=sql.Identifier('comment'), col=sql.Identifier('id')), [answer]
@@ -154,55 +153,58 @@ def update_question(cursor, parameter, message, title):
                     col3=sql.Identifier('title')), [message, title, parameter]
     )
 
+
 @connection.connection_handler
 def update_answer(cursor, parameter, message):
     cursor.execute(
         sql.SQL("UPDATE {table} SET {col2} = %s WHERE {col1} = %s;")
-        .format(table=sql.Identifier('answer'),
-                col1=sql.Identifier('id'),
-                col2=sql.Identifier('message')), [message,parameter]
+            .format(table=sql.Identifier('answer'),
+                    col1=sql.Identifier('id'),
+                    col2=sql.Identifier('message')), [message, parameter]
     )
+
 
 @connection.connection_handler
 def vote_item_up_down(cursor, parameter, type, direction):
     if type == 'question':
         if direction == "up":
             cursor.execute(
-            sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
-            .format(table=sql.Identifier('question'),
-                    col=sql.Identifier('vote_number'),
-                    col2=sql.Identifier('id')), [parameter]
+                sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
+                    .format(table=sql.Identifier('question'),
+                            col=sql.Identifier('vote_number'),
+                            col2=sql.Identifier('id')), [parameter]
             )
         elif direction == "down":
             cursor.execute(
-            sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
-            .format(table=sql.Identifier('question'),
-                    col=sql.Identifier('vote_number'),
-                    col2=sql.Identifier('id')), [parameter]
+                sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
+                    .format(table=sql.Identifier('question'),
+                            col=sql.Identifier('vote_number'),
+                            col2=sql.Identifier('id')), [parameter]
             )
 
     elif type == 'answer':
         if direction == "up":
             cursor.execute(
-            sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
-            .format(table=sql.Identifier('answer'),
-                    col=sql.Identifier('vote_number'),
-                    col2=sql.Identifier('id')), [parameter]
+                sql.SQL("UPDATE {table} SET {col}={col}+1 WHERE {col2} = %s;")
+                    .format(table=sql.Identifier('answer'),
+                            col=sql.Identifier('vote_number'),
+                            col2=sql.Identifier('id')), [parameter]
             )
         elif direction == "down":
             cursor.execute(
-            sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
-            .format(table=sql.Identifier('answer'),
-                col=sql.Identifier('vote_number'),
-                col2=sql.Identifier('id')), [parameter]
+                sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
+                    .format(table=sql.Identifier('answer'),
+                            col=sql.Identifier('vote_number'),
+                            col2=sql.Identifier('id')), [parameter]
             )
 
-@connection.connection_handler
 
+@connection.connection_handler
 def max_id(cursor):
     cursor.execute("""SELECT MAX(id) FROM tag""")
     maxim_id = cursor.fetchall()
     return maxim_id
+
 
 @connection.connection_handler
 def add_tag(cursor, tag_name, question_id):
@@ -221,15 +223,15 @@ def add_tag(cursor, tag_name, question_id):
 def get_tag_questions(cursor, question_id):
     cursor.execute(
         sql.SQL("SELECT * FROM {table} WHERE {col1}=%s;")
-            .format(table=sql.Identifier('question_tag'), col1=sql.Identifier('question_id'),), [question_id]
-        )
+            .format(table=sql.Identifier('question_tag'), col1=sql.Identifier('question_id'), ), [question_id]
+    )
     all_tag_ids = cursor.fetchall()
-    tag_list=[]
+    tag_list = []
     for tag_to_print in all_tag_ids:
-        tag_to_print=int(tag_to_print['tag_id'])
+        tag_to_print = int(tag_to_print['tag_id'])
         cursor.execute(
             sql.SQL("SELECT * FROM {table} WHERE {col}=%s;")
-                .format(table=sql.Identifier('tag'), col=sql.Identifier('id')),[tag_to_print]
+                .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_to_print]
         )
         names = cursor.fetchall()
         tag_list.append(names)
@@ -248,9 +250,11 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
             .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
     )
 
+@connection.connection_handler
 def search_for_phrase(cursor, phrase_for_query):
     cursor.execute(
-        sql.SQL("SELECT * from {table} WHERE to_tsvector({col1}) @@ to_tsquery(%s) OR to_tsvector({col2}) @@ to_tsquery(%s) ORDER BY {col3} desc;")
+        sql.SQL(
+            "SELECT * from {table} WHERE to_tsvector({col1}) @@ to_tsquery(%s) OR to_tsvector({col2}) @@ to_tsquery(%s) ORDER BY {col3} desc;")
             .format(table=sql.Identifier('question'),
                     col1=sql.Identifier('title'),
                     col2=sql.Identifier('message'),
@@ -275,7 +279,7 @@ def add_question_comment(cursor, message, question_id, answer_id):
             """.format(question_id=question_id,
                        message=message,
                        submission_time=submission_time)
-    )
+        )
     else:
         cursor.execute(
             """
@@ -285,4 +289,3 @@ def add_question_comment(cursor, message, question_id, answer_id):
                        message=message,
                        submission_time=submission_time)
         )
-

@@ -289,8 +289,8 @@ def delete_one_tag(question_id, tag_id):
 
     return route_question(question_on_page)
   
-search_phrase = False
-questions_found = []
+
+
 @app.route('/search', methods=['GET', 'POST'])
 def return_search():
         show_sort = False
@@ -300,8 +300,11 @@ def return_search():
         search_phrase_for_highlighting = search_phrase
         if search_phrase is None:
             return render_template("index.html", questions = questions_found, show_sort = show_sort)
+
         search_phrase = search_phrase.split()
+        print("Search phrase",search_phrase)
         phrase_for_query = str.join("&", search_phrase)
+        print("Phrase for query",phrase_for_query)
         questions_found = data_manager.search_for_phrase(phrase_for_query)
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
