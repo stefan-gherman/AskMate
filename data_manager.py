@@ -46,55 +46,6 @@ def add_answer(cursor, question_id, message, file):
 
 
 
-# def delete_question(question_id):
-#     answers_list = connection.read_answers(ANSWERS_FILE)
-#     questions_list = connection.read_questions(QUESTIONS_FILE)
-#
-#     for question in questions_list:
-#         if '../static/img/' != question['image']:
-#             if int(question['id']) == int(question_id):
-#                 image_path = question['image'][3:]
-#                 os.remove(image_path)
-#
-#     for answers in answers_list:
-#         if '../static/img/' != answers['image']:
-#             if int(answers['question_id']) == int(question_id):
-#                 image_path = answers['image'][3:]
-#                 os.remove(image_path)
-#
-#     data = [element for element in questions_list if int(element['id']) != int(question_id)]
-#     count = 0
-#     for d in data:
-#         d['id'] = count
-#         count += 1
-#
-#     connection.write_questions(QUESTIONS_FILE, data)
-#     data_answers = [element for element in answers_list if int(element['question_id']) != int(question_id)]
-#     for elem in data_answers:
-#         if int(elem['question_id']) > int(question_id):
-#             elem['question_id'] = int(elem['question_id']) - 1
-#     connection.write_answers(ANSWERS_FILE, data_answers)
-#     return connection.read_questions('data/questions.csv')
-
-
-# def delete_answer(answer_id):
-#     answers = connection.read_answers(ANSWERS_FILE)
-#     data = [element for element in answers if int(element['id']) != int(answer_id)]
-#     count = 0
-#     for answer in answers:
-#         if '../static/img/' != answer['image']:
-#             if int(answer['id']) == int(answer_id):
-#                 image_path = answer['image'][3:]
-#                 os.remove(image_path)
-#     for d in data:
-#         d['id'] = count
-#         count += 1
-#     connection.write_answers(ANSWERS_FILE, data)
-#     return connection.read_answers('data/answers.csv')
-
-
-
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -203,6 +154,14 @@ def update_question(cursor, parameter, message, title):
                     col3=sql.Identifier('title')), [message, title, parameter]
     )
 
+@connection.connection_handler
+def update_answer(cursor, parameter, message):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col2} = %s WHERE {col1} = %s;")
+        .format(table=sql.Identifier('answer'),
+                col1=sql.Identifier('id'),
+                col2=sql.Identifier('message')), [message,parameter]
+    )
 
 @connection.connection_handler
 def vote_item_up_down(cursor, parameter, type, direction):
@@ -239,6 +198,7 @@ def vote_item_up_down(cursor, parameter, type, direction):
             )
 
 @connection.connection_handler
+
 def max_id(cursor):
     cursor.execute("""SELECT MAX(id) FROM tag""")
     maxim_id = cursor.fetchall()
@@ -287,3 +247,42 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
     )
+
+def search_for_phrase(cursor, phrase_for_query):
+    cursor.execute(
+        sql.SQL("SELECT * from {table} WHERE to_tsvector({col1}) @@ to_tsquery(%s) OR to_tsvector({col2}) @@ to_tsquery(%s) ORDER BY {col3} desc;")
+            .format(table=sql.Identifier('question'),
+                    col1=sql.Identifier('title'),
+                    col2=sql.Identifier('message'),
+                    col3=sql.Identifier('vote_number')), [phrase_for_query, phrase_for_query]
+    )
+
+    questions_found = cursor.fetchall()
+    return questions_found
+
+
+@connection.connection_handler
+def add_question_comment(cursor, message, question_id, answer_id):
+    date = util.datetime.today()
+    submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(question_id)
+    print(answer_id)
+    if question_id is not None:
+        cursor.execute(
+            """
+            INSERT INTO comment (question_id, message, submission_time, edited_count) 
+            VALUES ('{question_id}', '{message}', '{submission_time}', '0');
+            """.format(question_id=question_id,
+                       message=message,
+                       submission_time=submission_time)
+    )
+    else:
+        cursor.execute(
+            """
+            INSERT INTO comment (answer_id, message, submission_time, edited_count) 
+            VALUES ('{answer_id}', '{message}', '{submission_time}', '0');
+            """.format(answer_id=answer_id,
+                       message=message,
+                       submission_time=submission_time)
+        )
+

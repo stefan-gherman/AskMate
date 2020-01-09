@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/main.css') }}">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add Comment</title>
+</head>
+<body>
+
+<div class="divquestion">
+    <p>Add Comment</p>
+</div>
+<br>
+
+    <br>
+
+{% if question_id %}
+       <a href="{{ url_for('route_question', question_id=question_id) }}">
+        <button type="submit" class="link_back">Go Back</button>
+    </a>
+    <form action='/question/{{ question_id }}/new-comment' method="post" enctype=multipart/form-data>
+        <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
+                  required></textarea><br>
+
+        <button name="submit">Submit</button>
+    </form>
+{% else %}
+<a href="{{ url_for('route_question', question_id=id) }}">
+        <button type="submit" class="link_back">Go Back</button>
+    </a>
+    <form action='/answer/{{ answer_id }}/new-comment' method="post" enctype=multipart/form-data>
+        <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
+                  required></textarea><br>
+
+        <button name="submit">Submit</button>
+    </form>
+
+{% endif %}
+</body>
+</html>
+</html>

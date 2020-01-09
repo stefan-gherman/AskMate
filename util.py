@@ -68,6 +68,37 @@ def random_string(string_length=10):
     return ''.join(random.choice(letters) for x in range(string_length))
 
 
+def apply_fancy(string,search_in):
+    new_string = string.lower()
+    new_string = new_string.split('+')
+    final_string = search_in.split()
+    search_in_new = search_in.lower()
+    search_in_new = search_in_new.split()
+    count_your_blessings = 0
+    positions = []
+    for string in new_string:
+        for string_search in range(len(search_in_new)):
+            if string == search_in_new[string_search]:
+                count_your_blessings += 1
+                positions.append(string_search)
+
+    for pos in positions:
+        final_string[pos] = f"<span style=\"color:red\">{final_string[pos]}</span>"
+    final_string = str.join(" ", final_string)
+    return final_string
+
+@connection.connection_handler
+def read_comments_sql(cursor):
+    cursor.execute(
+        """
+        SELECT * FROM comment;
+        """
+    )
+
+    comments = cursor.fetchall()
+    return comments
+
+
 @connection.connection_handler
 def read_questions_sql(cursor):
     cursor.execute(
@@ -90,6 +121,43 @@ def read_answers_sql(cursor):
 
     answers = cursor.fetchall()
 
+
+@connection.connection_handler
+def read_question_comments(cursor, question_id):
+    cursor.execute(
+        """
+        SELECT * FROM comment
+        WHERE question_id='{id}'
+        """.format(id=question_id)
+    )
+
+    question_comments = cursor.fetchall()
+    return question_comments
+
+
+@connection.connection_handler
+def read_question_id(cursor, answer_id):
+    cursor.execute(
+        """
+        SELECT question_id FROM answer
+        WHERE id = '{answer_id}'
+        """.format(answer_id=answer_id)
+    )
+    question_id = cursor.fetchall()
+    return question_id
+
+# @connection.connection_handler
+# def read_answer_id(cursor, question_id):
+#     cursor.execute(
+#         """
+#         SELECT id FROM answer
+#         WHERE question_id = '{question_id}'
+#         """.format(question_id=question_id)
+#     )
+#     question_id = cursor.fetchall()
+#     return question_id
+#
+# print(read_answer_id(29))
 
 @connection.connection_handler
 def order_questions_by(cursor, order):

@@ -40,6 +40,15 @@ body {
     color: black;
     background-color: peachpuff;
 }
+
+.question-comments {
+    font-size: 15px;
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    color: black;
+    background-color: #fff;
+    width:70%;
+    margin-right: 100px;
+}
 .answ {
     font-size: 25px;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
@@ -65,8 +74,9 @@ body {
 
 .links {
     font-size: 20px;
-    position: absolute;
-    right: 30px;
+    position: relative;
+    float: right;
+    margin-right: 10px;
 }
 
 .link_button{
@@ -107,6 +117,13 @@ button {
     color: white;
     font-size: 20px;
 }
+form button {
+    border-radius: 12px;
+    background-color: seagreen;
+    color: white;
+    font-size: 20px;
+}
+
 
 .message {
     border: 2px solid black;
