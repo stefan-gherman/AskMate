@@ -28,6 +28,8 @@ update_views = True
 def route_question(question_id):
     if question_id != '' and question_id is not None:
         question_id_conv = int(question_id)
+
+    tags = data_manager.get_tag_questions(question_id_conv)
     global update_views
 
     if update_views == True:
@@ -37,13 +39,16 @@ def route_question(question_id):
     comments = util.read_comments_sql()
     question_comments = util.read_question_comments(question_id)
     update_views = False
+
     return render_template('question.html',
                            questions=questions,
                            answers=answers,
                            question_id=question_id_conv,
                            question_comments=question_comments,
-                           comments=comments
+                           comments=comments,
+                           tags=tags
                            )
+
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -233,14 +238,6 @@ def route_index():
     #     questions_ordered = data_manager.sort_questions(param, sort_ord)
 
 
-# @app.route('/')
-@app.route('/list_questions')
-def list_questions():
-    questions = data_manager.list_first_questions()
-
-    return render_template('list_questions.html', questions=questions)
-
-
 @app.route('/question/<question_id>/')
 def delete_sql_question(question_id):
     global questions_found
@@ -256,6 +253,42 @@ def delete_sql_answer(answer_id):
     return redirect(request.referrer)
 
 
+
+@app.route('/question-new-tag/<question_id>')
+def question_tag(question_id):
+    question_id_to_add = int(question_id)
+    return render_template('tag_question.html', question_id=question_id_to_add)
+
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+def chose_question_tag(question_id):
+    question_id_to_add = int(question_id)
+    if request.method == 'GET':
+
+        return render_template('tag_question.html', question_id=question_id_to_add)
+
+    if request.method == 'POST':
+        tag1_input = request.form.get('tag1')
+        tag2_input = request.form.get('tag2')
+        tag3_input = request.form.get('tag3')
+        new_tag_input = request.form.get('new_tag')
+
+    tag_name_list = [tag1_input, tag2_input, tag3_input, new_tag_input]
+
+    for tag in tag_name_list:
+        if tag is not None and tag != '':
+            data_manager.add_tag(tag, question_id_to_add)
+
+    return route_question(question_id_to_add)
+
+
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def delete_one_tag(question_id, tag_id):
+    question_on_page = int(question_id)
+    tag_to_delete = int(tag_id)
+    data_manager.delete_tag_questions(question_on_page, tag_to_delete)
+
+    return route_question(question_on_page)
+  
 search_phrase = False
 questions_found = []
 @app.route('/search', methods=['GET', 'POST'])
@@ -318,5 +351,5 @@ if __name__ == "__main__":
     app.run(
         debug=True,
         host="0.0.0.0",
-        port=6372
+        port=6374
     )

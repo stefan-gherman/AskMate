@@ -68,17 +68,6 @@ def sort_questions(cursor, parameter, order):
 
 
 @connection.connection_handler
-def list_first_questions(cursor):
-    cursor.execute(
-        sql.SQL("SELECT * FROM {table} LIMIT 5;")
-            .format(table=sql.Identifier('question'))
-        )
-    names = cursor.fetchall()
-    return names
-
-
-
-@connection.connection_handler
 def delete_sql_questions(cursor, id_to_delete):
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
@@ -209,6 +198,56 @@ def vote_item_up_down(cursor, parameter, type, direction):
             )
 
 @connection.connection_handler
+
+def max_id(cursor):
+    cursor.execute("""SELECT MAX(id) FROM tag""")
+    maxim_id = cursor.fetchall()
+    return maxim_id
+
+@connection.connection_handler
+def add_tag(cursor, tag_name, question_id):
+    id_to_add = max_id()[0]['max'] + 1
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
+            .format(table=sql.Identifier('tag')), [id_to_add, tag_name]
+    )
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
+            .format(table=sql.Identifier('question_tag')), [question_id, id_to_add]
+    )
+
+
+@connection.connection_handler
+def get_tag_questions(cursor, question_id):
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table} WHERE {col1}=%s;")
+            .format(table=sql.Identifier('question_tag'), col1=sql.Identifier('question_id'),), [question_id]
+        )
+    all_tag_ids = cursor.fetchall()
+    tag_list=[]
+    for tag_to_print in all_tag_ids:
+        tag_to_print=int(tag_to_print['tag_id'])
+        cursor.execute(
+            sql.SQL("SELECT * FROM {table} WHERE {col}=%s;")
+                .format(table=sql.Identifier('tag'), col=sql.Identifier('id')),[tag_to_print]
+        )
+        names = cursor.fetchall()
+        tag_list.append(names)
+    return tag_list
+
+
+@connection.connection_handler
+def delete_tag_questions(cursor, question_id, tag_id_to_delete):
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col1}=%s AND {col2}=%s;")
+            .format(table=sql.Identifier('question_tag'), col1=sql.Identifier('question_id'),
+                    col2=sql.Identifier('tag_id')), [question_id, tag_id_to_delete]
+    )
+    cursor.execute(
+        sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
+            .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
+    )
+
 def search_for_phrase(cursor, phrase_for_query):
     cursor.execute(
         sql.SQL("SELECT * from {table} WHERE to_tsvector({col1}) @@ to_tsquery(%s) OR to_tsvector({col2}) @@ to_tsquery(%s) ORDER BY {col3} desc;")

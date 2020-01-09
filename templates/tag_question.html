@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Questions List</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    </head>
+
+
+<body>
+
+        <form action="{{ url_for('chose_question_tag', question_id=question_id)}}" method="post">
+            <fieldset>
+                <input type="checkbox" name="tag1" value="tag1"> Tag 1<br>
+                <input type="checkbox" name="tag2" value="tag2"> Tag 2<br>
+                <input type="checkbox" name="tag3" value="tag3"> Tag 3<br><br>
+            </fieldset>
+            <label> Define new tag:
+                <input type="text" name="new_tag"></label>
+            <input type="submit" value="Submit">
+        </form>
+
+
+</body>
+</html>
+
