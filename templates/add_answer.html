@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-
+<div class="border">
 <div class="divquestion">
     {% if edit_me %}
     <p>Edit Answer</p>
@@ -40,5 +40,6 @@
     {% endif %}
     <button name="submit">Submit</button>
 </form>
+</div>
 </body>
 </html>

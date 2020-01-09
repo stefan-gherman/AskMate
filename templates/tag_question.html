@@ -8,25 +8,28 @@
 
 
 <body>
-
-        <form action="{{ url_for('chose_question_tag', question_id=question_id)}}" method="post">
+    <div class="border">
+        <div class="divquestion">
+            <p>Add Comment</p>
+        </div>
+        <br>
+        <form action="{{ url_for('chose_question_tag', question_id=question_id)}}" method="post" class="tagform">
             <fieldset>
-                <input type="checkbox" name="css" value="CSS"> CSS<br>
-                <input type="checkbox" name="html" value="HTML"> HTML<br>
-                <input type="checkbox" name="sql" value="SQL"> SQL<br>
-                <input type="checkbox" name="php" value="PHP"> PHP<br>
-                <input type="checkbox" name="java" value="Java"> Java<br>
-                <input type="checkbox" name="cplus" value="C++"> C++<br>
-                <input type="checkbox" name="javascript" value="Javascript"> Javascript<br>
-                <input type="checkbox" name="python" value="Python"> Python<br>
-
-                <br>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="css" value="CSS"> <span>CSS</span> </span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="html" value="HTML"> <span>HTML</span></span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="sql" value="SQL"> <span>SQL</span></span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="php" value="PHP"> <span>PHP</span></span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="java" value="Java"> <span>Java</span></span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="cplus" value="C++"> <span>C++</span></span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="javascript" value="Javascript"> <span>Javascript</span></span>
+                <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="python" value="Python"> <span>Python</span></span>
             </fieldset>
-            <label> Define new tag:
-                <input type="text" name="new_tag"></label>
+                <br>
+            <label class="labelinput"> Define new tag:
+                <input type="text" name="new_tag" ></label>
             <input type="submit" value="Submit">
         </form>
-
+    </div>
 
 </body>
 </html>

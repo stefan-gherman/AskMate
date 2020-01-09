@@ -16,12 +16,14 @@
         <button type="submit" class="link_back">Go Back</button>
     </a>
 
-    <a href="{{ url_for('question_tag',question_id=question_id)}}">
-            <button class="links">Add tag</button>
-        </a>
-    <br>
-    <h1>Question: {{ questions.title }}</h1>
 
+    <br>
+    <div class="title_question">
+        <h1>Question: {{ questions.title }}</h1>
+    </div>
+    <br>
+
+    <br>
     <div class="msg">
 
 
@@ -30,7 +32,6 @@
     <div >
         {% for tag in tags %}
             <div class="tags">{{ tag[0]['name'] }}
-
                 <a class="link_button" href="{{ url_for('delete_one_tag', question_id = question_id, tag_id = tag[0]['id']) }}">
                     X
                 </a>
@@ -49,8 +50,11 @@
 
     {% endif %}
     <a href="{{ url_for('route_add_question_comment', question_id=questions.id ) }}">
-        <button type="submit" class="add-comment">Add Comment</button>
+        <button type="submit" class="links">Add Comment</button>
     </a>
+    <a href="{{ url_for('question_tag',question_id=question_id)}}">
+            <button class="links">Add tag</button>
+        </a>
     <p style="text-align: center"> Votes:{{ questions.vote_number }} Views:{{ questions.view_number }}
         Submission Date:{{ questions.submission_time }}</p>
 
@@ -60,20 +64,15 @@
             {{ comment.submission_time }}<br>
         {% endfor %}
     </div>
-<!--
-    {% for answer in answers %}
-    <div class="answ">
-        <p>
-            <a href="{{ url_for('delete_sql_answer', answer_id = answer.id) }}">
-            <button class="links">Delete</button>
-        </a>
-            <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
-            <button class="links">Edit</button>
-</div>
--->
+
 </div>
     </div>
-<h2 style="font-size: 2em"> Answers</h2>
+    <br>
+    <div class="title_question">
+        <h2 style="font-size: 2em"> Answers</h2>
+    </div>
+    <br>
+
 <a href="{{ url_for('route_add_answer', question_id = question_id) }}">
     <button type="submit" class="link_right">Add a new Answer</button>
 </a>
@@ -116,7 +115,8 @@
     </p>
 </div>
 {% endfor %}
-{% endfor %}
+
+    <br>
 </body>
 
 </html>
