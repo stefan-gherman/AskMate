@@ -57,6 +57,7 @@ def route_add_question():
     if request.method == 'POST':
         random_file_name = util.random_string()
         title = request.form['title']
+        title = title.rstrip('?')
         message = util.make_compat_display(request.form['message'])
         message = message.replace("'", "''")
         title = title.replace("'", "''")
@@ -81,6 +82,7 @@ def route_edit_question(question_id):
     edit_me = True
     if request.method == 'POST':
         title = request.form['title']
+        title = title.rstrip('?')
         message = request.form['message']
         message = util.make_compat_display(message, 'not_textarea')
         data_manager.update_question(question_id_conv, message, title)
@@ -290,15 +292,22 @@ def delete_one_tag(question_id, tag_id):
     return route_question(question_on_page)
   
 
-
+questions_found = []
+phrase_for_query = ""
 @app.route('/search', methods=['GET', 'POST'])
 def return_search():
         show_sort = False
         global questions_found
         global search_phrase
+        global phrase_for_query
         search_phrase = request.values.get('search')
         search_phrase_for_highlighting = search_phrase
         if search_phrase is None:
+            questions_found = data_manager.search_for_phrase(phrase_for_query)
+            search_phrase_for_highlighting = phrase_for_query
+            for question in questions_found:
+                question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
+                question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
             return render_template("index.html", questions = questions_found, show_sort = show_sort)
 
         search_phrase = search_phrase.split()
