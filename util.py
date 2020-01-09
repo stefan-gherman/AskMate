@@ -143,7 +143,9 @@ def read_question_id(cursor, answer_id):
         WHERE id = '{answer_id}'
         """.format(answer_id=answer_id)
     )
+
     question_id = cursor.fetchall()
+
     return question_id
 
 # @connection.connection_handler
