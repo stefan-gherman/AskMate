@@ -11,12 +11,26 @@
     </div>
     <br>
     <div class="sortquestion">
+        {% if show_sort %}
         <h2>Sort questions</h2>
 
         <form method="get" action="{{ url_for('route_index') }}">
                 <select name="param" id="param">
                     {% for elem in question_headers %}
-                    <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >{{elem}}</option>
+                    <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >
+                        {% if elem == 'submission_time' %}
+                            Submission Time
+                        {% endif %}
+                        {% if elem == 'vote_number' %}
+                            Vote Number
+                        {% endif %}
+                        {% if elem == 'view_number' %}
+                            View Number
+                        {% endif %}
+                        {% if elem == 'title' %}
+                            Title
+                        {% endif %}
+                    </option>
                     {% endfor %}
                 </select>
                 <select name = "sort_ord" id = "sort_ord" >
@@ -30,11 +44,19 @@
                 <button type="submit">Sort questions</button>
             </form>
         </div>
+    <br>
+    Sorted {{order_display}} by {{param_display}}
+    {% endif %}
         <br>
         <a href="{{ url_for('route_add_question') }}"><button type="button" id="buttonadd" >Add a new Question</button></a>
         <br>
         <br>
-
+        <form method="post" align="center" action="{{url_for('return_search')}}">
+            <input type="text" name="search" id="search" title="search" autofocus placeholder="Search...">
+            <button type="submit" id="buttonsearch">Go</button>
+        </form>
+        <br>
+        <br>
             <table id="container" align="center">
                 <thead id ="thead">
                     <tr><th></th>
@@ -51,7 +73,7 @@
                           <a href="{{ url_for('delete_sql_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
                       </td>
                       <td>
-                          <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{{ line.title }}</h2></a>
+                          <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{% autoescape false %}{{ line.title }}{% endautoescape %}</h2></a>
                       </td>
 
                       <td>

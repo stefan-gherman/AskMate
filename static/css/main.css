@@ -108,6 +108,13 @@ button {
     color: white;
     font-size: 20px;
 }
+form button {
+    border-radius: 12px;
+    background-color: seagreen;
+    color: white;
+    font-size: 20px;
+}
+
 
 .message {
     border: 2px solid black;
