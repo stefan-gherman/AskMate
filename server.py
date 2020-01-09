@@ -53,6 +53,8 @@ def route_add_question():
         random_file_name = util.random_string()
         title = request.form['title']
         message = util.make_compat_display(request.form['message'])
+        message = message.replace("'", "''")
+        title = title.replace("'", "''")
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
@@ -85,6 +87,36 @@ def route_edit_question(question_id):
         return render_template('add_question.html', edit_me=edit_me, question=question, id_q=id_q)
 
 
+@app.route('/question/<question_id>/<answer_id>/edit', methods=['GET', 'POST'])
+def route_edit_answer(question_id, answer_id):
+    global update_views
+    update_views = False
+    edit_me = True
+    answer_id = answer_id.rstrip('}')
+    if request.method == 'POST':
+        answer_id_conv = int(answer_id)
+        question_id_conv = int(question_id)
+        message = request.form['message']
+        message = util.make_compat_display(message, 'not_textarea')
+        data_manager.update_answer(answer_id_conv, message)
+        return redirect(url_for('route_question', question_id=question_id_conv))
+    elif request.method == 'GET':
+        answer_id_conv = int(answer_id)
+        question_id_conv = int(question_id)
+        answer = data_manager.display_answers(question_id_conv)
+        for i in range(len(answer)):
+            answer[i] = dict(answer[i])
+        print('This is answer after conv', answer)
+        for i in range(len(answer)):
+            if answer[i]['id'] == answer_id_conv:
+                answer_editable = answer[i]
+        print('\n', 'This is the editable answer.', answer_editable)
+        answer_editable['message'] = util.make_compat_display(answer_editable['message'], 'textarea')
+        id_a = answer_editable['id']
+        id_q = answer_editable['question_id']
+        return render_template('add_answer.html', edit_me=edit_me, answer=answer_editable, id_q=id_q, id_a=id_a)
+
+
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id):
     questions = data_manager.delete_question(question_id)
@@ -98,6 +130,7 @@ def route_add_answer(question_id):
     if request.method == 'POST':
         random_file_name = util.random_string()
         message = util.make_compat_display(request.form['message'])
+        message = message.replace("'", "''")
         file = request.files['file']
         filename = secure_filename(file.filename)
         if file and data_manager.allowed_file(file.filename):
@@ -176,7 +209,6 @@ def route_index():
     #     questions = util.make_compat_display(questions, 'not_textarea')
     #     questions_ordered = data_manager.sort_questions(param, sort_ord)
 
-
 # @app.route('/')
 @app.route('/list_questions')
 def list_questions():
@@ -199,6 +231,7 @@ def delete_sql_answer(answer_id):
     data_manager.delete_sql_answers(answer_to_delete)
 
     return redirect(request.referrer)
+
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
