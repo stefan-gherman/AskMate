@@ -5,6 +5,8 @@ import connection as connection
 import util as util
 from werkzeug.utils import secure_filename
 
+DATABASE_URL = os.environ['DATABASE_URL']
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
 
