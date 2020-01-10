@@ -394,4 +394,4 @@ def delete_comment_by_id(cursor, id):
     )
 
 
-delete_comment_by_id(64)
+#delete_comment_by_id(64)

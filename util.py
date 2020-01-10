@@ -70,7 +70,7 @@ def random_string(string_length=10):
 
 def apply_fancy(string,search_in):
     new_string = string.lower()
-    new_string = new_string.split('+')
+    new_string = new_string.split(' ')
     final_string = search_in.split()
     search_in_new = search_in.lower()
     search_in_new = search_in_new.split()

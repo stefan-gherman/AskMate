@@ -243,6 +243,9 @@ def route_index():
 def delete_sql_question(question_id):
     global questions_found
     question_to_delete = int(question_id)
+    answers = data_manager.display_answers(question_id)
+    for answer in answers:
+        data_manager.delete_sql_answers(int(answer['id']))
     data_manager.delete_sql_questions(question_to_delete)
     return redirect(request.referrer)
 
@@ -311,6 +314,9 @@ def return_search():
     if search_phrase is None:
         questions_found = data_manager.search_for_phrase(phrase_for_query)
         search_phrase_for_highlighting = phrase_for_query
+        search_phrase_for_highlighting = search_phrase_for_highlighting.split('&')
+        search_phrase_for_highlighting = str.join(" ",search_phrase_for_highlighting)
+        print(search_phrase_for_highlighting)
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
             question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
@@ -335,6 +341,7 @@ def route_add_question_comment(question_id):
 
     if request.method == 'POST':
         message = request.form['message']
+        message=message.replace("'","''")
         data_manager.add_question_comment(message=message,
                                           question_id=question_id,
                                           answer_id=answer_id)
@@ -352,6 +359,7 @@ def route_add_answer_comment(answer_id):
     question_id = question_id[0]['question_id']
     if request.method == 'POST':
         message = request.form['message']
+        message = message.replace("'", "''")
         data_manager.add_question_comment(message=message,
                                           question_id=None,
                                           answer_id=answer_id)
@@ -375,6 +383,7 @@ def route_edit_comments(comment_id):
         question_id = data_manager.get_question_id_by_comment_id(comment_id)
     if request.method == 'POST':
         message = request.form['message']
+        message = message.replace("'", "''")
         edited_count += 1
         data_manager.edit_comment(message=message,
                                   edited_count=edited_count,
