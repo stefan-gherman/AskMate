@@ -8,7 +8,7 @@
 {% block body %}
     <div class="top-banner">
         <h1>AskMate</h1>
-        <p>Answers for everything</p>
+        <p>Answers For Everything</p>
     </div>
 
     <div class="centered-content">
@@ -17,45 +17,6 @@
             <input type="submit" id="buttonsearch" value="Search" class="add-content-button">
         </form>
     </div>
-
-    <div class="centered-content">
-    <div class="sortquestion">
-        {% if show_sort %}
-        <form method="get" action="{{ url_for('route_index') }}">
-                <select name="param" id="param">
-                    {% for elem in question_headers %}
-                    <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >
-                        {% if elem == 'submission_time' %}
-                            Submission Time
-                        {% endif %}
-                        {% if elem == 'vote_number' %}
-                            Vote Number
-                        {% endif %}
-                        {% if elem == 'view_number' %}
-                            View Number
-                        {% endif %}
-                        {% if elem == 'title' %}
-                            Title
-                        {% endif %}
-                    </option>
-                    {% endfor %}
-                </select>
-                <select name = "sort_ord" id = "sort_ord" >
-                    <option value="asc" selected>
-                        Ascending
-                    </option>
-                    <option value = "desc" >
-                        Descending
-                    </option>
-                </select>
-                <button type="submit">Sort questions</button>
-            </form>
-        </div>
-    {% endif %}
-    </div>
-
-
-
 
         {% for line in questions %}
             <div class="question-wrapper">

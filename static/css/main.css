@@ -98,7 +98,7 @@ a:active {
 }
 
 .wrapped-message {
-    grid-column: 2/17;
+    grid-column: 1/17;
     grid-row: 2;
     background-color: rgb(61,70,94);
     box-shadow: 3px 3px 3px black;
@@ -135,6 +135,25 @@ nav ul {
 
 .menu-button:hover {
     opacity: 0.2;
+}
+
+.sort-bar {
+    display: none;
+    position: fixed;
+    right: 65px;
+    bottom: 187px;
+}
+
+.sort-bar-button {
+    border: none;
+    display: inline-block;
+    margin-top: 20px;
+    border-radius: 3px;
+    padding: 2px 7px;
+    background-color: rgb(65,105,187);
+    font-size: x-large;
+    color: rgb(205,242,255);
+    box-shadow: 3px 3px 3px black;
 }
 
 /* new/edit question and other text boxes */
