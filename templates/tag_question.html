@@ -6,9 +6,9 @@
 
 
 {% block body %}
-    <div class="border">
-        <div class="divquestion">
-            <p>Add Comment</p>
+
+        <div class="top-banner">
+            <p>Add Tag</p>
         </div>
         <br>
         <form action="{{ url_for('chose_question_tag', question_id=question_id)}}" method="post" class="tagform">
@@ -23,11 +23,11 @@
                 <span class="labelcheckbox"><input class="roundedOne" type="checkbox" name="python" value="Python"> <span>Python</span></span>
             </fieldset>
                 <br>
-            <label class="labelinput"> Define new tag:
-                <input type="text" name="new_tag" ></label>
-            <input type="submit" value="Submit">
+            <label for="new_tag">Create and add a new tag:</label>
+            <input type="text" name="new_tag" id="new_tag" >
+            <input type="submit" value="Create" class="add-content-button">
         </form>
-    </div>
+
 
 {% endblock body %}
 
