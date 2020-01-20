@@ -7,7 +7,6 @@ from psycopg2 import sql
 
 today = datetime.today()
 
-
 def order_by_value(dataset, param, order='asc'):
     """
     :param dataset: a list of dictionaries
