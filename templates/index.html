@@ -10,11 +10,17 @@
         <h1>AskMate</h1>
         <p>Answers for everything</p>
     </div>
-    <br>
+
+    <div class="centered-content">
+        <form method="post" align="center" action="{{url_for('return_search')}}">
+            <input type="text" name="search" id="search" title="search" autofocus placeholder="Search...">
+            <button type="submit" id="buttonsearch">Go</button>
+        </form>
+    </div>
+
+    <div class="centered-content">
     <div class="sortquestion">
         {% if show_sort %}
-        <h2>Sort questions</h2>
-
         <form method="get" action="{{ url_for('route_index') }}">
                 <select name="param" id="param">
                     {% for elem in question_headers %}
@@ -45,59 +51,51 @@
                 <button type="submit">Sort questions</button>
             </form>
         </div>
-    <br>
-            <p class="labelinput">Sorted {{order_display}} by {{param_display}}</p>
     {% endif %}
-        <br>
-        <a href="{{ url_for('route_add_question') }}"><button type="button" id="buttonadd" >Add a new Question</button></a>
-        <br>
-        <br>
-        <form method="post" align="center" action="{{url_for('return_search')}}">
-            <input type="text" name="search" id="search" title="search" autofocus placeholder="Search...">
-            <button type="submit" id="buttonsearch">Go</button>
-        </form>
-        <br>
-        <br>
-            <table id="container" align="center">
-                <thead id ="thead">
-                    <tr><th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for line in questions %}
-                    <tr>
-                      <td>
-                          <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
-                          <a href="{{ url_for('delete_sql_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
-                      </td>
-                      <td>
-                          <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{% autoescape false %}{{ line.title }}{% endautoescape %}</h2></a>
-                      </td>
+    </div>
 
-                      <td>
-                            <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}">
-                                <button type="button" id="buttonplus">Vote +</button>
+
+
+
+        {% for line in questions %}
+            <div class="question-wrapper">
+                <div class="wrapped-votes">
+                        <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}" class="vote-button">
+                            <img src="/static/img/vote-up-button.png">
+                        </a>
+                        <br>
+                        {{ line.vote_number }}
+                        <br>
+                        <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}" class="vote-button">
+                                    <img src="/static/img/vote-down-button.png">
+                        </a>
+                </div>
+
+                <div class="wrapped-title">
+                        <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink">{% autoescape false %}{{ line.title }}{% endautoescape %}</a>
+                        <br>
+                        <span class="title-info"> View number: {{ line.view_number }} Submission TIme: {{ line.submission_time }}
+                            <a href="{{ url_for('route_edit_question', question_id=line.id) }}">
+                                <span class="action-button">Edit</span>
                             </a>
-                            <span style="font-size: 20px; color: red; font-weight: bold">{{ line.vote_number }}</span>
-                            <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}">
-                                <button type="button" id="buttonminus"> Vote -</button>
+                            <a href="{{ url_for('delete_sql_question', question_id=line.id) }}">
+                                <span class="action-button">Delete</span>
                             </a>
-                        </td>
-                        <td>
-                            <p style="font-size: 20px;">View number: <span
-                                    style="font-size: 20px; color: red; font-weight: bold">{{ line.view_number }}</span>
-                            </p>
+                        </span>
+                </div>
 
-                        </td>
-                        <td>
-                            <p style="font-size: 20px;"> Submission TIme: {{ line.submission_time }}</p>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                <div class="wrapped-message">
+                    {{ line.message }}
+                </div>
+            </div>
+        {% endfor %}
 
+
+<!--
+<div class="centered-content">
+    <div class="add-content-button">
+        <a href="{{ url_for('route_add_question') }}">New Question</a>
+    </div>
+</div>
+-->
 {% endblock body %}

@@ -5,6 +5,10 @@ html {
     color: rgb(205,242,255);
 }
 
+a {
+    text-decoration: none;
+}
+
 /* unvisited link */
 a:link {
   color: rgb(248,255,169);
@@ -30,4 +34,102 @@ a:active {
 .top-banner {
     text-align: center;
     font-size: xx-large;
+}
+
+.add-content-button {
+    display: inline-block;
+    margin-top: 20px;
+    border-radius: 3px;
+    padding: 3px;
+    background-color: rgb(102,121,128);
+    color: rgb(186,191,126);
+}
+
+.centered-content {
+    text-align: center;
+    padding: 3px;
+}
+
+.action-button {
+    border-radius: 3px;
+    padding: 2px;
+    padding-left: 3px;
+    padding-right: 4px;
+    border: solid 1px rgb(121,128,46);
+}
+
+/* list and top 5 questions - questions display */
+
+.question-wrapper {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    grid-auto-rows: minmax(30px, auto);
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.wrapped-votes {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    text-align: center;
+    margin-top: 20px;
+    background-color: rgb(61,70,94);
+    box-shadow: 3px 3px 3px black;
+    padding: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.wrapped-title {
+    grid-column: 2/17;
+    grid-row: 1;
+    margin-top: 20px;
+    background-color: rgb(61,70,94);
+    box-shadow: 3px 3px 3px black;
+    padding: 3px;
+    border-top-right-radius: 3px;
+}
+
+.title-info {
+    font-size: x-small;
+}
+
+.wrapped-message {
+    grid-column: 2/17;
+    grid-row: 2;
+    background-color: rgb(61,70,94);
+    box-shadow: 3px 3px 3px black;
+    padding: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.vote-button {
+    opacity: 40%;
+}
+
+.vote-button:hover {
+    opacity: 100%;
+}
+
+/* bot nav menu */
+
+nav {
+    position: fixed;
+    right: 1%;
+    bottom: 1%;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+.menu-button {
+    margin: 3px;
+    box-shadow: 3px 3px 3px black;
+    border-radius: 3px;
+}
+
+.menu-button:hover {
+    opacity: 0.2;
 }

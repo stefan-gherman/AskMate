@@ -13,7 +13,13 @@
 
 
     <body>
-
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('route_index') }}"><img src="/static/img/buttonlist.png" class="menu-button"></a></li>
+          <li><a href="{{ url_for('route_add_question') }}"><img src="/static/img/buttonplus.png" class="menu-button"></a></li>
+          <li><a href="{{ url_for('route_index') }}"><img src="/static/img/buttonhome.png" class="menu-button"></a></li>
+        </ul>
+      </nav>
 
 
         {% block body %}{% endblock body%}
