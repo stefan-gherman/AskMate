@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'base.html' %}
+
+{% block head %}
     <title>Add Question</title>
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-</head>
-<body>
+{% endblock head %}
+
+{% block body %}
 <div class="border">
 {% if edit_me %}
     <div class="divquestion">
@@ -53,5 +52,4 @@
 
 </form>
 </div>
-</body>
-</html>
+{% endblock body %}

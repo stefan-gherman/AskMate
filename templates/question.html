@@ -1,13 +1,10 @@
-<!doctype HTML>
+{% extends 'base.html' %}
 
-<html>
+{% block head %}
+    <title>{{ questions.title }}</title>
+{% endblock head %}
 
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/main.css')}}">
-        <title>{{questions.title}}</title>
-    </head>
-    <body>
+{% block body%}
     <div class="up_banner">
         <p><span style="font-size: 70px">AskMate</span><br><span class="sub">Answers for everything </span></p>
     </div>
@@ -117,6 +114,4 @@
 {% endfor %}
 
     <br>
-</body>
-
-</html>
+{% endblock body %}

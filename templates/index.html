@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Questions List</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-    </head>
-    <body>
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Ask Mate Home</title>
+{% endblock head %}
+
+
+{% block body %}
     <div class="up_banner">
         <p><span style="font-size: 70px">AskMate</span> <br><span class="sub">Answers for everything </span></p>
     </div>
@@ -99,6 +99,4 @@
                 </tbody>
             </table>
 
-
-    </body>
-</html>
+{% endblock body %}

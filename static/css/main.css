@@ -1,17 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Barriecito|Cherry+Swash|Faster+One|Jaldi|Orbitron|Oregano|Overlock+SC|Rye|Special+Elite|UnifrakturMaguntia|Wallpoet|Warnes&display=swap');
-
-/*font-family: 'Orbitron', sans-serif;*/
-/*font-family: 'Special Elite', cursive;*/
-/*font-family: 'Jaldi', sans-serif;*/
-/*font-family: 'Warnes', cursive;*/
-/*font-family: 'Rye', cursive;*/
-/*font-family: 'Wallpoet', cursive;*/
-/*font-family: 'Oregano', cursive;*/
-/*font-family: 'UnifrakturMaguntia', cursive;*/
-/*font-family: 'Overlock SC', cursive;*/
-/*font-family: 'Faster One', cursive;*/
-/*font-family: 'Barriecito', cursive;*/
-/*font-family: 'Cherry Swash', cursive;*/
+html {
+    font-family: sans-serif;
+}
 
 .up_banner{
     background-color: rgba(255,255,255,0.5);
@@ -19,10 +8,7 @@
     width: available;
     border: 2px solid gold;
     border-radius: 30px;
-
-
 }
-
 
 body {
     background-image: url('metal_paint_rust_154151_3840x2400.jpg');
@@ -34,7 +20,6 @@ body {
     padding-right: 150px;
     padding-top: 20px;
 }
-
 
 .up_banner p {
     font-size: 25px;

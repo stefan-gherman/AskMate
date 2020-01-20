@@ -1,12 +1,10 @@
-<!doctype HTML>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>
-        Test GET query
-    </title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Test Page</title>
+{% endblock head %}
+
+{% block body %}
 <h1>
     Test QUERY
 </h1>
@@ -43,5 +41,4 @@ Elem:
     <button type="submit">Sort</button>
 </form>
  {{question_headers}}
-</body>
-</html>
+{% endblock body %}
