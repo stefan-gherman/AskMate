@@ -37,12 +37,15 @@ a:active {
 }
 
 .add-content-button {
+    border: none;
     display: inline-block;
     margin-top: 20px;
     border-radius: 3px;
-    padding: 3px;
-    background-color: rgb(102,121,128);
-    color: rgb(186,191,126);
+    padding: 2px 7px;
+    background-color: rgb(51,60,64);
+    font-size: x-large;
+    color: rgb(205,242,255);
+    box-shadow: 3px 3px 3px black, inset 2px 2px 2px rgb(64,111,100);
 }
 
 .centered-content {
@@ -132,4 +135,14 @@ nav ul {
 
 .menu-button:hover {
     opacity: 0.2;
+}
+
+/* new/edit question and other text boxes */
+
+textarea, input[type=text] {
+    background-color: darkgray;
+    width: 300px;
+    border-radius: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

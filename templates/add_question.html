@@ -5,51 +5,81 @@
 {% endblock head %}
 
 {% block body %}
-<div class="border">
+<div>
 {% if edit_me %}
-    <div class="divquestion">
+    <div class="top-banner">
         <p>Edit Question</p>
     </div><br>
 
 {% else %}
-    <div class="divquestion">
-        <p>Add Your Question</p>
+    <div class="top-banner">
+        <p>Ask Question</p>
     </div>
     <br>
 {% endif %}
 
-<a href="{{ url_for('route_index') }}">
-    <button type="submit" class="link_back">Go Back</button>
-</a>
-<br>
-<form {% if edit_me %} {% if question %} action='/question/{{ id_q }}/edit' {% endif %} {% else %}
-                                         action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
-    <label class="labelinput">{% if edit_me %}
-        Title<br>
-    {% else %}
-        <label class="labelinput">Add question title<br>
-    {% endif %}</label>
-        <input type="text" name="title" id="title" title="message" class="message" maxlength="50" {% if edit_me %}
-            {% if question %}
-               value="{{ question[0].title}}"
-            {% endif %}
-        {% endif %} style="min-width: 470px" required class="labelinput"><br><br>
-        <label id="message" class="labelinput">{% if edit_me %}
-            Edit question message
+<div class="centered-content">
+    <form {% if edit_me %} {% if question %} action='/question/{{ id_q }}/edit' {% endif %} {% else %}
+                                             action='/add-question' {% endif %} method="post" enctype=multipart/form-data>
+        {% if edit_me %}
+            <label for="title">Edit Question</label>
+            <br>
         {% else %}
-            Add question message
-        {% endif %}</label><br>
+            <label for="title">Question</label>
+            <br>
+        {% endif %}
+            <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    title="message"
+                    class="message"
+                    maxlength="50"
+                    {% if edit_me %}
+                        {% if question %}
+                            value="{{ question[0].title}}"
+                        {% endif %}
+                    {% endif %}><br>
+            <label id="message">
+                {% if edit_me %}
+                    Edit question message
+                {% else %}
+                    Add question message
+                {% endif %}
+            </label>
+            <br>
 
-        <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
-                  required>{% if edit_me %}{% if question %}{{ question[0].message}}
-        {% endif %}{% endif %}</textarea></label><br>
-    {% if edit_me %}
+            {% if edit_me %}
+                {% if question %}
+                    <textarea
+                            name="message"
+                            class="message"
+                            title="message"
+                            cols="50"
+                            rows="10"
+                            required>{{question[0].message}}</textarea>
+                {% endif %}
+            {% else %}
+                <textarea
+                    name="message"
+                    class="message"
+                    title="message"
+                    cols="50"
+                    rows="10"
+                    required></textarea>
+            {% endif %}
+            <br>
+        {% if edit_me %}
 
-    {% else %}
-        <input type=file name=file accept=".png, .jpeg"> <br><br>
-    {% endif %}
-    <button title="submit">Submit</button>
+        {% else %}
+            <input
+                    type=file
+                    name=file
+                    accept=".png, .jpeg">
+            <br>
+        {% endif %}
+        <input type="submit" value="Submit" class="add-content-button">
 
-</form>
+    </form>
 </div>
 {% endblock body %}
