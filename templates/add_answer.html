@@ -33,14 +33,25 @@
             {% endif %}
             method="post"
             enctype=multipart/form-data>
-        <textarea
-                name="message"
-                class="message"
-                title="message"
-                cols="50"
-                rows="10"
-                required>{% if edit_me %}{% if answer %}{{ answer.message}}
-            {% endif %}{% endif %}</textarea><br>
+        {% if edit_me %}
+            {% if answer %}
+                <textarea
+                        name="message"
+                        class="message"
+                        title="message"
+                        cols="50"
+                        rows="10"
+                        required>{{ answer.message}}</textarea><br>
+            {% else %}
+                <textarea
+                        name="message"
+                        class="message"
+                        title="message"
+                        cols="50"
+                        rows="10"
+                        required></textarea><br>
+            {% endif %}
+        {% endif %}
         {% if edit_me %}
 
         {% else %}

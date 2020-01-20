@@ -146,3 +146,15 @@ textarea, input[type=text] {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.tag {
+    padding: 2px;
+    border: solid 1px rgb(121,128,46);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.tag-container {
+    margin-top: 20px;
+    margin-left: 5%;
+}
