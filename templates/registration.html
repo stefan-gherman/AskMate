@@ -9,7 +9,7 @@
     <div>
         <h2>REGISTRATION FORM:</h2>
         <h4> Join the platform, where you can find the right answers for your questions</h4>
-        <form action="" method="post">
+        <form action="{{ url_for('register_user')}}" method="post">
             <label>User Name:
                 <input type="text" name="username">
             </label>

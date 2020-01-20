@@ -289,3 +289,13 @@ def add_question_comment(cursor, message, question_id, answer_id):
                        message=message,
                        submission_time=submission_time)
         )
+
+
+@connection.connection_handler
+def add_user_in_db(cursor, value_username, value_password):
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} ({col1}, {col2})VALUES (%s, %s);")
+            .format(table=sql.Identifier('person'),
+                    col1=sql.Identifier('username'),
+                    col2=sql.Identifier('password')), [value_username, value_password]
+    )

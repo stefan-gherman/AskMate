@@ -5,6 +5,7 @@ import connection as connection
 import util as util
 from werkzeug.utils import secure_filename
 
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
 
@@ -362,6 +363,21 @@ def route_add_answer_comment(answer_id):
                            answer_id=answer_id,
                            id=question_id)
 
+@app.route('/registration', methods=['GET', 'POST'])
+def registration_page():
+    return render_template('registration.html');
+
+
+@app.route('/register_form', methods=['GET', 'POST'])
+def register_user():
+    if request.method == 'POST':
+        input_username = request.form.get('username')
+        input_password = request.form.get('password')
+        hash_password = util.hash_password(input_password)
+        data_manager.add_user_in_db(input_username, hash_password)
+        message = 'Welcome ' + input_username + ' !!!!'
+
+    return render_template('user_page.html', message=message)
 
 
 if __name__ == "__main__":

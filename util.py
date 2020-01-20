@@ -1,3 +1,4 @@
+import bcrypt
 import connection as connection
 from datetime import datetime
 import data_manager as data_manager
@@ -178,3 +179,7 @@ def order_questions_by(cursor, order):
         )
         questions_ordered = cursor.fetchall()
         return questions_ordered
+
+def hash_password(plain_text_password):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
