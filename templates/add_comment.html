@@ -6,28 +6,11 @@
 
 {% block body %}
 
-<div class="border">
-<div class="divquestion">
-    <p>Add Comment</p>
+<div class="top-banner">
+        <p>Add Comment</p>
 </div>
-<br>
 
-    <br>
-
-{% if question_id %}
-       <a href="{{ url_for('route_question', question_id=question_id) }}">
-        <button type="submit" class="link_back">Go Back</button>
-    </a>
-    <form action='/question/{{ question_id }}/new-comment' method="post" enctype=multipart/form-data>
-        <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
-                  required></textarea><br>
-
-        <button name="submit">Submit</button>
-    </form>
-{% else %}
-<a href="{{ url_for('route_question', question_id=id) }}">
-        <button type="submit" class="link_back">Go Back</button>
-    </a>
+<div class="centered-content">
     <form action='/answer/{{ answer_id }}/new-comment' method="post" enctype=multipart/form-data>
         <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
                   required></textarea><br>
@@ -35,7 +18,7 @@
         <button name="submit">Submit</button>
     </form>
 
-{% endif %}
+
 </div>
 {% endblock body %}
 

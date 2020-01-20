@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Add Question</title>
+    {% if edit_me %}
+        <title>Edit Question</title>
+    {% else %}
+        <title>Add Question</title>
+    {% endif %}
 {% endblock head %}
 
 {% block body %}
