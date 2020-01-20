@@ -289,3 +289,13 @@ def add_question_comment(cursor, message, question_id, answer_id):
                        message=message,
                        submission_time=submission_time)
         )
+
+
+@connection.connection_handler
+def update_accept_answer(cursor, answer_id):
+    cursor.execute(
+        sql.SQL("UPDATE {table} SET {col1} = TRUE WHERE {col2} = %s;")
+            .format(table=sql.Identifier('answer'),
+                    col1=sql.Identifier('accepted'),
+                    col2=sql.Identifier('id')), [answer_id]
+    )

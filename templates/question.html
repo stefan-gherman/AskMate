@@ -90,6 +90,11 @@
         </a>
         <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
             <button class="links">Edit</button></a>
+
+        <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}">
+        Accept
+        </a>
+
         {% autoescape false %}{{ answer.message }}{% endautoescape %}
 
         <br><br>
