@@ -605,3 +605,14 @@ def get_accepted_value_for_answer(cursor, answer_id):
     result = cursor.fetchone()
     current_accepted_value = result['accepted']
     return current_accepted_value
+
+
+@connection.connection_handler
+def get_question_data_and_username(cursor, question_id):
+    cursor.execute(f"""
+                    SELECT question.*, person.username AS username FROM question
+                    JOIN person ON question.user_id = person.id
+                    WHERE question.id = {question_id};
+""")
+    question = cursor.fetchone()
+    return question

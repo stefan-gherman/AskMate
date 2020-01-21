@@ -35,14 +35,15 @@ def route_question(question_id):
 
     if update_views == True:
         data_manager.update_views(question_id_conv)
-    questions = dict(data_manager.display_question(question_id_conv).pop())
+    # questions = dict(data_manager.display_question(question_id_conv).pop())
+    question = data_manager.get_question_data_and_username(question_id)
     answers = data_manager.display_answers(question_id_conv)
     comments = util.read_comments_sql()
     question_comments = util.read_question_comments(question_id)
     update_views = False
     db_username_by_question_id = data_manager.get_username_by_question_id(question_id)
     return render_template('question.html',
-                           questions=questions,
+                           question=question,
                            answers=answers,
                            question_id=question_id_conv,
                            question_comments=question_comments,
