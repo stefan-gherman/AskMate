@@ -329,6 +329,7 @@ def return_search():
         print('This is a question', question)
     return render_template("index.html", questions=questions_found, show_sort=show_sort)
 
+
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
@@ -383,7 +384,6 @@ def register_user():
     return render_template('user_page.html', message=message)
 
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -418,6 +418,12 @@ def display_user_activity(user_id):
                            target_user_questions=target_user_questions,
                            target_user_answers=target_user_answers,
                            target_user_comments=target_user_comments)
+
+
+@app.route('/tags')
+def route_tags():
+    data = data_manager.count_number_of_tags()
+    return render_template('tags.html', data=data)
 
 
 if __name__ == "__main__":
