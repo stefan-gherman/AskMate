@@ -292,6 +292,17 @@ def add_question_comment(cursor, message, question_id, answer_id):
 
 
 @connection.connection_handler
+def add_user_in_db(cursor, value_username, value_password):
+    cursor.execute(
+        sql.SQL("INSERT INTO {table} ({col1}, {col2})VALUES (%s, %s);")
+            .format(table=sql.Identifier('person'),
+                    col1=sql.Identifier('username'),
+                    col2=sql.Identifier('password')), [value_username, value_password]
+
+    )
+    
+    
+@connection.connection_handler
 def update_accept_answer(cursor, answer_id):
     cursor.execute(
         sql.SQL("UPDATE {table} SET {col1} = TRUE WHERE {col2} = %s;")
