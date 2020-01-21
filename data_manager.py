@@ -576,7 +576,8 @@ def get_list_users(cursor):
 @connection.connection_handler
 def get_newest_questions(cursor):
     cursor.execute(f"""
-                    SELECT * FROM question
+                    SELECT question.*, person.username AS username FROM question
+                    JOIN person ON question.user_id = person.id
                     ORDER BY submission_time DESC 
                     LIMIT 5;
 """)
