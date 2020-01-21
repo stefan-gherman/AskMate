@@ -354,9 +354,11 @@ def route_add_answer_comment(answer_id):
     question_id = question_id[0]['question_id']
     if request.method == 'POST':
         message = request.form['message']
+        user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.add_question_comment(message=message,
                                           question_id=None,
-                                          answer_id=answer_id)
+                                          answer_id=answer_id,
+                                          user_id=user_id)
         return redirect(url_for('route_question',
                                 question_id=question_id))
 
