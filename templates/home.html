@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>All Questions</title>
+    <title>Ask Mate Home</title>
 {% endblock head %}
 
 
 {% block body %}
     <div class="top-banner">
-        <p>All Questions</p>
+        <h1>AskMate</h1>
+        <p>Answers For Everything</p>
     </div>
 
     <div class="centered-content">
@@ -68,11 +69,4 @@
         {% endfor %}
 
 
-<!--
-<div class="centered-content">
-    <div class="add-content-button">
-        <a href="{{ url_for('route_add_question') }}">New Question</a>
-    </div>
-</div>
--->
 {% endblock body %}
