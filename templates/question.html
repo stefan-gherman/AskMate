@@ -11,24 +11,44 @@
     <p class="title-info">
         <span>Votes:{{ questions.vote_number }} Views:{{ questions.view_number }}
         Submission Date:{{ questions.submission_time }}</span>
+        {% if session %}
         <a href="{{ url_for('route_add_question_comment', question_id=questions.id ) }}" class="action-button">Comment</a>
         <a href="{{ url_for('route_edit_question', question_id=questions.id) }}" class="action-button">Edit</a>
         <a href="{{ url_for('delete_sql_question', question_id=questions.id) }}" class="action-button">Delete</a>
+        {% else %}
+        <a href="#" class="action-button">Comment</a>
+        <a href="#" class="action-button">Edit</a>
+        <a href="#" class="action-button">Delete</a>
+        {% endif %}
     </p>
 </div>
 
 <div class="question-wrapper">
     <div class="wrapped-votes">
-        <a href="{{ url_for('route_question_vote_up', question_id=questions.id) }}" class="vote-button">
-            <img src="/static/local_ico/vote-up-button.png">
-        </a>
-        <br>
-        {{ questions.vote_number }}
-        <br>
-        <a href="{{ url_for('route_question_vote_down', question_id=questions.id) }}" class="vote-button">
-            <img src="/static/local_ico/vote-down-button.png">
-        </a>
+        {% if session %}
+            <a href="{{ url_for('route_question_vote_up', question_id=questions.id) }}" class="vote-button">
+                <img src="/static/local_ico/vote-up-button.png">
+            </a>
+            <br>
+            {{ questions.vote_number }}
+            <br>
+            <a href="{{ url_for('route_question_vote_down', question_id=questions.id) }}" class="vote-button">
+                <img src="/static/local_ico/vote-down-button.png">
+            </a>
+        {% else %}
+            <a href="#" class="vote-button">
+                <img src="/static/local_ico/vote-up-button.png">
+            </a>
+            <br>
+            {{ questions.vote_number }}
+            <br>
+            <a href="#" class="vote-button">
+                <img src="/static/local_ico/vote-down-button.png">
+            </a>
+        {% endif %}
     </div>
+
+
     <div class="wrapped-title">
         {{ questions.message }}
     </div>
@@ -45,18 +65,33 @@
 
 
 <div class="tag-container">
-    {% for tag in tags %}
-        <span class="tag">
-            {{ tag[0]['name'] }}
-        </span>
-        <span>
-            <a
-                class="action-button"
-                href="{{ url_for('delete_one_tag', question_id = question_id, tag_id = tag[0]['id']) }}"
-                >X</a>
-        </span>
-    {% endfor %}
-    <span><a href="{{ url_for('question_tag',question_id=question_id)}}" class="action-button">+</a></span>
+    {% if session %}
+        {% for tag in tags %}
+            <span class="tag">
+                {{ tag[0]['name'] }}
+            </span>
+            <span>
+                <a
+                    class="action-button"
+                    href="{{ url_for('delete_one_tag', question_id = question_id, tag_id = tag[0]['id']) }}"
+                    >X</a>
+            </span>
+        {% endfor %}
+        <span><a href="{{ url_for('question_tag',question_id=question_id)}}" class="action-button">+</a></span>
+    {% else %}
+        {% for tag in tags %}
+            <span class="tag">
+                {{ tag[0]['name'] }}
+            </span>
+            <span>
+                <a
+                    class="action-button"
+                    href="#"
+                    >X</a>
+            </span>
+        {% endfor %}
+        <span><a href="#" class="action-button">+</a></span>
+    {% endif %}
 </div>
 <br>
 
@@ -77,30 +112,58 @@
 {% for answer in answers %}
 
 <div class="question-wrapper">
+
     <div class="wrapped-votes">
-        <a href="{{ url_for('route_answer_vote_up', answer_id=answer.id) }}" class="vote-button">
+        {% if session %}
+            <a href="{{ url_for('route_answer_vote_up', answer_id=answer.id) }}" class="vote-button">
+                <img src="/static/local_ico/vote-up-button.png">
+            </a>
+            <br>
+            {{ answer.vote_number }}
+            <br>
+            <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
+                        <img src="/static/local_ico/vote-down-button.png">
+            </a>
+            <div class="wrapped-accepted">
+                <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
+                    Accept
+                </a>
+        {% else %}
+            <a href="#" class="vote-button">
             <img src="/static/local_ico/vote-up-button.png">
-        </a>
-        <br>
-        {{ answer.vote_number }}
-        <br>
-        <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
-                    <img src="/static/local_ico/vote-down-button.png">
-        </a>
-        <div class="wrapped-accepted">
-            <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
+            </a>
+            <br>
+            {{ answer.vote_number }}
+            <br>
+            <a href="#" class="vote-button">
+                        <img src="/static/local_ico/vote-down-button.png">
+            </a>
+            <div class="wrapped-accepted">
+            <a href="#" class="action-button">
                 Accept
             </a>
+        {% endif %}
+
     </div>
 </div>
 
     <div class="wrapped-title">
-        {{ answer.message }}
-        <span class="title-info">
-            <a href="{{ url_for('route_add_answer_comment', answer_id = answer.id) }}" class="action-button">Comment</a>
-            <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}" class="action-button">Edit</a>
-            <a href="{{ url_for('delete_sql_answer', answer_id = answer.id) }}" class="action-button">Delete</a>
-        </span>
+        {% if session %}
+            {{ answer.message }}
+            <span class="title-info">
+                <a href="{{ url_for('route_add_answer_comment', answer_id = answer.id) }}" class="action-button">Comment</a>
+                <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}" class="action-button">Edit</a>
+                <a href="{{ url_for('delete_sql_answer', answer_id = answer.id) }}" class="action-button">Delete</a>
+            </span>
+        {% else %}
+            {{ answer.message }}
+            <span class="title-info">
+                <a href="#" class="action-button">Comment</a>
+                <a href="#" class="action-button">Edit</a>
+                <a href="#" class="action-button">Delete</a>
+            </span>
+        {% endif %}
+
     </div>
 
 
@@ -117,8 +180,15 @@
 
 {% endfor %}
 
+{% if session %}
 <div class="centered-content">
     <a href="{{ url_for('route_add_answer', question_id = question_id) }}" class="add-content-button">Answer Question</a>
 </div>
+{% else %}
+<div class="centered-content">
+    <a href="#" class="add-content-button">Answer Question</a>
+</div>
+{% endif %}
+
 
 {% endblock body %}

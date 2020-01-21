@@ -3,6 +3,7 @@ html {
     background-color: rgb(51,60,64);
     font-weight: lighter;
     color: rgb(205,242,255);
+    font-size: large;
 }
 
 a {
@@ -114,7 +115,7 @@ a:active {
     grid-row: 2;
     background-color: rgb(61,70,94);
     box-shadow: 3px 3px 3px black;
-    padding: 3px;
+    padding: 5px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
 }

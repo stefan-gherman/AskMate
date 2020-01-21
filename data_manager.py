@@ -545,8 +545,7 @@ def count_number_of_tags(cursor):
     return data
 
 
-
-
+@connection.connection_handler
 def get_list_users(cursor):
     cursor.execute(
         f""" SELECT username, created, reputation FROM person;

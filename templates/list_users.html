@@ -1,26 +1,30 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>List Users</title>
+    <title>Users</title>
 {% endblock head %}
 
 
 {% block body %}
-    <p>All Users</p>
-    <table>
-    <tr>
-        <th>UserName</th>
-        <th>Date register</th>
-        <th>Reputation</th>
-    </tr>
-    {% for item in data_list_users %}
-    <tr>
-        <td> {{ item.username }} </td>
-        <td> {{ item.created }} </td>
-        <td> {{ item.reputation }} </td>
-    </tr>
-    {% endfor %}
-    </table>
+    <p class="top-banner">
+        All Users
+    </p>
 
+    <div class="centered-content">
+        <table>
+        <tr>
+            <th>Username</th>
+            <th>Joined on</th>
+            <th>Reputation</th>
+        </tr>
+        {% for item in data_list_users %}
+        <tr>
+            <td> {{ item.username }} </td>
+            <td> {{ item.created }} </td>
+            <td> {{ item.reputation }} </td>
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
 {% endblock body %}
 
