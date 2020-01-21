@@ -84,6 +84,15 @@
         <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
                     <img src="/static/img/vote-down-button.png">
         </a>
+        <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
+            <button class="links">Edit</button></a>
+
+        <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}">
+        Accept
+        </a>
+
+        {% autoescape false %}{{ answer.message }}{% endautoescape %}
+
     </div>
 
     <div class="wrapped-title">
