@@ -528,3 +528,13 @@ def get_user_id_by_username(cursor, username):
     result = cursor.fetchone()
     user_id = result['id']
     return user_id
+
+
+@connection.connection_handler
+def get_list_users(cursor):
+    cursor.execute(
+        f""" SELECT username, created, reputation FROM person;
+"""
+    )
+    result = cursor.fetchall()
+    return result

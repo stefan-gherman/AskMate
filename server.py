@@ -425,6 +425,11 @@ def display_user_activity(user_id):
                            target_user_answers=target_user_answers,
                            target_user_comments=target_user_comments)
 
+@app.route('/list_users')
+def list_users():
+    data_list_users = data_manager.get_list_users()
+    return render_template('list_users.html', data_list_users=data_list_users)
+
 
 if __name__ == "__main__":
     app.run(
