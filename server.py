@@ -146,7 +146,8 @@ def route_add_answer(question_id):
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        data_manager.add_answer(question_id, message, filename)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        data_manager.add_answer(question_id, message, filename, user_id)
         return redirect(url_for('route_question', question_id=question_id))
     return render_template('add_answer.html', question_id=question_id)
 
@@ -257,11 +258,11 @@ def delete_sql_answer(answer_id):
     return redirect(request.referrer)
 
 
-
 @app.route('/question-new-tag/<question_id>')
 def question_tag(question_id):
     question_id_to_add = int(question_id)
     return render_template('tag_question.html', question_id=question_id_to_add)
+
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
 def chose_question_tag(question_id):

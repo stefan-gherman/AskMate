@@ -23,16 +23,7 @@
 {% endif %}
 
 <div class="centered-content">
-    <form
-            {% if edit_me %}
-                {% if answer %}
-                    action='/question/{{ id_q }}/{{id_a}}/edit'
-                {% endif %}
-            {% else %}
-                action='/question/{{question_id}}/new-answer'
-            {% endif %}
-            method="post"
-            enctype=multipart/form-data>
+    <form {% if edit_me %} {% if answer %} action='/question/{{ id_q }}/{{id_a}}/edit' {% endif %} {% else %} action='/question/{{question_id}}/new-answer' {% endif %} method="post" enctype=multipart/form-data>
         {% if edit_me %}
             {% if answer %}
                 <textarea
@@ -51,12 +42,17 @@
                         rows="10"
                         required></textarea><br>
             {% endif %}
-        {% endif %}
-        {% if edit_me %}
-
         {% else %}
-            <input type=file name=file accept=".png, .jpeg"> <br><br>
+            <textarea
+                        name="message"
+                        class="message"
+                        title="message"
+                        cols="50"
+                        rows="10"
+                        required></textarea><br>
         {% endif %}
+            <input type=file name=file accept=".png, .jpeg"> <br><br>
+
         <input type="submit" name="submit" value="Submit" class="add-content-button">
     </form>
 </div>
