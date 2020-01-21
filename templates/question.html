@@ -76,13 +76,13 @@
 <div class="question-wrapper">
     <div class="wrapped-votes">
         <a href="{{ url_for('route_answer_vote_up', answer_id=answer.id) }}" class="vote-button">
-            <img src="/static/img/vote-up-button.png">
+            <img src="/static/local_ico/vote-up-button.png">
         </a>
         <br>
         {{ answer.vote_number }}
         <br>
         <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
-                    <img src="/static/img/vote-down-button.png">
+                    <img src="/static/local_ico/vote-down-button.png">
         </a>
         <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
             <button class="links">Edit</button></a>
