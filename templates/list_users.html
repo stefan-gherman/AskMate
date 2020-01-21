@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>List Users</title>
+{% endblock head %}
+
+
+{% block body %}
+    <p>All Users</p>
+    <table>
+    <tr>
+        <th>UserName</th>
+        <th>Date register</th>
+        <th>Reputation</th>
+    </tr>
+    {% for item in data_list_users %}
+    <tr>
+        <td> {{ item.username }} </td>
+        <td> {{ item.created }} </td>
+        <td> {{ item.reputation }} </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+{% endblock body %}
+
