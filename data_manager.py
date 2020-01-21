@@ -28,20 +28,20 @@ def add_question(cursor, title, message, file):
 
 
 @connection.connection_handler
-def add_answer(cursor, question_id, message, file):
+def add_answer(cursor, question_id, message, file, user_id):
     date = util.datetime.today()
     submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
     answers_list = util.read_answers_sql()
     image = "../" + UPLOAD_FOLDER + "/" + str(file)
     cursor.execute(
         """
-        INSERT INTO answer (submission_time, vote_number, question_id, message, image) 
-        VALUES ('{submission_time}', '0', '{question_id}', '{message}', '{image}' )
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id) 
+        VALUES ('{submission_time}', '0', '{question_id}', '{message}', '{image}', {user_id} )
         """.format(submission_time=submission_time,
                    question_id=question_id,
                    message=message,
-                   image=image
-
+                   image=image,
+                   user_id=user_id
                    )
     )
 
@@ -359,7 +359,7 @@ def search_for_phrase(cursor, phrase_for_query):
 
 
 @connection.connection_handler
-def add_question_comment(cursor, message, question_id, answer_id):
+def add_question_comment(cursor, message, question_id, answer_id, user_id):
     date = util.datetime.today()
     submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
     print(question_id)
@@ -367,20 +367,22 @@ def add_question_comment(cursor, message, question_id, answer_id):
     if question_id is not None:
         cursor.execute(
             """
-            INSERT INTO comment (question_id, message, submission_time, edited_count) 
-            VALUES ('{question_id}', '{message}', '{submission_time}', '0');
+            INSERT INTO comment (question_id, message, submission_time, edited_count, user_id) 
+            VALUES ('{question_id}', '{message}', '{submission_time}', '0', {user_id});
             """.format(question_id=question_id,
                        message=message,
-                       submission_time=submission_time)
+                       submission_time=submission_time,
+                       user_id=user_id)
         )
     else:
         cursor.execute(
             """
-            INSERT INTO comment (answer_id, message, submission_time, edited_count) 
-            VALUES ('{answer_id}', '{message}', '{submission_time}', '0');
+            INSERT INTO comment (answer_id, message, submission_time, edited_count, user_id) 
+            VALUES ('{answer_id}', '{message}', '{submission_time}', '0', {user_id});
             """.format(answer_id=answer_id,
                        message=message,
-                       submission_time=submission_time)
+                       submission_time=submission_time,
+                       user_id=user_id)
         )
 
 
@@ -422,3 +424,65 @@ def verify_password(cursor, plain_text_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
 
+@connection.connection_handler
+def get_username_by_user_id(cursor, user_id):
+    cursor.execute(f"""
+                   SELECT username FROM person
+                   WHERE id='{user_id}';
+""")
+    result = cursor.fetchone()
+    target_user_username = result['username']
+    return target_user_username
+
+
+@connection.connection_handler
+def get_all_user_questions(cursor, user_id):
+    cursor.execute(f"""
+            SELECT person.username, question.title, question.id FROM person
+            JOIN question ON person.id = question.user_id
+            WHERE person.id={user_id}
+            ;
+""")
+    user_questions = cursor.fetchall()
+    return user_questions
+
+
+@connection.connection_handler
+def get_all_user_answers(cursor, user_id):
+    cursor.execute(f"""
+            SELECT person.username, answer.message, answer.question_id FROM person
+            JOIN answer ON person.id = answer.user_id
+            WHERE person.id={user_id}
+            ;
+""")
+    user_answers = cursor.fetchall()
+    return user_answers
+
+
+@connection.connection_handler
+def get_all_user_comments(cursor, user_id):
+    cursor.execute(f"""
+            SELECT person.username, 
+                    comment.message, 
+                    comment.question_id, 
+                    comment.answer_id, 
+                    ( SELECT answer.question_id FROM answer
+                        WHERE id=comment.answer_id) AS answers_linked_question_id
+            FROM person
+            JOIN comment ON person.id = comment.user_id
+            WHERE person.id={user_id}
+            ;
+""")
+    user_comments = cursor.fetchall()
+    return user_comments
+
+
+@connection.connection_handler
+def get_user_id_by_username(cursor, username):
+    cursor.execute(f"""
+                           SELECT id FROM person
+                           WHERE username='{username}';
+        """)
+    result = cursor.fetchone()
+    user_id = result['id']
+    return user_id

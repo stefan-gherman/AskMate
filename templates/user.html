@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>User {{ target_user_username }}</title>
+{% endblock head %}
+
+
+{% block body %}
+
+<h2>Questions added by {{ target_user_username }}</h2>
+    {% for question in target_user_questions %}
+        <p>
+            <a href="/question/{{ question.id }}">{{ question.title }}</a>
+        </p>
+    {% endfor %}
+
+<h2>Answers added by {{ target_user_username }}</h2>
+    {% for answer in target_user_answers %}
+        <p>
+            {{ answer.message }} <a href="/question/{{ answer.question_id }}">Go to question</a>
+        </p>
+    {% endfor %}
+
+
+
+<h2>Comments added by {{ target_user_username }}</h2>
+    {% for comment in target_user_comments %}
+        <p>
+            {{ comment.message }}
+            {% if comment.question_id %}
+                <a href="/question/{{ comment.question_id }}">Go to question</a>
+            {% elif comment.answers_linked_question_id %}
+                <a href="/question/{{ comment.answers_linked_question_id }}">Go to question</a>
+            {% endif %}
+        </p>
+    {% endfor %}
+
+
+{% endblock body %}

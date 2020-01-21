@@ -330,16 +330,17 @@ def return_search():
         return render_template("index.html", questions = questions_found, show_sort = show_sort)
 
 
-
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
 
     if request.method == 'POST':
         message = request.form['message']
+        user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.add_question_comment(message=message,
                                           question_id=question_id,
-                                          answer_id=answer_id)
+                                          answer_id=answer_id,
+                                          user_id=user_id)
         return redirect(url_for('route_question', question_id=question_id))
 
     return render_template('add_comment.html',
@@ -354,9 +355,11 @@ def route_add_answer_comment(answer_id):
     question_id = question_id[0]['question_id']
     if request.method == 'POST':
         message = request.form['message']
+        user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.add_question_comment(message=message,
                                           question_id=None,
-                                          answer_id=answer_id)
+                                          answer_id=answer_id,
+                                          user_id=user_id)
         return redirect(url_for('route_question',
                                 question_id=question_id))
 
@@ -392,12 +395,27 @@ def login():
     return render_template('login.html')
 
 
+
 @app.route('/user_accept_answer/<answer_id>')
 def route_accept_answer(answer_id):
 
     data_manager.update_accept_answer(answer_id)
 
     return redirect(request.referrer)
+
+
+@app.route('/user/<user_id>')
+def display_user_activity(user_id):
+    target_user_username = data_manager.get_username_by_user_id(user_id)
+    target_user_questions = data_manager.get_all_user_questions(user_id)
+    target_user_answers = data_manager.get_all_user_answers(user_id)
+    target_user_comments = data_manager.get_all_user_comments(user_id)
+    return render_template('user.html',
+                           target_user_username=target_user_username,
+                           target_user_questions=target_user_questions,
+                           target_user_answers=target_user_answers,
+                           target_user_comments=target_user_comments)
+
 
 if __name__ == "__main__":
     app.run(
