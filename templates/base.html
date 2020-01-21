@@ -79,8 +79,8 @@
 
 
 
-          <li><a href="#"><img src="/static/local_ico/buttontags.png" class="menu-button"></a></li>
-          <li><a href="#"><img src="/static/local_ico/buttonusers.png" class="menu-button"></a></li>
+          <li><a href="{{ url_for('route_tags') }}"><img src="/static/local_ico/buttontags.png" class="menu-button"></a></li>
+          <li><a href="{{ url_for('list_users') }}"><img src="/static/local_ico/buttonusers.png" class="menu-button"></a></li>
           <li><a href="{{ url_for('route_index') }}"><img src="/static/local_ico/buttonlist.png" class="menu-button"></a></li>
           <li><a href="{{ url_for('route_add_question') }}"><img src="/static/local_ico/buttonplus.png" class="menu-button"></a></li>
           <li><a href="{{ url_for('route_index') }}"><img src="/static/local_ico/buttonhome.png" class="menu-button"></a></li>

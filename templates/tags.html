@@ -6,21 +6,29 @@
 
 
 {% block body %}
-    <table>
-        <thead>
-            <tr>
-                <th>Tag</th>
-                <th>Number Of Tags/th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for current_data in data %}
-            <tr>
-                <td>{{current_data}}</td>
-                <td>{{data[current_data]}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="top-banner">
+        <p>All Tags</p>
+    </div>
+
+
+    <div class="centered-content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for current_data in data %}
+                <tr>
+                    <td>{{current_data}}</td>
+                    <td>{{data[current_data]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}

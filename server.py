@@ -425,6 +425,7 @@ def display_user_activity(user_id):
                            target_user_answers=target_user_answers,
                            target_user_comments=target_user_comments)
 
+
 @app.route('/list_users')
 def list_users():
     data_list_users = data_manager.get_list_users()
