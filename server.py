@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import os
 import data_manager as data_manager
 import connection as connection
@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
+app.secret_key = os.urandom((20))
 
 # @app.route('/')
 # @app.route('/list')
@@ -328,16 +329,17 @@ def return_search():
         print('This is a question', question)
     return render_template("index.html", questions=questions_found, show_sort=show_sort)
 
-
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
 
     if request.method == 'POST':
         message = request.form['message']
+        user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.add_question_comment(message=message,
                                           question_id=question_id,
-                                          answer_id=answer_id)
+                                          answer_id=answer_id,
+                                          user_id=user_id)
         return redirect(url_for('route_question', question_id=question_id))
 
     return render_template('add_comment.html',
@@ -352,9 +354,11 @@ def route_add_answer_comment(answer_id):
     question_id = question_id[0]['question_id']
     if request.method == 'POST':
         message = request.form['message']
+        user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.add_question_comment(message=message,
                                           question_id=None,
-                                          answer_id=answer_id)
+                                          answer_id=answer_id,
+                                          user_id=user_id)
         return redirect(url_for('route_question',
                                 question_id=question_id))
 
@@ -376,8 +380,24 @@ def register_user():
         hash_password = util.hash_password(input_password)
         data_manager.add_user_in_db(input_username, hash_password)
         message = 'Welcome ' + input_username + ' !!!!'
-
     return render_template('user_page.html', message=message)
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        hashed_password = data_manager.get_password_by_username(request.form['username'])
+        if data_manager.verify_password(request.form['password'], hashed_password):
+            session['username'] = request.form['username']
+            return redirect(url_for('route_index'))
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('route_index'))
 
 
 @app.route('/user_accept_answer/<answer_id>')
@@ -385,6 +405,19 @@ def route_accept_answer(answer_id):
     data_manager.update_accept_answer(answer_id)
 
     return redirect(request.referrer)
+
+
+@app.route('/user/<user_id>')
+def display_user_activity(user_id):
+    target_user_username = data_manager.get_username_by_user_id(user_id)
+    target_user_questions = data_manager.get_all_user_questions(user_id)
+    target_user_answers = data_manager.get_all_user_answers(user_id)
+    target_user_comments = data_manager.get_all_user_comments(user_id)
+    return render_template('user.html',
+                           target_user_username=target_user_username,
+                           target_user_questions=target_user_questions,
+                           target_user_answers=target_user_answers,
+                           target_user_comments=target_user_comments)
 
 
 if __name__ == "__main__":

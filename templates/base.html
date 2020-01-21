@@ -13,6 +13,17 @@
 
 
     <body>
+    <span>
+        {% if session %}
+            <span>{{ session.username }}</span> <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('registration_page') }}">Register</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </span>
+
+
+
       <nav>
         <ul>
           <li><img src="/static/img/buttonsort.png" onclick="myFunction()" class="menu-button"></li>
