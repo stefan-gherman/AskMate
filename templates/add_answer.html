@@ -1,45 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Answer</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-<div class="border">
-<div class="divquestion">
-    {% if edit_me %}
-    <p>Edit Answer</p>
-    {% else %}
-    <p>Add Answer</p>
-    {% endif %}
-</div>
-<br>
-<br>
-{% if edit_me %}
-{% if answer %}
-<a href="{{ url_for('route_question', question_id = answer.question_id) }}">
-    <button type="submit" class="link_back">Go Back</button>
-</a>
-{% endif %}
-{% else %}
-<a href="{{ url_for('route_question', question_id = question_id) }}">
-    <button type="submit" class="link_back">Go Back</button>
-</a>
-{% endif %}
-<br>
-<br>
-<form {% if edit_me %} {% if answer %} action='/question/{{ id_q }}/{{id_a}}/edit' {% endif %} {% else %} action='/question/{{question_id}}/new-answer' {% endif %} method="post" enctype=multipart/form-data>
-    <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
-              required>{% if edit_me %}{% if answer %}{{ answer.message}}
-        {% endif %}{% endif %}</textarea><br>
-    {% if edit_me %}
+{% extends 'base.html' %}
 
+{% block head %}
+    {% if edit_me %}
+        <title>Edit Answer</title>
     {% else %}
-    <input type=file name=file accept=".png, .jpeg"> <br><br>
+        <title>Add Answer</title>
     {% endif %}
-    <button name="submit">Submit</button>
-</form>
+{% endblock head %}
+
+
+{% block body %}
+<div>
+
+{% if edit_me %}
+    <div class="top-banner">
+        <p>Edit Answer</p>
+    </div>
+{% else %}
+    <div class="top-banner">
+        <p>Answer</p>
+    </div>
+{% endif %}
+
+<div class="centered-content">
+    <form
+            {% if edit_me %}
+                {% if answer %}
+                    action='/question/{{ id_q }}/{{id_a}}/edit'
+                {% endif %}
+            {% else %}
+                action='/question/{{question_id}}/new-answer'
+            {% endif %}
+            method="post"
+            enctype=multipart/form-data>
+        {% if edit_me %}
+            {% if answer %}
+                <textarea
+                        name="message"
+                        class="message"
+                        title="message"
+                        cols="50"
+                        rows="10"
+                        required>{{ answer.message}}</textarea><br>
+            {% else %}
+                <textarea
+                        name="message"
+                        class="message"
+                        title="message"
+                        cols="50"
+                        rows="10"
+                        required></textarea><br>
+            {% endif %}
+        {% endif %}
+        {% if edit_me %}
+
+        {% else %}
+            <input type=file name=file accept=".png, .jpeg"> <br><br>
+        {% endif %}
+        <input type="submit" name="submit" value="Submit" class="add-content-button">
+    </form>
 </div>
-</body>
-</html>
+
+</div>
+{% endblock body %}

@@ -1,0 +1,279 @@
+html {
+    font-family: sans-serif;
+}
+
+.up_banner{
+    background-color: rgba(255,255,255,0.5);
+    height: 175px;
+    width: available;
+    border: 2px solid gold;
+    border-radius: 30px;
+}
+
+body {
+    background-image: url('metal_paint_rust_154151_3840x2400.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    /*background-color: rgba(255,255,255,0.3);*/
+    /*background-blend-mode: lighten;*/
+    padding-left: 150px;
+    padding-right: 150px;
+    padding-top: 20px;
+}
+
+.up_banner p {
+    font-size: 25px;
+    font-family: 'Rye', cursive;
+    font-style: italic;
+    color: darkslategrey;
+    text-align: center;
+}
+
+.divquestion {
+    margin-top: 20px;
+    padding-top: 20px;
+    padding-bottom: 25px;
+    font-size: 35px;
+    font-family: 'Rye', cursive;
+    font-style: italic;
+    color: darkslategrey;
+    background-color: rgba(255,255,255,0.5);
+    height: 100px;
+    text-align: center;
+    border-radius: 30px;
+    border: 2px solid gold;
+}
+
+.sub{
+    font-size: 20px;
+}
+
+.title_question {
+    font-family: 'Cherry Swash', cursive;
+    color: black;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 30px;
+    border: 2px solid gold;
+    padding-left: 20px;
+}
+
+.msg {
+    font-size: 18px;
+    font-family: 'Cherry Swash', cursive;
+    color: black;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 30px;
+    border: 2px solid gold;
+    padding-left: 30px;
+    padding-bottom: 20px;
+
+}
+.answ {
+    font-size: 25px;
+    font-family: 'Cherry Swash', cursive;
+    color: black;
+    background-color: rgba(255,255,255,0.5);
+    min-height: 85px;
+    max-height: fit-content;
+    width: 100%;
+    border-radius: 30px;
+    border: 2px solid gold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.vote {
+    height: 30px;
+    width: 30px;
+}
+
+.alignc {
+    float: none;
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+
+.links {
+    font-size: 20px;
+    position: relative;
+    margin-left: 10px;
+    right: 30px;
+    float: right;
+}
+
+.link_button{
+    width:20px;
+    font-weight:bolder;
+    font-size:20px;
+    display:block;
+    float:right;
+    border:1px solid #000000;
+    text-decoration: none;
+}
+.link_back {
+    font-size: 20px;
+    background-color: darkslategrey;
+    color: white;
+}
+.sortquestion {
+    background-color: rgba(255,255,255,0.5);
+    height: 120px;
+    width: available;
+    border: 2px solid gold;
+    border-radius: 30px;
+    color: darkslategrey;
+    font-size: 20px;
+    font-family: 'Cherry Swash', cursive;
+    padding-left: 30px;
+    padding-bottom: 20px;
+}
+#titlesort {
+    padding-right: 30px;
+}
+.link_right {
+    font-size: 20px;
+    background-color: darkslategrey;
+    color: white;
+}
+table{
+    align: center;
+    border: 2px solid gold;
+    border-radius: 30px;
+    background-color: rgba(255,255,255,0.5);
+    font-family: 'Cherry Swash', cursive;
+}
+button {
+    border-radius: 12px;
+    background-color: darkslategrey;
+    color: white;
+    font-size: 20px;
+    font-family: 'Cherry Swash', cursive;
+}
+
+.message {
+    border: 2px solid black;
+    font-size: 15px;
+}
+
+#question {
+    font-size: 20px;
+}
+
+#title {
+    font-size: 15px;
+}
+
+select {
+    font-size: 20px;
+}
+
+.tags{
+  display: inline-block;
+  width: 100px;
+  height: 50px;
+  margin: 1em;
+}
+.question-comments{
+    padding-left: 20px;
+    padding-bottom: 10px;
+}
+
+.roundedOne {
+  width: 28px;
+  height: 28px;
+  position: relative;
+  margin: 20px auto;
+  background: #fcfff4;
+  background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+  border-radius: 50px;
+  box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+  label {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    background: linear-gradient(top, #222 0%, #45484d 100%);
+    border-radius: 50px;
+    box-shadow: inset 0px 1px 1px rgba(0,0,0,0.5), 0px 1px 0px rgba(255,255,255,1);
+    &:after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      background: $activeColor;
+      background: linear-gradient(top, $activeColor 0%, $darkenColor 100%);
+      opacity: 0;
+      border-radius: 50px;
+      box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+    }
+    &:hover::after {
+      opacity: 0.3;
+    }
+  }
+  input[type=checkbox] {
+    visibility: hidden;
+    &:checked + label:after {
+      opacity: 1;
+    }
+  }
+}
+
+span {
+    font-size: 20px;
+    font-family: 'Cherry Swash', cursive;
+
+}
+fieldset{
+    background-color: rgba(255,255,255,0.5);
+    border: 2px solid gold;
+    border-radius: 30px;
+}
+
+.tagform{
+    padding-top: 20px;
+}
+
+.labelcheckbox{
+    float: left;
+    margin: 25px;
+}
+
+.labelinput{
+    font-size: 30px;
+    font-family: 'Cherry Swash', cursive;
+    color: white;
+}
+
+.message{
+    border: 2px solid gold;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#param, #sort_ord{
+    border-radius: 30px;
+    border: 1px solid darkslategrey;
+}
+
+#search{
+    width: 350px;
+    height: 30px;
+    border-radius: 30px;
+    border: 1px solid darkslategrey;
+}
+
+.border{
+  border: 20px solid rgba(255,255,255,0.5);
+    border-radius: 30px;
+  padding: 20px;
+  max-width: 700px;
+  width: 80%;
+  margin: 20px auto;
+}
