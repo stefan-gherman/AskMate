@@ -40,14 +40,15 @@ def route_question(question_id):
     comments = util.read_comments_sql()
     question_comments = util.read_question_comments(question_id)
     update_views = False
-
+    db_username_by_question_id = data_manager.get_username_by_question_id(question_id)
     return render_template('question.html',
                            questions=questions,
                            answers=answers,
                            question_id=question_id_conv,
                            question_comments=question_comments,
                            comments=comments,
-                           tags=tags
+                           tags=tags,
+                           db_username_by_question_id=db_username_by_question_id
                            )
 
 
@@ -413,8 +414,11 @@ def logout():
 
 @app.route('/user_accept_answer/<answer_id>')
 def route_accept_answer(answer_id):
-    data_manager.update_accept_answer(answer_id)
-
+    current_accepted_value = data_manager.get_accepted_value_for_answer(answer_id)
+    if current_accepted_value is False:
+        data_manager.update_accept_answer(answer_id)
+    else:
+        data_manager.update_clear_answer(answer_id)
     return redirect(request.referrer)
 
 
