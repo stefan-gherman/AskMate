@@ -402,3 +402,56 @@ def update_accept_answer(cursor, answer_id):
                     col1=sql.Identifier('accepted'),
                     col2=sql.Identifier('id')), [answer_id]
     )
+
+
+@connection.connection_handler
+def get_username_by_user_id(cursor, user_id):
+    cursor.execute(f"""
+                   SELECT username FROM person
+                   WHERE id='{user_id}';
+""")
+    result = cursor.fetchone()
+    target_user_username = result['username']
+    return target_user_username
+
+
+@connection.connection_handler
+def get_all_user_questions(cursor, user_id):
+    cursor.execute(f"""
+            SELECT person.username, question.title, question.id FROM person
+            JOIN question ON person.id = question.user_id
+            WHERE person.id={user_id}
+            ;
+""")
+    user_questions = cursor.fetchall()
+    return user_questions
+
+
+@connection.connection_handler
+def get_all_user_answers(cursor, user_id):
+    cursor.execute(f"""
+            SELECT person.username, answer.message, answer.question_id FROM person
+            JOIN answer ON person.id = answer.user_id
+            WHERE person.id={user_id}
+            ;
+""")
+    user_answers = cursor.fetchall()
+    return user_answers
+
+
+@connection.connection_handler
+def get_all_user_comments(cursor, user_id):
+    cursor.execute(f"""
+            SELECT person.username, 
+                    comment.message, 
+                    comment.question_id, 
+                    comment.answer_id, 
+                    ( SELECT answer.question_id FROM answer
+                        WHERE id=comment.answer_id) AS answers_linked_question_id
+            FROM person
+            JOIN comment ON person.id = comment.user_id
+            WHERE person.id={user_id}
+            ;
+""")
+    user_comments = cursor.fetchall()
+    return user_comments
