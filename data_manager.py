@@ -13,18 +13,21 @@ ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 
 @connection.connection_handler
-def add_question(cursor, title, message, file):
+def add_question(cursor, title, message, file, user_id):
     date = util.datetime.today()
     submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
     image = "../" + UPLOAD_FOLDER + "/" + str(file)
     cursor.execute(
         """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
-        VALUES ('{submission_time}','0','0', '{title}', '{message}', '{image}');
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id) 
+        VALUES ('{submission_time}','0','0', '{title}', '{message}', '{image}',{user_id});
         """.format(submission_time=submission_time,
                    title=title,
                    message=message,
-                   image=image))
+                   image=image,
+                   user_id=user_id
+                   )
+    )
 
 
 @connection.connection_handler
@@ -55,13 +58,29 @@ def allowed_file(filename):
 def sort_questions(cursor, parameter, order):
     if order == 'asc':
         cursor.execute(
-            sql.SQL("SELECT * FROM {table} ORDER BY {col1} ASC;")
-                .format(table=sql.Identifier('question'), col1=sql.Identifier(parameter), order=sql.Identifier(order))
+            sql.SQL(
+                "SELECT {table}.*, {table2}.{col2} as user_name FROM {table} JOIN {table2} ON {table}.{col3} = {table2}.{col4} ORDER BY {col1} ASC;")
+                .format(
+                table=sql.Identifier('question'),
+                col1=sql.Identifier(parameter),
+                order=sql.Identifier(order),
+                table2=sql.Identifier('person'),
+                col3=sql.Identifier('user_id'),
+                col4=sql.Identifier('id'),
+                col2=sql.Identifier('username'))
         )
     else:
         cursor.execute(
-            sql.SQL("SELECT * FROM {table} ORDER BY {col1} DESC;")
-                .format(table=sql.Identifier('question'), col1=sql.Identifier(parameter))
+            sql.SQL(
+                "SELECT {table}.*, {table2}.{col2} as user_name FROM {table} JOIN {table2} ON {table}.{col3} = {table2}.{col4} ORDER BY {col1} DESC;")
+                .format(
+                table=sql.Identifier('question'),
+                col1=sql.Identifier(parameter),
+                order=sql.Identifier(order),
+                table2=sql.Identifier('person'),
+                col3=sql.Identifier('user_id'),
+                col4=sql.Identifier('id'),
+                col2=sql.Identifier('username'))
         )
     sorted_questions = cursor.fetchall()
     return sorted_questions
@@ -395,8 +414,8 @@ def add_user_in_db(cursor, value_username, value_password):
                     col2=sql.Identifier('password')), [value_username, value_password]
 
     )
-    
-    
+
+
 @connection.connection_handler
 def update_accept_answer(cursor, answer_id):
     cursor.execute(
@@ -445,6 +464,7 @@ def get_password_by_username(cursor, username):
 def verify_password(cursor, plain_text_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
+
 
 @connection.connection_handler
 def get_username_by_user_id(cursor, user_id):

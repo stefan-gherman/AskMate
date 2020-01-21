@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+    {% if alert_me %}
+    <script>
+        alert("Sorry, that didn't work.");
+    </script>
+    {%  endif  %}
 </head>
 <body>
     <div>

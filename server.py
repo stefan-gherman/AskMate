@@ -63,13 +63,16 @@ def route_add_question():
         title = title.replace("'", "''")
         file = request.files['file']
         filename = secure_filename(file.filename)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        print(user_id)
         if file and data_manager.allowed_file(file.filename):
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        data_manager.add_question(title, message, filename)
+        data_manager.add_question(title, message, filename, user_id)
+        # print(session['username'], ' this is the session.')
         update_views = False
-        return redirect(url_for("route_index"))
+        return redirect(url_for("route_index",  username='text_text'))
     else:
         return render_template('add_question.html')
 
@@ -392,6 +395,8 @@ def login():
         if data_manager.verify_password(request.form['password'], hashed_password):
             session['username'] = request.form['username']
             return redirect(url_for('route_index'))
+        else:
+            return render_template('login.html', alert_me = True)
     return render_template('login.html')
 
 
