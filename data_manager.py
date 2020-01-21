@@ -10,7 +10,9 @@ ANSWERS_FILE = 'data/answers.csv'
 UPLOAD_FOLDER = 'static/img'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
-
+# Replicating user_in_session:
+user_in_session = 3
+#
 @connection.connection_handler
 def add_question(cursor, title, message, file):
     date = util.datetime.today()
@@ -18,12 +20,15 @@ def add_question(cursor, title, message, file):
     image = "../" + UPLOAD_FOLDER + "/" + str(file)
     cursor.execute(
         """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message, image) 
-        VALUES ('{submission_time}','0','0', '{title}', '{message}', '{image}');
+        INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id) 
+        VALUES ('{submission_time}','0','0', '{title}', '{message}', '{image}',{user_id});
         """.format(submission_time=submission_time,
                    title=title,
                    message=message,
-                   image=image))
+                   image=image,
+                   user_id=user_in_session
+                   )
+    )
 
 
 @connection.connection_handler
