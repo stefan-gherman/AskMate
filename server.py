@@ -343,7 +343,6 @@ def return_search():
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
-
     if request.method == 'POST':
         message = request.form['message']
         user_id = data_manager.get_user_id_by_username(session['username'])

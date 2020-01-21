@@ -93,17 +93,18 @@
         <span><a href="#" class="action-button">+</a></span>
     {% endif %}
 </div>
-<br>
 
 
-    <div class="question-comments">
+
+    <div class="comments">
         {% for comment in question_comments %}
             {{ comment.message }}
             {{ comment.submission_time }}<br>
         {% endfor %}
     </div>
 
-
+<br>
+<br>
     <div class="top-banner">
         <p> Answers</p>
     </div>

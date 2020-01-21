@@ -11,12 +11,21 @@
 </div>
 
 <div class="centered-content">
+    {% if question_id %}
+    <form action='/question/{{ question_id }}/new-comment' method="post" enctype=multipart/form-data>
+        <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
+                  required></textarea><br>
+
+        <button name="submit">Submit</button>
+    </form>
+    {% elif answer_id %}
     <form action='/answer/{{ answer_id }}/new-comment' method="post" enctype=multipart/form-data>
         <textarea name="message" class="message" title="message" cols="50" rows="10" style="resize: none"
                   required></textarea><br>
 
         <button name="submit">Submit</button>
     </form>
+    {% endif %}
 
 
 </div>

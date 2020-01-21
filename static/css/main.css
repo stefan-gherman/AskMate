@@ -131,6 +131,11 @@ a:active {
     border-bottom-left-radius: 3px;
 }
 
+.comments {
+    margin-right: 5%;
+    float: right;
+    font-size: medium;
+}
 
 
 .vote-button {
