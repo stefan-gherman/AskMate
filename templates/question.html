@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>{{ questions.title }}</title>
+    <title>{{ question.title }}</title>
 {% endblock head %}
 
 {% block body%}
 
 <div class="top-banner">
-    <p>Question: {{ questions.title }}</p>
+    <p>Question: {{ question.title }}</p>
     <p class="title-info">
-        <span>Votes:{{ questions.vote_number }} Views:{{ questions.view_number }}
-        Submission Date:{{ questions.submission_time }}</span>
+        <span>Votes:{{ question.vote_number }} Views:{{ question.view_number }} By: <a href="{{ url_for('display_user_activity', user_id=question.user_id) }}">{{ question.username }}</a>
+        Submission Date:{{ question.submission_time }}</span>
         {% if session %}
-        <a href="{{ url_for('route_add_question_comment', question_id=questions.id ) }}" class="action-button">Comment</a>
-        <a href="{{ url_for('route_edit_question', question_id=questions.id) }}" class="action-button">Edit</a>
-        <a href="{{ url_for('delete_sql_question', question_id=questions.id) }}" class="action-button">Delete</a>
+        <a href="{{ url_for('route_add_question_comment', question_id=question.id ) }}" class="action-button">Comment</a>
+        <a href="{{ url_for('route_edit_question', question_id=question.id) }}" class="action-button">Edit</a>
+        <a href="{{ url_for('delete_sql_question', question_id=question.id) }}" class="action-button">Delete</a>
         {% else %}
         <a href="#" class="action-button">Comment</a>
         <a href="#" class="action-button">Edit</a>
@@ -26,13 +26,13 @@
 <div class="question-wrapper">
     <div class="wrapped-votes">
         {% if session %}
-            <a href="{{ url_for('route_question_vote_up', question_id=questions.id) }}" class="vote-button">
+            <a href="{{ url_for('route_question_vote_up', question_id=question.id) }}" class="vote-button">
                 <img src="/static/local_ico/vote-up-button.png">
             </a>
             <br>
-            {{ questions.vote_number }}
+            {{ question.vote_number }}
             <br>
-            <a href="{{ url_for('route_question_vote_down', question_id=questions.id) }}" class="vote-button">
+            <a href="{{ url_for('route_question_vote_down', question_id=question.id) }}" class="vote-button">
                 <img src="/static/local_ico/vote-down-button.png">
             </a>
         {% else %}
@@ -40,7 +40,7 @@
                 <img src="/static/local_ico/vote-up-button.png">
             </a>
             <br>
-            {{ questions.vote_number }}
+            {{ question.vote_number }}
             <br>
             <a href="#" class="vote-button">
                 <img src="/static/local_ico/vote-down-button.png">
@@ -50,14 +50,14 @@
 
 
     <div class="wrapped-title">
-        {{ questions.message }}
+        {{ question.message }}
     </div>
 
-        {% if (questions.image == '../static/img/' or questions.image == None) %}
+        {% if (question.image == '../static/img/' or question.image == None) %}
 
         {% else %}
             <div class="wrapped-message">
-                <img src="{{ questions.image }}" alt="question image" id="image" height="200px">
+                <img src="{{ question.image }}" alt="question image" id="image" height="200px">
             </div>
         {% endif %}
 
