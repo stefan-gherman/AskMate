@@ -381,19 +381,23 @@ def register_user():
         hash_password = util.hash_password(input_password)
         data_manager.add_user_in_db(input_username, hash_password)
         message = 'Welcome ' + input_username + ' !!!!'
-
     return render_template('user_page.html', message=message)
-#CONECTEAZA la DB
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method =='POST':
-        session.pop('user', None)
+    if request.method == 'POST':
         hashed_password = data_manager.get_password_by_username(request.form['username'])
         if data_manager.verify_password(request.form['password'], hashed_password):
-            session['user'] = request.form['username']
+            session['username'] = request.form['username']
             return redirect(url_for('route_index'))
     return render_template('login.html')
 
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('route_index'))
 
 
 @app.route('/user_accept_answer/<answer_id>')
