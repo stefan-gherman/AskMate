@@ -329,16 +329,17 @@ def return_search():
         return render_template("index.html", questions = questions_found, show_sort = show_sort)
 
 
-
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
 
     if request.method == 'POST':
         message = request.form['message']
+        user_id = data_manager.get_user_id_by_username(session['username'])
         data_manager.add_question_comment(message=message,
                                           question_id=question_id,
-                                          answer_id=answer_id)
+                                          answer_id=answer_id,
+                                          user_id=user_id)
         return redirect(url_for('route_question', question_id=question_id))
 
     return render_template('add_comment.html',

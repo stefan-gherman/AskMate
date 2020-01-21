@@ -358,7 +358,7 @@ def search_for_phrase(cursor, phrase_for_query):
 
 
 @connection.connection_handler
-def add_question_comment(cursor, message, question_id, answer_id):
+def add_question_comment(cursor, message, question_id, answer_id, user_id):
     date = util.datetime.today()
     submission_time = date.now().strftime("%Y-%m-%d %H:%M:%S")
     print(question_id)
@@ -366,20 +366,22 @@ def add_question_comment(cursor, message, question_id, answer_id):
     if question_id is not None:
         cursor.execute(
             """
-            INSERT INTO comment (question_id, message, submission_time, edited_count) 
-            VALUES ('{question_id}', '{message}', '{submission_time}', '0');
+            INSERT INTO comment (question_id, message, submission_time, edited_count, user_id) 
+            VALUES ('{question_id}', '{message}', '{submission_time}', '0', {user_id});
             """.format(question_id=question_id,
                        message=message,
-                       submission_time=submission_time)
+                       submission_time=submission_time,
+                       user_id=user_id)
         )
     else:
         cursor.execute(
             """
-            INSERT INTO comment (answer_id, message, submission_time, edited_count) 
-            VALUES ('{answer_id}', '{message}', '{submission_time}', '0');
+            INSERT INTO comment (answer_id, message, submission_time, edited_count, user_id) 
+            VALUES ('{answer_id}', '{message}', '{submission_time}', '0', {user_id});
             """.format(answer_id=answer_id,
                        message=message,
-                       submission_time=submission_time)
+                       submission_time=submission_time,
+                       user_id=user_id)
         )
 
 
@@ -455,3 +457,14 @@ def get_all_user_comments(cursor, user_id):
 """)
     user_comments = cursor.fetchall()
     return user_comments
+
+
+@connection.connection_handler
+def get_user_id_by_username(cursor, username):
+    cursor.execute(f"""
+                           SELECT id FROM person
+                           WHERE username='{username}';
+        """)
+    result = cursor.fetchone()
+    user_id = result['id']
+    return user_id
