@@ -363,6 +363,7 @@ def route_add_answer_comment(answer_id):
                            answer_id=answer_id,
                            id=question_id)
 
+
 @app.route('/registration', methods=['GET', 'POST'])
 def registration_page():
     return render_template('registration.html');
@@ -379,6 +380,12 @@ def register_user():
 
     return render_template('user_page.html', message=message)
 
+@app.route('/user_accept_answer/<answer_id>')
+def route_accept_answer(answer_id):
+
+    data_manager.update_accept_answer(answer_id)
+
+    return redirect(request.referrer)
 
 if __name__ == "__main__":
     app.run(
