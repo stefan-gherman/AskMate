@@ -333,6 +333,7 @@ def return_search():
         print('This is a question', question)
     return render_template("index.html", questions=questions_found, show_sort=show_sort)
 
+
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
@@ -387,7 +388,6 @@ def register_user():
     return render_template('user_page.html', message=message)
 
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -429,6 +429,21 @@ def display_user_activity(user_id):
 def list_users():
     data_list_users = data_manager.get_list_users()
     return render_template('list_users.html', data_list_users=data_list_users)
+
+
+@app.route('/tags')
+def route_tags():
+    data = data_manager.count_number_of_tags()
+    names_list = []
+    for elem in data:
+        names_list.append(elem['name'])
+    empty_dict = {}
+    for tag in names_list:
+        if tag not in empty_dict.keys():
+            empty_dict[tag] = 1
+        else:
+            empty_dict[tag] += 1
+    return render_template('tags.html', data=empty_dict)
 
 
 if __name__ == "__main__":

@@ -531,6 +531,22 @@ def get_user_id_by_username(cursor, username):
 
 
 @connection.connection_handler
+def count_number_of_tags(cursor):
+    cursor.execute(
+        sql.SQL("""
+            SELECT COUNT(question_id) AS Number, tag_id, tag.name
+            FROM question_tag
+            JOIN tag ON question_tag.tag_id = tag.id
+            GROUP BY tag_id, tag.name
+        """)
+        )
+
+    data = cursor.fetchall()
+    return data
+
+
+
+
 def get_list_users(cursor):
     cursor.execute(
         f""" SELECT username, created, reputation FROM person;
