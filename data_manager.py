@@ -3,6 +3,7 @@ import util as util
 import os
 import psycopg2
 import psycopg2.extras
+import bcrypt
 from psycopg2 import sql
 
 QUESTIONS_FILE = 'data/questions.csv'
@@ -405,6 +406,23 @@ def update_accept_answer(cursor, answer_id):
                     col2=sql.Identifier('id')), [answer_id]
     )
 
+
+@connection.connection_handler
+def get_password_by_username(cursor, username):
+    cursor.execute(
+        f"""
+        SELECT password FROM person WHERE username='{username}';
+"""
+    )
+    result = cursor.fetchone()
+    password = result['password']
+    return password
+
+
+@connection.connection_handler
+def verify_password(cursor, plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
 
 @connection.connection_handler
 def get_username_by_user_id(cursor, user_id):
