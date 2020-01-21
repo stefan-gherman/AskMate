@@ -26,17 +26,20 @@
         {{ questions.vote_number }}
         <br>
         <a href="{{ url_for('route_question_vote_down', question_id=questions.id) }}" class="vote-button">
-                    <img src="/static/local_ico/vote-down-button.png">
+            <img src="/static/local_ico/vote-down-button.png">
         </a>
     </div>
     <div class="wrapped-title">
         {{ questions.message }}
     </div>
-    <div class="wrapped-message">
-        {% if questions['image'] != '../static/img/' %}
-        <img src="{{ questions.image }}" alt="question image" id="image" width="300px" height="300px">
+
+        {% if (questions.image == '../static/img/' or questions.image == None) %}
+
+        {% else %}
+            <div class="wrapped-message">
+                <img src="{{ questions.image }}" alt="question image" id="image" height="200px">
+            </div>
         {% endif %}
-    </div>
 
 </div>
 
@@ -84,16 +87,12 @@
         <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
                     <img src="/static/local_ico/vote-down-button.png">
         </a>
-        <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}">
-            <button class="links">Edit</button></a>
-
-        <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}">
-        Accept
-        </a>
-
-        {% autoescape false %}{{ answer.message }}{% endautoescape %}
-
+        <div class="wrapped-accepted">
+            <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
+                Accept
+            </a>
     </div>
+</div>
 
     <div class="wrapped-title">
         {{ answer.message }}
@@ -104,11 +103,15 @@
         </span>
     </div>
 
-    <div>
-        {% if answer.image != '../static/img/' %}
-            <img src="{{ answer.image }}" alt="question image" id="image" width="300px" height="300px">
+
+        {% if (answer.image == '../static/img/' or answer.image == None) %}
+
+        {% else %}
+            <div class="wrapped-message">
+                <img src="{{ answer.image }}" alt="answer image" height="200px">
+            </div>
         {% endif %}
-    </div>
+
 
 </div>
 
