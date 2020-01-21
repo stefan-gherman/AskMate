@@ -5,7 +5,6 @@ import connection as connection
 import util as util
 from werkzeug.utils import secure_filename
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
 app.secret_key = os.urandom((20))
@@ -50,7 +49,6 @@ def route_question(question_id):
                            comments=comments,
                            tags=tags
                            )
-
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -215,7 +213,7 @@ def route_index():
             questions_ordered = data_manager.sort_questions('submission_time', 'desc')
 
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered,
-                                   param_display='Submission Time', order_display='Descending', show_sort =show_sort)
+                                   param_display='Submission Time', order_display='Descending', show_sort=show_sort)
         else:
             update_views = True
             questions_ordered = data_manager.sort_questions(param, sort_ord)
@@ -232,7 +230,7 @@ def route_index():
             elif param == 'view_number':
                 param_display = 'View Number'
             return render_template('index.html', question_headers=question_headers, questions=questions_ordered,
-                                   order_display=order_display, param_display=param_display, show_sort = show_sort)
+                                   order_display=order_display, param_display=param_display, show_sort=show_sort)
 
     # elif request.method == 'POST':
     #     questions = connection.read_questions('data/questions.csv')
@@ -257,17 +255,16 @@ def delete_sql_answer(answer_id):
     return redirect(request.referrer)
 
 
-
 @app.route('/question-new-tag/<question_id>')
 def question_tag(question_id):
     question_id_to_add = int(question_id)
     return render_template('tag_question.html', question_id=question_id_to_add)
 
+
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
 def chose_question_tag(question_id):
     question_id_to_add = int(question_id)
     if request.method == 'GET':
-
         return render_template('tag_question.html', question_id=question_id_to_add)
 
     if request.method == 'POST':
@@ -281,7 +278,8 @@ def chose_question_tag(question_id):
         tag8_input = request.form.get('python')
         new_tag_input = request.form.get('new_tag')
 
-    tag_name_list = [tag1_input, tag2_input, tag3_input, tag4_input, tag5_input, tag6_input, tag7_input, tag8_input, new_tag_input]
+    tag_name_list = [tag1_input, tag2_input, tag3_input, tag4_input, tag5_input, tag6_input, tag7_input, tag8_input,
+                     new_tag_input]
 
     for tag in tag_name_list:
         if tag is not None and tag != '':
@@ -297,38 +295,39 @@ def delete_one_tag(question_id, tag_id):
     data_manager.delete_tag_questions(question_on_page, tag_to_delete)
 
     return route_question(question_on_page)
-  
+
 
 questions_found = []
 phrase_for_query = ""
+
+
 @app.route('/search', methods=['GET', 'POST'])
 def return_search():
-        show_sort = False
-        global questions_found
-        global search_phrase
-        global phrase_for_query
-        search_phrase = request.values.get('search')
-        search_phrase_for_highlighting = search_phrase
-        if search_phrase is None:
-            questions_found = data_manager.search_for_phrase(phrase_for_query)
-            search_phrase_for_highlighting = phrase_for_query
-            for question in questions_found:
-                question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
-                question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-            return render_template("index.html", questions = questions_found, show_sort = show_sort)
-
-        search_phrase = search_phrase.split()
-        print("Search phrase",search_phrase)
-        phrase_for_query = str.join("&", search_phrase)
-        print("Phrase for query",phrase_for_query)
+    show_sort = False
+    global questions_found
+    global search_phrase
+    global phrase_for_query
+    search_phrase = request.values.get('search')
+    search_phrase_for_highlighting = search_phrase
+    if search_phrase is None:
         questions_found = data_manager.search_for_phrase(phrase_for_query)
+        search_phrase_for_highlighting = phrase_for_query
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
             question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-        for question in questions_found:
-            print('This is a question',question)
-        return render_template("index.html", questions = questions_found, show_sort = show_sort)
+        return render_template("index.html", questions=questions_found, show_sort=show_sort)
 
+    search_phrase = search_phrase.split()
+    print("Search phrase", search_phrase)
+    phrase_for_query = str.join("&", search_phrase)
+    print("Phrase for query", phrase_for_query)
+    questions_found = data_manager.search_for_phrase(phrase_for_query)
+    for question in questions_found:
+        question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
+        question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
+    for question in questions_found:
+        print('This is a question', question)
+    return render_template("index.html", questions=questions_found, show_sort=show_sort)
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
@@ -384,6 +383,7 @@ def register_user():
     return render_template('user_page.html', message=message)
 
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -402,7 +402,6 @@ def logout():
 
 @app.route('/user_accept_answer/<answer_id>')
 def route_accept_answer(answer_id):
-
     data_manager.update_accept_answer(answer_id)
 
     return redirect(request.referrer)
