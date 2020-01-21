@@ -1,3 +1,4 @@
+import bcrypt
 import connection as connection
 from datetime import datetime
 import data_manager as data_manager
@@ -69,10 +70,16 @@ def random_string(string_length=10):
 
 def apply_fancy(string,search_in):
     new_string = string.lower()
-    new_string = new_string.split('+')
+    new_string = new_string.split()
     final_string = search_in.split()
     search_in_new = search_in.lower()
     search_in_new = search_in_new.split()
+    filthy_chars = ['!', '"', '$', '%', '&', "'", '(', ')', '*', ',', '-', '.', '/', ':', ';', '<', '=', '>',
+                    '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~', '\t', '\n', '\r', '\x0b', '\x0c']
+    for word in range(len(search_in_new)):
+        for elem2 in filthy_chars:
+            if elem2 in search_in_new[word]:
+                search_in_new[word] = search_in_new[word].rstrip(elem2)
     count_your_blessings = 0
     positions = []
     for string in new_string:
@@ -178,3 +185,7 @@ def order_questions_by(cursor, order):
         )
         questions_ordered = cursor.fetchall()
         return questions_ordered
+
+def hash_password(plain_text_password):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')

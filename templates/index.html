@@ -1,104 +1,58 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Questions List</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-    </head>
-    <body>
-    <div class="up_banner">
-        <p><span style="font-size: 70px">AskMate</span> <br><span class="sub">Answers for everything </span></p>
-    </div>
-    <br>
-    <div class="sortquestion">
-        {% if show_sort %}
-        <h2>Sort questions</h2>
+{% extends 'base.html' %}
 
-        <form method="get" action="{{ url_for('route_index') }}">
-                <select name="param" id="param">
-                    {% for elem in question_headers %}
-                    <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >
-                        {% if elem == 'submission_time' %}
-                            Submission Time
-                        {% endif %}
-                        {% if elem == 'vote_number' %}
-                            Vote Number
-                        {% endif %}
-                        {% if elem == 'view_number' %}
-                            View Number
-                        {% endif %}
-                        {% if elem == 'title' %}
-                            Title
-                        {% endif %}
-                    </option>
-                    {% endfor %}
-                </select>
-                <select name = "sort_ord" id = "sort_ord" >
-                    <option value="asc" selected>
-                        Ascending
-                    </option>
-                    <option value = "desc" >
-                        Descending
-                    </option>
-                </select>
-                <button type="submit">Sort questions</button>
-            </form>
-        </div>
-    <br>
-            <p class="labelinput">Sorted {{order_display}} by {{param_display}}</p>
-    {% endif %}
-        <br>
-        <a href="{{ url_for('route_add_question') }}"><button type="button" id="buttonadd" >Add a new Question</button></a>
-        <br>
-        <br>
+{% block head %}
+    <title>Ask Mate Home</title>
+{% endblock head %}
+
+
+{% block body %}
+    <div class="top-banner">
+        <h1>AskMate</h1>
+        <p>Answers For Everything</p>
+    </div>
+
+    <div class="centered-content">
         <form method="post" align="center" action="{{url_for('return_search')}}">
             <input type="text" name="search" id="search" title="search" autofocus placeholder="Search...">
-            <button type="submit" id="buttonsearch">Go</button>
+            <input type="submit" id="buttonsearch" value="Search" class="add-content-button">
         </form>
-        <br>
-        <br>
-            <table id="container" align="center">
-                <thead id ="thead">
-                    <tr><th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for line in questions %}
-                    <tr>
-                      <td>
-                          <a href="{{ url_for('route_edit_question', question_id=line.id) }}"><button type="button" id="buttonedit">Edit</button></a>
-                          <a href="{{ url_for('delete_sql_question', question_id=line.id) }}"><button type="button" id="buttondelete">Delete</button></a>
-                      </td>
-                      <td>
-                          <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink"><h2>{% autoescape false %}{{ line.title }}{% endautoescape %}</h2></a>
-                      </td>
+    </div>
 
-                      <td>
-                            <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}">
-                                <button type="button" id="buttonplus">Vote +</button>
-                            </a>
-                            <span style="font-size: 20px; color: red; font-weight: bold">{{ line.vote_number }}</span>
-                            <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}">
-                                <button type="button" id="buttonminus"> Vote -</button>
-                            </a>
-                        </td>
-                        <td>
-                            <p style="font-size: 20px;">View number: <span
-                                    style="font-size: 20px; color: red; font-weight: bold">{{ line.view_number }}</span>
-                            </p>
+        {% for line in questions %}
+            <div class="question-wrapper">
+                <div class="wrapped-votes">
+                        <a href="{{ url_for('route_question_vote_up', question_id=line.id) }}" class="vote-button">
+                            <img src="/static/local_ico/vote-up-button.png">
+                        </a>
+                        <br>
+                        {{ line.vote_number }}
+                        <br>
+                        <a href="{{ url_for('route_question_vote_down', question_id=line.id) }}" class="vote-button">
+                                    <img src="/static/local_ico/vote-down-button.png">
+                        </a>
+                </div>
 
-                        </td>
-                        <td>
-                            <p style="font-size: 20px;"> Submission TIme: {{ line.submission_time }}</p>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                <div class="wrapped-title">
+                        <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink">{% autoescape false %}{{ line.title }}{% endautoescape %}</a>
+                        <br>
+                        <span class="title-info"> View number: {{ line.view_number }} Submission TIme: {{ line.submission_time }} By: {{ line.user_id }}
+                            <a href="{{ url_for('route_edit_question', question_id=line.id) }}" class="action-button">Edit</a>
+                            <a href="{{ url_for('delete_sql_question', question_id=line.id) }}" class="action-button">Delete</a>
+                        </span>
+                </div>
+
+                <div class="wrapped-message">
+                    {{ line.message }}
+                </div>
+            </div>
+        {% endfor %}
 
 
-    </body>
-</html>
+<!--
+<div class="centered-content">
+    <div class="add-content-button">
+        <a href="{{ url_for('route_add_question') }}">New Question</a>
+    </div>
+</div>
+-->
+{% endblock body %}

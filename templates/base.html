@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+
+
+        {% block head%}{% endblock head %}
+
+
+    </head>
+
+
+
+    <body>
+    <span>
+        {% if session %}
+            <span>{{ session.username }}</span> <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('registration_page') }}">Register</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </span>
+
+
+
+      <nav>
+        <ul>
+          <li><img src="/static/img/buttonsort.png" onclick="myFunction()" class="menu-button"></li>
+          <script>
+            function myFunction() {
+                let x = document.getElementById("sort-bar");
+
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none"
+                }
+            }
+        </script>
+
+
+
+          <div id="sort-bar" class="sort-bar">
+            {% if show_sort %}
+            <form method="get" action="{{ url_for('route_index') }}">
+                <select name="param" id="param" class="sort-bar-button">
+                    {% for elem in question_headers %}
+                    <option value="{{elem}}" {% if elem =='submission_time' %} selected {% endif %} >
+                        {% if elem == 'submission_time' %}
+                            Added
+                        {% endif %}
+                        {% if elem == 'vote_number' %}
+                            Votes
+                        {% endif %}
+                        {% if elem == 'view_number' %}
+                            Views
+                        {% endif %}
+                        {% if elem == 'title' %}
+                            Question
+                        {% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+                <select name = "sort_ord" id = "sort_ord" class="sort-bar-button">
+                    <option value="asc" selected>
+                        ^
+                    </option>
+                    <option value = "desc" >
+                        v
+                    </option>
+                </select>
+                <input type="submit" value="Sort" class="sort-bar-button">
+            </form>
+            {% endif %}
+        </div>
+
+
+
+
+
+          <li><a href="{{ url_for('route_index') }}"><img src="/static/local_ico/buttonlist.png" class="menu-button"></a></li>
+          <li><a href="{{ url_for('route_add_question') }}"><img src="/static/local_ico/buttonplus.png" class="menu-button"></a></li>
+          <li><a href="{{ url_for('route_index') }}"><img src="/static/local_ico/buttonhome.png" class="menu-button"></a></li>
+        </ul>
+      </nav>
+
+
+        {% block body %}{% endblock body%}
+
+
+
+    </body>
+</html>
