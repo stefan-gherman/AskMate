@@ -208,3 +208,9 @@ textarea, input[type=text] {
     margin-top: 20px;
     margin-left: 5%;
 }
+
+.accepted-answer {
+    background-color: lightgoldenrodyellow;
+    color: black;
+    border-radius: 3px;
+}

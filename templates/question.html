@@ -126,9 +126,26 @@
                         <img src="/static/local_ico/vote-down-button.png">
             </a>
             <div class="wrapped-accepted">
-                <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
-                    Accept
-                </a>
+                {% if session.username == db_username_by_question_id %}
+                    {% if answer.accepted == false %}
+                        <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
+                            Accept
+                        </a>
+                    {% elif answer.accepted == true %}
+                    <span class="accepted-answer">ACCEPTED</span><br>
+                    <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
+                        Clear
+                    </a>
+                    {% endif %}
+                {% elif session.username != db_username_by_question_id %}
+                    {% if answer.accepted == true %}
+                        <span class="accepted-answer">ACCEPTED</span>
+                    {% elif answer.accepted == false %}
+                    <a href="#" class="action-button">
+                        Accept
+                    </a>
+                    {% endif %}
+                {% endif %}
         {% else %}
             <a href="#" class="vote-button">
             <img src="/static/local_ico/vote-up-button.png">
@@ -140,9 +157,13 @@
                         <img src="/static/local_ico/vote-down-button.png">
             </a>
             <div class="wrapped-accepted">
-            <a href="#" class="action-button">
-                Accept
-            </a>
+            {% if answer.accepted == true %}
+                    <span class="accepted-answer">ACCEPTED</span>
+                {% elif answer.accepted == false %}
+                <a href="#" class="action-button">
+                    Accept
+                </a>
+                {% endif %}
         {% endif %}
 
     </div>

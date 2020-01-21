@@ -452,6 +452,15 @@ def update_accept_answer(cursor, answer_id):
 
 
 @connection.connection_handler
+def update_clear_answer(cursor, answer_id):
+    cursor.execute(f"""
+                    UPDATE answer
+                    SET accepted=false
+                    WHERE id={answer_id};
+""")
+
+
+@connection.connection_handler
 def get_password_by_username(cursor, username):
     cursor.execute(
         f"""
@@ -567,3 +576,26 @@ def get_newest_questions(cursor):
 """)
     newest_questions = cursor.fetchall()
     return newest_questions
+
+
+@connection.connection_handler
+def get_username_by_question_id(cursor, question_id):
+    cursor.execute(f"""
+                    SELECT person.username FROM person
+                    JOIN question ON person.id = question.user_id
+                    WHERE question.id={question_id};
+""")
+    result = cursor.fetchone()
+    db_username_by_question_id = result['username']
+    return db_username_by_question_id
+
+
+@connection.connection_handler
+def get_accepted_value_for_answer(cursor, answer_id):
+    cursor.execute(f"""
+                    SELECT accepted FROM answer 
+                    WHERE id={answer_id};
+""")
+    result = cursor.fetchone()
+    current_accepted_value = result['accepted']
+    return current_accepted_value
