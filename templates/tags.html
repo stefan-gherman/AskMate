@@ -16,8 +16,8 @@
         <tbody>
             {% for current_data in data %}
             <tr>
-                <td>{{current_data['name']}}</td>
-                <td>{{current_data['number'] }}</td>
+                <td>{{current_data}}</td>
+                <td>{{data[current_data]}}</td>
             </tr>
             {% endfor %}
         </tbody>
