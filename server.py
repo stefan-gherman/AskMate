@@ -200,6 +200,12 @@ sort_ord = None
 
 
 @app.route('/')
+def route_home():
+    newest_questions = data_manager.get_newest_questions()
+    return render_template('home.html',
+                           questions=newest_questions)
+
+
 @app.route('/list', methods=['GET', 'POST'])
 def route_index():
     global update_views
