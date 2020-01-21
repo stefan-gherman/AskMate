@@ -99,10 +99,10 @@ def apply_fancy(string,search_in):
 def read_comments_sql(cursor):
     cursor.execute(
         """
-        SELECT * FROM comment;
+        SELECT comment.*, person.username AS username FROM comment
+        JOIN person ON comment.user_id = person.id;
         """
     )
-
     comments = cursor.fetchall()
     return comments
 
