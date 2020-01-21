@@ -83,6 +83,18 @@ a:active {
     border-bottom-left-radius: 3px;
 }
 
+.wrapped-accepted {
+    grid-column: 1 / 2;
+    grid-row: 2;
+    text-align: center;
+    margin-top: 20px;
+    background-color: rgb(61,70,94);
+    box-shadow: 3px 3px 3px black;
+    padding: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
 .wrapped-title {
     grid-column: 2/17;
     grid-row: 1;
@@ -98,7 +110,7 @@ a:active {
 }
 
 .wrapped-message {
-    grid-column: 1/17;
+    grid-column: 2/17;
     grid-row: 2;
     background-color: rgb(61,70,94);
     box-shadow: 3px 3px 3px black;
@@ -106,6 +118,19 @@ a:active {
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
 }
+
+.wrapped-image {
+    margin-top: 0px;
+    grid-column: 2/17;
+    grid-row: 3;
+    background-color: rgb(61,70,94);
+    box-shadow: 3px 3px 3px black;
+    padding: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+
 
 .vote-button {
     opacity: 40%;
