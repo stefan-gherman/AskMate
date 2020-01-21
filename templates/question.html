@@ -113,6 +113,7 @@
 
 
 {% for answer in answers %}
+    {% if answer.question_id == question_id %}
 
 <div class="question-wrapper">
 
@@ -173,14 +174,14 @@
 
     <div class="wrapped-title">
         {% if session %}
-            {{ answer.message }}
+            {{ answer.message }} by: <a href="{{ url_for('display_user_activity', user_id=answer.user_id) }}">{{ answer.username }}</a> {{ answer.submission_time }}
             <span class="title-info">
                 <a href="{{ url_for('route_add_answer_comment', answer_id = answer.id) }}" class="action-button">Comment</a>
                 <a href="{{ url_for('route_edit_answer', answer_id = answer.id , question_id = answer.question_id) }}" class="action-button">Edit</a>
                 <a href="{{ url_for('delete_sql_answer', answer_id = answer.id) }}" class="action-button">Delete</a>
             </span>
         {% else %}
-            {{ answer.message }}
+            {{ answer.message }} by: <a href="{{ url_for('display_user_activity', user_id=answer.user_id) }}">{{ answer.username }}</a> {{ answer.submission_time }}
             <span class="title-info">
                 <a href="#" class="action-button">Comment</a>
                 <a href="#" class="action-button">Edit</a>
@@ -212,7 +213,7 @@
 
 
 </div>
-
+    {% endif %}
 {% endfor %}
 <br>
 <br>
