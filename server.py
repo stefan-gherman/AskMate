@@ -63,13 +63,16 @@ def route_add_question():
         title = title.replace("'", "''")
         file = request.files['file']
         filename = secure_filename(file.filename)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        print(user_id)
         if file and data_manager.allowed_file(file.filename):
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        data_manager.add_question(title, message, filename)
+        data_manager.add_question(title, message, filename, user_id)
+        # print(session['username'], ' this is the session.')
         update_views = False
-        return redirect(url_for("route_index"))
+        return redirect(url_for("route_index",  username='text_text'))
     else:
         return render_template('add_question.html')
 
@@ -144,7 +147,8 @@ def route_add_answer(question_id):
             extension = filename[-4:]
             filename = str(random_file_name) + extension
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        data_manager.add_answer(question_id, message, filename)
+        user_id = data_manager.get_user_id_by_username(session['username'])
+        data_manager.add_answer(question_id, message, filename, user_id)
         return redirect(url_for('route_question', question_id=question_id))
     return render_template('add_answer.html', question_id=question_id)
 
@@ -391,6 +395,8 @@ def login():
         if data_manager.verify_password(request.form['password'], hashed_password):
             session['username'] = request.form['username']
             return redirect(url_for('route_index'))
+        else:
+            return render_template('login.html', alert_me = True)
     return render_template('login.html')
 
 
@@ -418,6 +424,11 @@ def display_user_activity(user_id):
                            target_user_questions=target_user_questions,
                            target_user_answers=target_user_answers,
                            target_user_comments=target_user_comments)
+
+@app.route('/list_users')
+def list_users():
+    data_list_users = data_manager.get_list_users()
+    return render_template('list_users.html', data_list_users=data_list_users)
 
 
 @app.route('/tags')

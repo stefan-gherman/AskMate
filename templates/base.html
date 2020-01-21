@@ -26,7 +26,8 @@
 
       <nav>
         <ul>
-          <li><img src="/static/img/buttonsort.png" onclick="myFunction()" class="menu-button"></li>
+          {% if request.path == '/list' %}
+          <li><img src="/static/local_ico/buttonsort.png" onclick="myFunction()" class="menu-button"></li>
           <script>
             function myFunction() {
                 let x = document.getElementById("sort-bar");
@@ -37,7 +38,8 @@
                     x.style.display = "none"
                 }
             }
-        </script>
+          </script>
+          {% endif %}
 
 
 
@@ -77,8 +79,8 @@
 
 
 
-
-
+          <li><a href="#"><img src="/static/local_ico/buttontags.png" class="menu-button"></a></li>
+          <li><a href="#"><img src="/static/local_ico/buttonusers.png" class="menu-button"></a></li>
           <li><a href="{{ url_for('route_index') }}"><img src="/static/local_ico/buttonlist.png" class="menu-button"></a></li>
           <li><a href="{{ url_for('route_add_question') }}"><img src="/static/local_ico/buttonplus.png" class="menu-button"></a></li>
           <li><a href="{{ url_for('route_index') }}"><img src="/static/local_ico/buttonhome.png" class="menu-button"></a></li>
