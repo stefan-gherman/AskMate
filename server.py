@@ -401,7 +401,7 @@ def login():
         hashed_password = data_manager.get_password_by_username(request.form['username'])
         if data_manager.verify_password(request.form['password'], hashed_password):
             session['username'] = request.form['username']
-            return redirect(url_for('route_index'))
+            return redirect(url_for('route_home'))
         else:
             return render_template('login.html', alert_me = True)
     return render_template('login.html')
@@ -410,7 +410,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('route_index'))
+    return redirect(url_for('route_home'))
 
 
 @app.route('/user_accept_answer/<answer_id>')

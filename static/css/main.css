@@ -131,9 +131,17 @@ a:active {
     border-bottom-left-radius: 3px;
 }
 
-.comments {
+.comments-container {
+    padding-top: 4px;
     margin-right: 5%;
-    float: right;
+    text-align: right;
+}
+
+.comments {
+    grid-column: 1/17;
+    grid-row: 3;
+
+
     font-size: medium;
 }
 
@@ -207,6 +215,8 @@ textarea, input[type=text] {
 .tag-container {
     margin-top: 20px;
     margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 4px;
 }
 
 .accepted-answer {
