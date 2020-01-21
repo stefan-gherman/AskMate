@@ -8,6 +8,7 @@ from psycopg2 import sql
 
 today = datetime.today()
 
+
 def order_by_value(dataset, param, order='asc'):
     """
     :param dataset: a list of dictionaries
@@ -92,6 +93,7 @@ def apply_fancy(string,search_in):
         final_string[pos] = f"<span style=\"color:red\">{final_string[pos]}</span>"
     final_string = str.join(" ", final_string)
     return final_string
+
 
 @connection.connection_handler
 def read_comments_sql(cursor):

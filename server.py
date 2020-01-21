@@ -325,7 +325,7 @@ def return_search():
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
             question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-        return render_template("index.html", questions=questions_found, show_sort=show_sort)
+        return render_template("search-results.html", questions=questions_found, show_sort=show_sort)
 
     search_phrase = search_phrase.split()
     print("Search phrase", search_phrase)
@@ -337,13 +337,12 @@ def return_search():
         question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
     for question in questions_found:
         print('This is a question', question)
-    return render_template("index.html", questions=questions_found, show_sort=show_sort)
+    return render_template("search-results.html", questions=questions_found, show_sort=show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def route_add_question_comment(question_id):
     answer_id = None
-
     if request.method == 'POST':
         message = request.form['message']
         user_id = data_manager.get_user_id_by_username(session['username'])
