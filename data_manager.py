@@ -402,3 +402,26 @@ def update_accept_answer(cursor, answer_id):
                     col1=sql.Identifier('accepted'),
                     col2=sql.Identifier('id')), [answer_id]
     )
+    cursor.execute(
+        sql.SQL(
+            "SELECT {table1}.{col1} , {table2}.{col3} FROM {table1} JOIN {table2} ON {table1}.{col1} = {table2}.{col2} WHERE {table1}.{col2} = %s LIMIT 1;")
+            .format(
+            table1=sql.Identifier('answer'),
+            col1=sql.Identifier('user_id'),
+            table2=sql.Identifier('person'),
+            col2=sql.Identifier('id'),
+            col3=sql.Identifier('username')
+        ), [answer_id]
+    )
+    user_id = cursor.fetchall()
+    user_id_to_update = user_id[0]['user_id']
+    cursor.execute(
+        sql.SQL(
+            "UPDATE {table1} SET {col1} = {col1}  + 15 WHERE {col2} = %s;"
+        ).format(
+            table1=sql.Identifier('person'),
+            col1=sql.Identifier('reputation'),
+            col2=sql.Identifier('id')
+        ), [user_id_to_update]
+    )
+
