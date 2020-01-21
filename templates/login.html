@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <div>
+        <h2>LOGIN FORM:</h2>
+        <h4> Enter the platform, where you can find the right answers for your questions</h4>
+        <form action="{{ url_for('login')}}" method="post">
+            <label>User Name:
+                <input type="text" name="username">
+            </label>
+            <label>Password:
+                <input type="password" name="password">
+            </label>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

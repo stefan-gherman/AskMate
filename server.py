@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 import os
 import data_manager as data_manager
 import connection as connection
@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
+app.secret_key = os.urandom((20))
 
 # @app.route('/')
 # @app.route('/list')
@@ -379,6 +380,17 @@ def register_user():
         message = 'Welcome ' + input_username + ' !!!!'
 
     return render_template('user_page.html', message=message)
+#CONECTEAZA la DB
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method =='POST':
+        session.pop('user', None)
+        hashed_password = data_manager.get_password_by_username(request.form['username'])
+        if data_manager.verify_password(request.form['password'], hashed_password):
+            session['user'] = request.form['username']
+            return redirect(url_for('route_index'))
+    return render_template('login.html')
+
 
 @app.route('/user_accept_answer/<answer_id>')
 def route_accept_answer(answer_id):
