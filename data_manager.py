@@ -174,12 +174,57 @@ def vote_item_up_down(cursor, parameter, type, direction):
                             col=sql.Identifier('vote_number'),
                             col2=sql.Identifier('id')), [parameter]
             )
+            cursor.execute(
+                sql.SQL(
+                    "SELECT {table1}.{col1} , {table2}.{col3} FROM {table1} JOIN {table2} ON {table1}.{col1} = {table2}.{col2} WHERE {table1}.{col2} = %s LIMIT 1;")
+                    .format(
+                    table1=sql.Identifier('question'),
+                    col1=sql.Identifier('user_id'),
+                    table2=sql.Identifier('person'),
+                    col2=sql.Identifier('id'),
+                    col3=sql.Identifier('username')
+                ), [parameter]
+            )
+            user_id = cursor.fetchall()
+            user_id_to_update = user_id[0]['user_id']
+            cursor.execute(
+                sql.SQL(
+                    "UPDATE {table1} SET {col1} = {col1} + 5 WHERE {col2} = %s;"
+                ).format(
+                    table1=sql.Identifier('person'),
+                    col1=sql.Identifier('reputation'),
+                    col2=sql.Identifier('id')
+                ), [user_id_to_update]
+            )
+
         elif direction == "down":
             cursor.execute(
                 sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
                     .format(table=sql.Identifier('question'),
                             col=sql.Identifier('vote_number'),
                             col2=sql.Identifier('id')), [parameter]
+            )
+            cursor.execute(
+                sql.SQL(
+                    "SELECT {table1}.{col1} , {table2}.{col3} FROM {table1} JOIN {table2} ON {table1}.{col1} = {table2}.{col2} WHERE {table1}.{col2} = %s LIMIT 1;")
+                    .format(
+                    table1=sql.Identifier('question'),
+                    col1=sql.Identifier('user_id'),
+                    table2=sql.Identifier('person'),
+                    col2=sql.Identifier('id'),
+                    col3=sql.Identifier('username')
+                ), [parameter]
+            )
+            user_id = cursor.fetchall()
+            user_id_to_update = user_id[0]['user_id']
+            cursor.execute(
+                sql.SQL(
+                    "UPDATE {table1} SET {col1} = {col1}  - 2 WHERE {col2} = %s;"
+                ).format(
+                    table1=sql.Identifier('person'),
+                    col1=sql.Identifier('reputation'),
+                    col2=sql.Identifier('id')
+                ), [user_id_to_update]
             )
 
     elif type == 'answer':
@@ -190,12 +235,58 @@ def vote_item_up_down(cursor, parameter, type, direction):
                             col=sql.Identifier('vote_number'),
                             col2=sql.Identifier('id')), [parameter]
             )
+            cursor.execute(
+                sql.SQL(
+                    "SELECT {table1}.{col1} , {table2}.{col3} FROM {table1} JOIN {table2} ON {table1}.{col1} = {table2}.{col2} WHERE {table1}.{col2} = %s LIMIT 1;")
+                    .format(
+                    table1=sql.Identifier('answer'),
+                    col1=sql.Identifier('user_id'),
+                    table2=sql.Identifier('person'),
+                    col2=sql.Identifier('id'),
+                    col3=sql.Identifier('username')
+                ), [parameter]
+            )
+            user_id = cursor.fetchall()
+            user_id_to_update = user_id[0]['user_id']
+            cursor.execute(
+                sql.SQL(
+                    "UPDATE {table1} SET {col1} = {col1}  + 10 WHERE {col2} = %s;"
+                ).format(
+                    table1=sql.Identifier('person'),
+                    col1=sql.Identifier('reputation'),
+                    col2=sql.Identifier('id')
+                ), [user_id_to_update]
+            )
+
+
         elif direction == "down":
             cursor.execute(
                 sql.SQL("UPDATE {table} SET {col}={col}-1 WHERE {col2} = %s;")
                     .format(table=sql.Identifier('answer'),
                             col=sql.Identifier('vote_number'),
                             col2=sql.Identifier('id')), [parameter]
+            )
+            cursor.execute(
+                sql.SQL(
+                    "SELECT {table1}.{col1} , {table2}.{col3} FROM {table1} JOIN {table2} ON {table1}.{col1} = {table2}.{col2} WHERE {table1}.{col2} = %s LIMIT 1;")
+                    .format(
+                    table1=sql.Identifier('answer'),
+                    col1=sql.Identifier('user_id'),
+                    table2=sql.Identifier('person'),
+                    col2=sql.Identifier('id'),
+                    col3=sql.Identifier('username')
+                ), [parameter]
+            )
+            user_id = cursor.fetchall()
+            user_id_to_update = user_id[0]['user_id']
+            cursor.execute(
+                sql.SQL(
+                    "UPDATE {table1} SET {col1} = {col1}  -2  WHERE {col2} = %s;"
+                ).format(
+                    table1=sql.Identifier('person'),
+                    col1=sql.Identifier('reputation'),
+                    col2=sql.Identifier('id')
+                ), [user_id_to_update]
             )
 
 
@@ -249,6 +340,7 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('tag'), col=sql.Identifier('id')), [tag_id_to_delete]
     )
+
 
 @connection.connection_handler
 def search_for_phrase(cursor, phrase_for_query):
