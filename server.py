@@ -423,7 +423,16 @@ def display_user_activity(user_id):
 @app.route('/tags')
 def route_tags():
     data = data_manager.count_number_of_tags()
-    return render_template('tags.html', data=data)
+    names_list = []
+    for elem in data:
+        names_list.append(elem['name'])
+    empty_dict = {}
+    for tag in names_list:
+        if tag not in empty_dict.keys():
+            empty_dict[tag] = 1
+        else:
+            empty_dict[tag] += 1
+    return render_template('tags.html', data=empty_dict)
 
 
 if __name__ == "__main__":
