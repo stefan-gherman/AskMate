@@ -508,3 +508,21 @@ def get_user_id_by_username(cursor, username):
     result = cursor.fetchone()
     user_id = result['id']
     return user_id
+
+
+@connection.connection_handler
+def count_number_of_tags(cursor):
+    cursor.execute(
+        sql.SQL("""
+            SELECT COUNT(question_id) AS Number, tag_id, tag.name
+            FROM question_tag
+            JOIN tag ON question_tag.tag_id = tag.id
+            GROUP BY tag_id, tag.name
+        """)
+        )
+
+    data = cursor.fetchall()
+    return data
+
+
+
