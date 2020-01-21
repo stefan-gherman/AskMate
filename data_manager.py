@@ -143,15 +143,21 @@ def display_question(cursor, parameter):
 
 @connection.connection_handler
 def display_answers(cursor, parameter):
-    cursor.execute(
-        sql.SQL("SELECT * FROM {table} where {col} = %s ORDER BY {col2} ASC;")
-            .format(table=sql.Identifier('answer'),
-                    col=sql.Identifier('question_id'),
-                    col2=sql.Identifier('id')), [parameter]
-    )
+    # TODO: sanitize JOIN
+    # cursor.execute(
+    #     sql.SQL("SELECT * FROM {table} where {col} = %s ORDER BY {col2} ASC;")
+    #         .format(table=sql.Identifier('answer'),
+    #                 col=sql.Identifier('question_id'),
+    #                 col2=sql.Identifier('id')), [parameter]
+    # )
+    # answers = cursor.fetchall()
+    # return answers
+    cursor.execute(f"""
+                    SELECT answer.*, person.username AS username FROM answer
+                    JOIN person ON answer.user_id = person.id;
+""")
     answers = cursor.fetchall()
     return answers
-
 
 @connection.connection_handler
 def update_views(cursor, parameter):
