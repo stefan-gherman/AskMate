@@ -134,7 +134,7 @@ a:active {
 .comments-container {
     padding-top: 4px;
     margin-right: 5%;
-    text-align: right;
+    text-align: center;
 }
 
 .comments {
@@ -142,7 +142,7 @@ a:active {
     grid-row: 3;
 
 
-    font-size: medium;
+    font-size: large;
 }
 
 
@@ -206,7 +206,6 @@ textarea, input[type=text] {
 }
 
 .tag {
-    padding: 2px;
     border: solid 1px rgb(121,128,46);
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
@@ -217,6 +216,16 @@ textarea, input[type=text] {
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 4px;
+    font-size: medium;
+    line-height: 23px;
+}
+
+.tag-button {
+    border-radius: 3px;
+    padding-left: 3px;
+    padding-right: 4px;
+    border: solid 1px rgb(121,128,46);
+
 }
 
 .accepted-answer {
