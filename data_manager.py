@@ -154,7 +154,8 @@ def display_answers(cursor, parameter):
     # return answers
     cursor.execute(f"""
                     SELECT answer.*, person.username AS username FROM answer
-                    JOIN person ON answer.user_id = person.id;
+                    JOIN person ON answer.user_id = person.id
+                    ORDER BY answer.vote_number DESC;
 """)
     answers = cursor.fetchall()
     return answers
@@ -639,3 +640,77 @@ def get_question_data_and_username(cursor, question_id):
 """)
     question = cursor.fetchone()
     return question
+
+
+@connection.connection_handler
+def get_question_status_for_user(cursor, question_id, username):
+    cursor.execute(f"""
+                    SELECT status FROM question_status
+                    WHERE question_id={question_id} AND username='{username}';
+""")
+    result = cursor.fetchone()
+    status = result['status']
+    return status
+
+
+@connection.connection_handler
+def set_question_status_for_user(cursor, question_id, username):
+    cursor.execute(f"""
+                    INSERT INTO question_status (question_id, status, username)
+                    VALUES ({question_id}, 0, '{username}');
+""")
+
+
+@connection.connection_handler
+def get_answer_status_for_user(cursor, answer_id, username):
+    cursor.execute(f"""
+                        SELECT status FROM answer_status
+                        WHERE answer_id={answer_id} AND username='{username}';
+    """)
+    result = cursor.fetchone()
+    status = result['status']
+    return status
+
+
+@connection.connection_handler
+def set_answer_status_for_user(cursor, answer_id, username):
+    cursor.execute(f"""
+                    INSERT INTO answer_status (answer_id, status, username)
+                    VALUES ({answer_id}, 0, '{username}');
+""")
+
+
+@connection.connection_handler
+def question_status_plus_one(cursor, question_id, username):
+    cursor.execute(f"""
+                    UPDATE question_status
+                    SET status = status + 1
+                    WHERE question_id={question_id} AND username='{username}';
+""")
+
+
+@connection.connection_handler
+def question_status_minus_one(cursor, question_id, username):
+    cursor.execute(f"""
+                    UPDATE question_status
+                    SET status = status - 1
+                    WHERE question_id={question_id} AND username='{username}';
+""")
+
+
+@connection.connection_handler
+def answer_status_plus_one(cursor, answer_id, username):
+    cursor.execute(f"""
+                    UPDATE answer_status
+                    SET status = status + 1
+                    WHERE answer_id={answer_id} AND username='{username}';
+""")
+
+
+@connection.connection_handler
+def answer_status_minus_one(cursor, answer_id, username):
+    cursor.execute(f"""
+                    UPDATE answer_status
+                    SET status = status - 1
+                    WHERE answer_id={answer_id} AND username='{username}';
+""")
