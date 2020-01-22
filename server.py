@@ -371,7 +371,10 @@ def return_search():
             if '<span' in question['title'].split() or '<span' in question['message'].split():
                 search_res.append(question)
         print('Search Res:', search_res)
-        return render_template("search-results.html", questions=search_res, show_sort=show_sort)
+        return render_template("search-results.html",
+                               search_phrase=search_phrase,
+                               questions=search_res,
+                               show_sort=show_sort)
 
     search_phrase = search_phrase.split()
     print("Search phrase", search_phrase)
@@ -388,7 +391,10 @@ def return_search():
         if '<span' in question['title'].split() or '<span' in question['message'].split():
             search_res.append(question)
     print('Search Res:', search_res)
-    return render_template("search-results.html", questions=search_res, show_sort=show_sort)
+    return render_template("search-results.html",
+                           search_phrase=search_phrase,
+                           questions=search_res,
+                           show_sort=show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
