@@ -404,7 +404,11 @@ def register_user():
 
         if input_password == input_confirm:
             hash_password = util.hash_password(input_password)
-            data_manager.add_user_in_db(input_username, hash_password)
+            try:
+                data_manager.add_user_in_db(input_username, hash_password)
+            except:
+                message_invalid="User already exists!!"
+                return render_template('registration.html', message_invalid=message_invalid)
             return redirect(url_for('login'))
         else:
             message = 'Password did not match'
