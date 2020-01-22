@@ -68,7 +68,9 @@
 
 
     <div class="wrapped-title">
+        {% autoescape false %}
         {{ question.message }}
+        {% endautoescape %}
     </div>
 
         {% if (question.image == '../static/img/' or question.image == None) %}
@@ -204,7 +206,9 @@
 
     <div class="wrapped-title">
         {% if session %}
+            {% autoescape false %}
             {{ answer.message }} by: <a href="{{ url_for('display_user_activity', user_id=answer.user_id) }}">{{ answer.username }}</a> {{ answer.submission_time }}
+            {% endautoescape %}
             <span class="title-info">
                 <a href="{{ url_for('route_add_answer_comment', answer_id = answer.id) }}" class="action-button">Comment</a>
 
@@ -219,7 +223,9 @@
 
             </span>
         {% else %}
+            {% autoescape false %}
             {{ answer.message }} by: <a href="{{ url_for('display_user_activity', user_id=answer.user_id) }}">{{ answer.username }}</a> {{ answer.submission_time }}
+            {% endautoescape %}
             <span class="title-info">
 <!--                <a href="#" class="action-button">Comment</a>-->
 <!--                <a href="#" class="action-button">Edit</a>-->
