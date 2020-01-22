@@ -85,7 +85,9 @@
                 </div>
 
                 <div class="wrapped-message">
+                    {% autoescape false %}
                     {{ line.message }}
+                    {% endautoescape %}
                 </div>
             </div>
         {% endfor %}
