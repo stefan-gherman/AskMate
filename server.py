@@ -445,11 +445,11 @@ def register_user():
             try:
                 data_manager.add_user_in_db(input_username, hash_password)
             except:
-                message_invalid="User already exists!!"
+                message_invalid = "Sorry, that username already exists!"
                 return render_template('registration.html', message_invalid=message_invalid)
             return redirect(url_for('login'))
         else:
-            message = 'Password did not match'
+            message = 'Password confirmation unsuccessful. Please try again.'
             return render_template('registration.html', message=message)
     return render_template('registration.html')
 
