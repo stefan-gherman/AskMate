@@ -61,6 +61,7 @@ def route_add_question():
         random_file_name = util.random_string()
         title = request.form['title']
         title = title.rstrip('?')
+        title = title + ' ' + '?'
         message = util.make_compat_display(request.form['message'])
         message = message.replace("'", "''")
         title = title.replace("'", "''")
@@ -89,6 +90,7 @@ def route_edit_question(question_id):
     if request.method == 'POST':
         title = request.form['title']
         title = title.rstrip('?')
+        title = title + ' ' + '?'
         message = request.form['message']
         message = util.make_compat_display(message, 'not_textarea')
         data_manager.update_question(question_id_conv, message, title)
