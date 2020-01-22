@@ -168,36 +168,72 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/vote_up')
 def route_question_vote_up(question_id):
+    try:
+        status = data_manager.get_question_status_for_user(question_id, session['username'])
+    except:
+        data_manager.set_question_status_for_user(question_id, session['username'])
     question_id_conv = int(question_id)
-    data_manager.vote_item_up_down(question_id_conv, 'question', 'up')
-    return redirect(request.referrer)
+    status = data_manager.get_question_status_for_user(question_id, session['username'])
+    if status == 0 or status == -1:
+        data_manager.vote_item_up_down(question_id_conv, 'question', 'up')
+        data_manager.question_status_plus_one(question_id, session['username'])
+        return redirect(request.referrer)
+    else:
+        return redirect(request.referrer)
 
 
 @app.route('/question/<question_id>/vote_down')
 def route_question_vote_down(question_id):
+    try:
+        status = data_manager.get_question_status_for_user(question_id, session['username'])
+    except:
+        data_manager.set_question_status_for_user(question_id, session['username'])
     question_id_conv = int(question_id)
-    data_manager.vote_item_up_down(question_id_conv, 'question', 'down')
-    return redirect(request.referrer)
+    status = data_manager.get_question_status_for_user(question_id, session['username'])
+    if status == 0 or status == 1:
+        data_manager.vote_item_up_down(question_id_conv, 'question', 'down')
+        data_manager.question_status_minus_one(question_id, session['username'])
+        return redirect(request.referrer)
+    else:
+        return redirect(request.referrer)
 
 
 @app.route('/answer/<answer_id>/vote_up')
 def route_answer_vote_up(answer_id):
+    try:
+        status = data_manager.get_answer_status_for_user(answer_id, session['username'])
+    except:
+        data_manager.set_answer_status_for_user(answer_id, session['username'])
     global update_views
     global questions_found
     update_views = False
     answer_id_conv = int(answer_id)
-    data_manager.vote_item_up_down(answer_id_conv, 'answer', 'up')
-    return redirect(request.referrer)
+    status = data_manager.get_answer_status_for_user(answer_id, session['username'])
+    if status == 0 or status == -1:
+        data_manager.vote_item_up_down(answer_id_conv, 'answer', 'up')
+        data_manager.answer_status_plus_one(answer_id, session['username'])
+        return redirect(request.referrer)
+    else:
+        return redirect(request.referrer)
 
 
 @app.route('/answer/<answer_id>/vote_down')
 def route_answer_vote_down(answer_id):
+    try:
+        status = data_manager.get_answer_status_for_user(answer_id, session['username'])
+    except:
+        data_manager.set_answer_status_for_user(answer_id, session['username'])
     global update_views
     global questions_found
     update_views = False
     answer_id_conv = int(answer_id)
-    data_manager.vote_item_up_down(answer_id_conv, 'answer', 'down')
-    return redirect(request.referrer)
+    status = data_manager.get_answer_status_for_user(answer_id, session['username'])
+    if status == 0 or status == 1:
+        data_manager.vote_item_up_down(answer_id_conv, 'answer', 'down')
+        data_manager.answer_status_minus_one(answer_id, session['username'])
+        return redirect(request.referrer)
+    else:
+        return redirect(request.referrer)
 
 
 param = None
