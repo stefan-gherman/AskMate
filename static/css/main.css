@@ -209,6 +209,7 @@ textarea, input[type=text] {
     border: solid 1px rgb(121,128,46);
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
+    padding-left: 3px;
 }
 
 .tag-container {

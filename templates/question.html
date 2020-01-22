@@ -62,7 +62,7 @@
 
         {% else %}
             <div class="wrapped-message">
-                <img src="{{ question.image }}" alt="question image" id="image" height="200px">
+                <a href="{{ question.image }}" target="_blank"><img src="{{ question.image }}" alt="question image" id="image" height="200px"></a>
             </div>
         {% endif %}
 
@@ -208,7 +208,7 @@
 
         {% else %}
             <div class="wrapped-message">
-                <img src="{{ answer.image }}" alt="answer image" height="200px">
+                <a href="{{ answer.image }}" target="_blank"><img src="{{ answer.image }}" alt="answer image" height="200px"></a>
             </div>
         {% endif %}
     </div>
