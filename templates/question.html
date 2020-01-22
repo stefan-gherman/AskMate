@@ -77,12 +77,12 @@
             </span>
             <span>
                 <a
-                    class="action-button"
+                    class="tag-button"
                     href="{{ url_for('delete_one_tag', question_id = question_id, tag_id = tag[0]['id']) }}"
                     >X</a>
             </span>
         {% endfor %}
-        <span><a href="{{ url_for('question_tag',question_id=question_id)}}" class="action-button">+</a></span>
+        <span><a href="{{ url_for('question_tag',question_id=question_id)}}" class="tag-button">+</a></span>
     {% else %}
         {% for tag in tags %}
             <span class="tag">
@@ -90,12 +90,12 @@
             </span>
             <span>
                 <a
-                    class="action-button"
+                    class="tag-button"
                     href="#"
                     >X</a>
             </span>
         {% endfor %}
-        <span><a href="#" class="action-button">+</a></span>
+        <span><a href="#" class="tag-button">+</a></span>
     {% endif %}
 </div>
 
