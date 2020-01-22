@@ -31,15 +31,28 @@
 <div class="question-wrapper">
     <div class="wrapped-votes">
         {% if session %}
-            <a href="{{ url_for('route_question_vote_up', question_id=question.id) }}" class="vote-button">
-                <img src="/static/local_ico/vote-up-button.png">
-            </a>
-            <br>
-            {{ question.vote_number }}
-            <br>
-            <a href="{{ url_for('route_question_vote_down', question_id=question.id) }}" class="vote-button">
-                <img src="/static/local_ico/vote-down-button.png">
-            </a>
+            {% if session['username'] == question.username %}
+                <a href="#" class="vote-button">
+                    <img src="/static/local_ico/vote-up-button.png">
+                </a>
+                <br>
+                {{ question.vote_number }}
+                <br>
+                <a href="#" class="vote-button">
+                    <img src="/static/local_ico/vote-down-button.png">
+                </a>
+            {% endif %}
+            {% if not session['username'] == question.username %}
+                <a href="{{ url_for('route_question_vote_up', question_id=question.id) }}" class="vote-button">
+                    <img src="/static/local_ico/vote-up-button.png">
+                </a>
+                <br>
+                {{ question.vote_number }}
+                <br>
+                <a href="{{ url_for('route_question_vote_down', question_id=question.id) }}" class="vote-button">
+                    <img src="/static/local_ico/vote-down-button.png">
+                </a>
+            {% endif %}
         {% else %}
             <a href="#" class="vote-button">
                 <img src="/static/local_ico/vote-up-button.png">
@@ -62,7 +75,7 @@
 
         {% else %}
             <div class="wrapped-message">
-                <img src="{{ question.image }}" alt="question image" id="image" height="200px">
+                <a href="{{ question.image }}" target="_blank"><img src="{{ question.image }}" alt="question image" id="image" height="200px"></a>
             </div>
         {% endif %}
 
@@ -77,12 +90,12 @@
             </span>
             <span>
                 <a
-                    class="action-button"
+                    class="tag-button"
                     href="{{ url_for('delete_one_tag', question_id = question_id, tag_id = tag[0]['id']) }}"
                     >X</a>
             </span>
         {% endfor %}
-        <span><a href="{{ url_for('question_tag',question_id=question_id)}}" class="action-button">+</a></span>
+        <span><a href="{{ url_for('question_tag',question_id=question_id)}}" class="tag-button">+</a></span>
     {% else %}
         {% for tag in tags %}
             <span class="tag">
@@ -90,12 +103,12 @@
             </span>
             <span>
                 <a
-                    class="action-button"
+                    class="tag-button"
                     href="#"
                     >X</a>
             </span>
         {% endfor %}
-        <span><a href="#" class="action-button">+</a></span>
+        <span><a href="#" class="tag-button">+</a></span>
     {% endif %}
 </div>
 
@@ -123,15 +136,28 @@
 
     <div class="wrapped-votes">
         {% if session %}
-            <a href="{{ url_for('route_answer_vote_up', answer_id=answer.id) }}" class="vote-button">
-                <img src="/static/local_ico/vote-up-button.png">
-            </a>
-            <br>
-            {{ answer.vote_number }}
-            <br>
-            <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
-                        <img src="/static/local_ico/vote-down-button.png">
-            </a>
+            {% if session['username'] == answer.username %}
+                <a href="#" class="vote-button">
+                    <img src="/static/local_ico/vote-up-button.png">
+                </a>
+                <br>
+                {{ answer.vote_number }}
+                <br>
+                <a href="#" class="vote-button">
+                            <img src="/static/local_ico/vote-down-button.png">
+                </a>
+            {% endif %}
+            {% if not session['username'] == answer.username %}
+                <a href="{{ url_for('route_answer_vote_up', answer_id=answer.id) }}" class="vote-button">
+                    <img src="/static/local_ico/vote-up-button.png">
+                </a>
+                <br>
+                {{ answer.vote_number }}
+                <br>
+                <a href="{{ url_for('route_answer_vote_down', answer_id=answer.id) }}" class="vote-button">
+                            <img src="/static/local_ico/vote-down-button.png">
+                </a>
+            {% endif %}
             <div class="wrapped-accepted">
                 {% if session.username == db_username_by_question_id %}
                     {% if answer.accepted == false %}
@@ -208,7 +234,7 @@
 
         {% else %}
             <div class="wrapped-message">
-                <img src="{{ answer.image }}" alt="answer image" height="200px">
+                <a href="{{ answer.image }}" target="_blank"><img src="{{ answer.image }}" alt="answer image" height="200px"></a>
             </div>
         {% endif %}
     </div>
