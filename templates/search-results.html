@@ -40,18 +40,28 @@
 
         <div class="wrapped-title">
             {% if session %}
+                {% if session['username'] == line.username %}
                 <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink">{% autoescape false %}{{ line.title }}{% endautoescape %}</a>
                 <br>
-                <span class="title-info"> View number: {{ line.view_number }} Submission Time: {{ line.submission_time }} By: <strong>{{ line.user_name }}</strong>
+                <span class="title-info"> View number: {{ line.view_number }} Submission Time: {{ line.submission_time }} By: <strong><a href="{{ url_for('display_user_activity', user_id=line.user_id) }}">{{ line.username }}</a></strong>
                     <a href="{{ url_for('route_edit_question', question_id=line.id) }}" class="action-button">Edit</a>
                     <a href="{{ url_for('delete_sql_question', question_id=line.id) }}" class="action-button">Delete</a>
                 </span>
+                {% endif %}
+                {% if not session['username'] == line.username %}
+                    <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink">{% autoescape false %}{{ line.title }}{% endautoescape %}</a>
+                    <br>
+            <span class="title-info"> View number: {{ line.view_number }} Submission Time: {{ line.submission_time }} By: <strong><a href="{{ url_for('display_user_activity', user_id=line.user_id) }}">{{ line.username }}</a></strong>
+<!--                        <a href="{{ url_for('route_edit_question', question_id=line.id) }}" class="action-button">Edit</a>-->
+<!--                        <a href="{{ url_for('delete_sql_question', question_id=line.id) }}" class="action-button">Delete</a>-->
+                    </span>
+                {% endif %}
             {% else %}
                 <a href="{{ url_for('route_question', question_id=line.id) }}" id="titlelink">{% autoescape false %}{{ line.title }}{% endautoescape %}</a>
                 <br>
-                <span class="title-info"> View number: {{ line.view_number }} Submission Time: {{ line.submission_time }} By: <strong>{{ line.user_name }}</strong>
-                    <a href="#" class="action-button">Edit</a>
-                    <a href="#" class="action-button">Delete</a>
+            <span class="title-info"> View number: {{ line.view_number }} Submission Time: {{ line.submission_time }} By: <strong><a href="{{ url_for('display_user_activity', user_id=line.user_id) }}">{{ line.username }}</a></strong>
+<!--                    <a href="#" class="action-button">Edit</a>-->
+<!--                    <a href="#" class="action-button">Delete</a>-->
                 </span>
             {% endif %}
         </div>
