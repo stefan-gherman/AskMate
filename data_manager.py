@@ -325,15 +325,37 @@ def max_id(cursor):
 
 @connection.connection_handler
 def add_tag(cursor, tag_name, question_id):
-    id_to_add = max_id()[0]['max'] + 1
+    question_id = int(question_id)
+    print('Am i Here?')
     cursor.execute(
-        sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
-            .format(table=sql.Identifier('tag')), [id_to_add, tag_name]
+        sql.SQL("SELECT  {table1}.{col1}, {table2}.{col2} FROM {table1} JOIN {table3} ON {table3}.{col4} = {table1}.{col5} JOIN {table2} on {table3}.{col6} = {table2}.{col5} WHERE {table3}.{col6} = %s;")
+            .format(
+            table1 = sql.Identifier('tag'),
+            col1 = sql.Identifier('name'),
+            table2 = sql.Identifier('question'),
+            col2 = sql.Identifier('title'),
+            table3 = sql.Identifier('question_tag'),
+            col4=sql.Identifier('tag_id'),
+            col5=sql.Identifier('id'),
+            col6=sql.Identifier('question_id')
+
+                    ), [question_id]
     )
-    cursor.execute(
-        sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
-            .format(table=sql.Identifier('question_tag')), [question_id, id_to_add]
-    )
+    tags = cursor.fetchall()
+    tag_names = [tag['name'].lower() for tag in tags]
+    print(tag_names)
+    if tag_name.lower() not in tag_names:
+        id_to_add = max_id()[0]['max'] + 1
+        cursor.execute(
+            sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
+                .format(table=sql.Identifier('tag')), [id_to_add, tag_name.title()]
+        )
+        cursor.execute(
+            sql.SQL("INSERT INTO {table} VALUES (%s, %s);")
+                .format(table=sql.Identifier('question_tag')), [question_id, id_to_add]
+        )
+    else:
+        print('Debug: Already There')
 
 
 @connection.connection_handler
@@ -370,18 +392,17 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
 
 @connection.connection_handler
 def search_for_phrase(cursor, phrase_for_query):
-    # TODO: fix search
-    # cursor.execute(
-    #     sql.SQL(
-    #         "SELECT * from {table} WHERE to_tsvector({col1}) @@ to_tsquery(%s) OR to_tsvector({col2}) @@ to_tsquery(%s) ORDER BY {col3} desc;")
-    #         .format(table=sql.Identifier('question'),
-    #                 col1=sql.Identifier('title'),
-    #                 col2=sql.Identifier('message'),
-    #                 col3=sql.Identifier('vote_number')), [phrase_for_query, phrase_for_query]
-    # )
-    cursor.execute(f"""
-                    SELECT * FROM question WHERE title LIKE '%{phrase_for_query}%' OR message LIKE '%{phrase_for_query}%';
-""")
+    cursor.execute(
+        sql.SQL(
+            "SELECT * from {table} WHERE to_tsvector('simple_english', {col1}) @@ to_tsquery('simple_english', %s) OR to_tsvector('simple_english', {col2}) @@ to_tsquery('simple_english', %s) ORDER BY {col3} desc;")
+            .format(table=sql.Identifier('question'),
+                    col1=sql.Identifier('title'),
+                    col2=sql.Identifier('message'),
+                    col3=sql.Identifier('vote_number')), [phrase_for_query, phrase_for_query]
+    )
+#     cursor.execute(f"""
+#                     SELECT * FROM question WHERE title LIKE '%{phrase_for_query}%' OR message LIKE '%{phrase_for_query}%';
+# """)
     questions_found = cursor.fetchall()
     return questions_found
 

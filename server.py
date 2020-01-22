@@ -5,6 +5,7 @@ import connection as connection
 import util as util
 from werkzeug.utils import secure_filename
 
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
 app.secret_key = os.urandom((20))
@@ -74,7 +75,7 @@ def route_add_question():
         data_manager.add_question(title, message, filename, user_id)
         # print(session['username'], ' this is the session.')
         update_views = False
-        return redirect(url_for("route_index",  username='text_text'))
+        return redirect(url_for("route_index", username='text_text'))
     else:
         return render_template('add_question.html')
 
@@ -327,7 +328,12 @@ def return_search():
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
             question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-        return render_template("search-results.html", questions=questions_found, show_sort=show_sort)
+        search_res = []
+        for question in questions_found:
+            if '<span' in question['title'].split() or '<span' in question['message'].split():
+                search_res.append(question)
+        print('Search Res:', search_res)
+        return render_template("search-results.html", questions=search_res, show_sort=show_sort)
 
     search_phrase = search_phrase.split()
     print("Search phrase", search_phrase)
@@ -339,7 +345,12 @@ def return_search():
         question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
     for question in questions_found:
         print('This is a question', question)
-    return render_template("search-results.html", questions=questions_found, show_sort=show_sort)
+    search_res = []
+    for question in questions_found:
+        if '<span' in question['title'].split() or '<span' in question['message'].split():
+            search_res.append(question)
+    print('Search Res:', search_res)
+    return render_template("search-results.html", questions=search_res, show_sort=show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
@@ -403,7 +414,7 @@ def login():
             session['username'] = request.form['username']
             return redirect(url_for('route_home'))
         else:
-            return render_template('login.html', alert_me = True)
+            return render_template('login.html', alert_me=True)
     return render_template('login.html')
 
 
@@ -454,7 +465,14 @@ def route_tags():
             empty_dict[tag] = 1
         else:
             empty_dict[tag] += 1
-    return render_template('tags.html', data=empty_dict)
+    freq_counter = []
+    for key in empty_dict.keys():
+        freq_counter.append((key, empty_dict[key]))
+    print(freq_counter)
+    freq_counter = sorted(freq_counter,key = lambda element: element[1], reverse = True)
+    print(freq_counter)
+    sorted_by_freq = dict(freq_counter)
+    return render_template('tags.html', data=sorted_by_freq)
 
 
 if __name__ == "__main__":
