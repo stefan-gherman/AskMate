@@ -1,37 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
-</head>
-<body>
-    <div>
-        <h2>REGISTRATION FORM:</h2>
-        <h4> Join the platform, where you can find the right answers for your questions</h4>
-        <form action="{{ url_for('register_user')}}" method="post">
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Register</title>
+{% endblock head %}
+
+
+{% block body %}
+
+    <div class="top-banner">
+        <p>Join Ask Mate Today</p>
+    </div>
+
+
+    <div class="centered-content">
+
+        <p>The platform where you can find the right answers to absolutely all your questions!</p>
+        <div>
+            <form action="{{ url_for('register_user')}}" method="post">
             {% if message_invalid %}
             {{ message_invalid }}
             {% endif %}
-        <br>
-            <label>User Name:
-                <input type="text" name="username">
-            </label>
             <br>
-            <label>Password:
-                <input type="password" name="password">
-            </label>
-            <br>
-            <label>Confirm Password:
-                <input type="password" name="confirm">
-            </label>
-            <br>
-            <input type="submit" value="Submit">
-        </form>
+            <label>User Name:</label><br>
+            <input type="text" name="username"><br>
+            <label>Password:</label><br>
+            <input type="password" name="password"><br>
+            <label>Confirm Password:</label><br>
+            <input type="password" name="confirm"><br>
+            <input type="submit" value="Join" class="add-content-button">
+            </form>
+        </div>
     <br>
         {% if message %}
             {{ message }}
-            {% endif %}
+        {% endif %}
     </div>
-</body>
-</html>
+
+
+{% endblock body %}

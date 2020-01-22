@@ -197,7 +197,7 @@ nav ul {
 
 /* new/edit question and other text boxes */
 
-textarea, input[type=text] {
+textarea, input[type=text], input[type=password] {
     background-color: darkgray;
     width: 300px;
     border-radius: 3px;
