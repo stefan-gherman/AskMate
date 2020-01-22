@@ -10,14 +10,28 @@
         <h2>REGISTRATION FORM:</h2>
         <h4> Join the platform, where you can find the right answers for your questions</h4>
         <form action="{{ url_for('register_user')}}" method="post">
+            {% if message_invalid %}
+            {{ message_invalid }}
+            {% endif %}
+        <br>
             <label>User Name:
                 <input type="text" name="username">
             </label>
+            <br>
             <label>Password:
                 <input type="password" name="password">
             </label>
+            <br>
+            <label>Confirm Password:
+                <input type="password" name="confirm">
+            </label>
+            <br>
             <input type="submit" value="Submit">
         </form>
+    <br>
+        {% if message %}
+            {{ message }}
+            {% endif %}
     </div>
 </body>
 </html>

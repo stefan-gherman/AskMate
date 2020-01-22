@@ -402,10 +402,20 @@ def register_user():
     if request.method == 'POST':
         input_username = request.form.get('username')
         input_password = request.form.get('password')
-        hash_password = util.hash_password(input_password)
-        data_manager.add_user_in_db(input_username, hash_password)
-        message = 'Welcome ' + input_username + ' !!!!'
-    return render_template('user_page.html', message=message)
+        input_confirm = request.form.get('confirm')
+
+        if input_password == input_confirm:
+            hash_password = util.hash_password(input_password)
+            try:
+                data_manager.add_user_in_db(input_username, hash_password)
+            except:
+                message_invalid="User already exists!!"
+                return render_template('registration.html', message_invalid=message_invalid)
+            return redirect(url_for('login'))
+        else:
+            message = 'Password did not match'
+            return render_template('registration.html', message=message)
+    return render_template('registration.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
