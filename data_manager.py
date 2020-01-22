@@ -394,7 +394,7 @@ def delete_tag_questions(cursor, question_id, tag_id_to_delete):
 def search_for_phrase(cursor, phrase_for_query):
     cursor.execute(
         sql.SQL(
-            "SELECT * from {table} WHERE to_tsvector('simple_english', {col1}) @@ to_tsquery('simple_english', %s) OR to_tsvector('simple_english', {col2}) @@ to_tsquery('simple_english', %s) ORDER BY {col3} desc;")
+            "SELECT * from {table} WHERE to_tsvector('simple_english_no_stop',{col1}) @@ to_tsquery('simple_english_no_stop', %s) OR to_tsvector('simple_english_no_stop', {col2}) @@ to_tsquery('simple_english_no_stop' ,%s) ORDER BY {col3} desc;")
             .format(table=sql.Identifier('question'),
                     col1=sql.Identifier('title'),
                     col2=sql.Identifier('message'),
