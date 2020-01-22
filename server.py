@@ -327,7 +327,12 @@ def return_search():
         for question in questions_found:
             question["title"] = util.apply_fancy(search_phrase_for_highlighting, question['title'])
             question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
-        return render_template("search-results.html", questions=questions_found, show_sort=show_sort)
+        search_res = []
+        for question in questions_found:
+            if '<span' in question['title'].split() or '<span' in question['message'].split():
+                search_res.append(question)
+        print('Search Res:', search_res)
+        return render_template("search-results.html", questions=search_res, show_sort=show_sort)
 
     search_phrase = search_phrase.split()
     print("Search phrase", search_phrase)
@@ -339,7 +344,12 @@ def return_search():
         question["message"] = util.apply_fancy(search_phrase_for_highlighting, question['message'])
     for question in questions_found:
         print('This is a question', question)
-    return render_template("search-results.html", questions=questions_found, show_sort=show_sort)
+    search_res = []
+    for question in questions_found:
+        if '<span' in question['title'].split() or '<span' in question['message'].split():
+            search_res.append(question)
+    print('Search Res:', search_res)
+    return render_template("search-results.html", questions=search_res, show_sort=show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
