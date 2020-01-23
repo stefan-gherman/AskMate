@@ -168,7 +168,7 @@
                         </a>
                     {% elif answer.accepted == true %}
                     <span class="accepted-answer">ACCEPTED</span><br>
-                    <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="action-button">
+                    <a href="{{ url_for('route_accept_answer', answer_id = answer.id) }}" class="clear-action-button">
                         Clear
                     </a>
                     {% endif %}
