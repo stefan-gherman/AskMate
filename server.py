@@ -296,7 +296,7 @@ def delete_sql_question(question_id):
     global questions_found
     question_to_delete = int(question_id)
     data_manager.delete_sql_questions(question_to_delete)
-    return redirect(request.referrer)
+    return redirect(url_for('route_home'))
 
 
 @app.route('/answer/<answer_id>/')
