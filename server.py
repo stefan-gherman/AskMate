@@ -336,8 +336,8 @@ def chose_question_tag(question_id):
         if tag is not None and tag != '':
             data_manager.add_tag(tag, question_id_to_add)
 
-    return route_question(question_id_to_add)
-
+    #return route_question(question_id_to_add)
+    return redirect(url_for('route_question', question_id = question_id_to_add))
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
 def delete_one_tag(question_id, tag_id):
@@ -345,8 +345,8 @@ def delete_one_tag(question_id, tag_id):
     tag_to_delete = int(tag_id)
     data_manager.delete_tag_questions(question_on_page, tag_to_delete)
 
-    return route_question(question_on_page)
-
+    #return route_question(question_on_page)
+    return redirect(url_for('route_question', question_id=question_on_page))
 
 questions_found = []
 phrase_for_query = ""
