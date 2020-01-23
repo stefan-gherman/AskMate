@@ -3,6 +3,8 @@ import psycopg2
 import os
 import psycopg2.extras
 
+# DATABASE_URL = os.environ['DATABASE_URL']
+
 QUESTIONS_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 ANSWERS_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
@@ -70,6 +72,7 @@ def open_database():
     try:
         connection_string = get_connection_string()
         connection = psycopg2.connect(connection_string)
+        # connection = psycopg2.connect(DATABASE_URL, sslmode='require') # heroku connection
         connection.autocommit = True
     except psycopg2.DatabaseError as exception:
         print('Database connection problem')
