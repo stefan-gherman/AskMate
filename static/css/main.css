@@ -62,6 +62,14 @@ a:active {
     border: solid 1px rgb(121,128,46);
 }
 
+.clear-action-button {
+    font-size: medium;
+    border-radius: 3px;
+    padding-left: 3px;
+    padding-right: 4px;
+    border: solid 1px rgb(121,128,46);
+}
+
 /* list and top 5 questions - questions display */
 /* GRID SIZE   */
 .question-wrapper {
