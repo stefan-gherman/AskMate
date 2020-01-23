@@ -16,8 +16,17 @@ ALTER TABLE IF EXISTS ONLY public.question_tag DROP CONSTRAINT IF EXISTS fk_ques
 ALTER TABLE IF EXISTS ONLY public.tag DROP CONSTRAINT IF EXISTS pk_tag_id CASCADE;
 ALTER TABLE IF EXISTS ONLY public.question_tag DROP CONSTRAINT IF EXISTS fk_tag_id CASCADE;
 
-DROP TABLE IF EXISTS public.question;
-DROP SEQUENCE IF EXISTS public.question_id_seq;
+-- DROP TABLE IF EXISTS public.question;
+-- DROP SEQUENCE IF EXISTS public.question_id_seq;
+
+CREATE TABLE person (
+    id serial not null primary key,
+    username = varchar(50),
+    password = varchar(70),
+    created = timestamp without time zone DEFAULT current_timestamp,
+    reputation integer default 0
+)
+
 CREATE TABLE question (
     id serial NOT NULL,
     submission_time timestamp without time zone,
@@ -25,7 +34,8 @@ CREATE TABLE question (
     vote_number integer,
     title text,
     message text,
-    image text
+    image text,
+    user_id integer references person(id)
 );
 
 DROP TABLE IF EXISTS public.answer;

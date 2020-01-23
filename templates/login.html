@@ -1,28 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Log into Ask Mate</title>
+{% endblock head %}
+
+
+{% block body %}
+
+    <div class="top-banner">
+        <p>Log Into Ask Mate</p>
+    </div>
+
     {% if alert_me %}
     <script>
         alert("Sorry, that didn't work.");
     </script>
     {%  endif  %}
-</head>
-<body>
-    <div>
-        <h2>LOGIN FORM:</h2>
-        <h4> Enter the platform, where you can find the right answers for your questions</h4>
+
+    <div class="centered-content">
+
+        <p> Enter the platform, where you can find the right answers for your questions</p>
         <form action="{{ url_for('login') }}" method="post">
-            <label>User Name:
-                <input type="text" name="username">
-            </label>
-            <label>Password:
-                <input type="password" name="password">
-            </label>
-            <input type="submit" value="Submit">
+            <label>User Name:</label><br>
+            <input type="text" name="username"><br>
+            <label>Password:</label><br>
+            <input type="password" name="password"><br>
+            <input type="submit" value="Log In" class="add-content-button">
         </form>
     </div>
-</body>
-</html>
+
+
+{% endblock body %}

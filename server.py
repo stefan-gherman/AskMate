@@ -371,7 +371,10 @@ def return_search():
             if '<span' in question['title'].split() or '<span' in question['message'].split():
                 search_res.append(question)
         print('Search Res:', search_res)
-        return render_template("search-results.html", questions=search_res, show_sort=show_sort)
+        return render_template("search-results.html",
+                               search_phrase=search_phrase,
+                               questions=search_res,
+                               show_sort=show_sort)
 
     search_phrase = search_phrase.split()
     print("Search phrase", search_phrase)
@@ -388,7 +391,10 @@ def return_search():
         if '<span' in question['title'].split() or '<span' in question['message'].split():
             search_res.append(question)
     print('Search Res:', search_res)
-    return render_template("search-results.html", questions=search_res, show_sort=show_sort)
+    return render_template("search-results.html",
+                           search_phrase=search_phrase,
+                           questions=search_res,
+                           show_sort=show_sort)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
@@ -445,11 +451,11 @@ def register_user():
             try:
                 data_manager.add_user_in_db(input_username, hash_password)
             except:
-                message_invalid="User already exists!!"
+                message_invalid = "Sorry, that username already exists!"
                 return render_template('registration.html', message_invalid=message_invalid)
             return redirect(url_for('login'))
         else:
-            message = 'Password did not match'
+            message = 'Password confirmation unsuccessful. Please try again.'
             return render_template('registration.html', message=message)
     return render_template('registration.html')
 
@@ -527,5 +533,5 @@ if __name__ == "__main__":
     app.run(
         debug=True,
         host="0.0.0.0",
-        port=6374
+        port=5000
     )

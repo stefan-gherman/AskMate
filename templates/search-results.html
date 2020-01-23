@@ -9,6 +9,7 @@
 
 {% block body %}
 
+<p>Displaying results for: {{ search_phrase[0] }}</p>
 
 
 {% for line in questions %}
@@ -80,7 +81,9 @@
         </div>
 
         <div class="wrapped-message">
+            {% autoescape  false %}
             {{ line.message }}
+            {% endautoescape %}
         </div>
     </div>
 
