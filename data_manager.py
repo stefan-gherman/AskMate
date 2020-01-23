@@ -114,6 +114,23 @@ def delete_sql_questions(cursor, id_to_delete):
             .format(table=sql.Identifier('question_tag'), col=sql.Identifier('question_id')), [id_to_delete]
     )
     cursor.execute(
+        sql.SQL("SELECT {col1} FROM {table1} WHERE {col2}=%s;")
+            .format(
+            col1=sql.Identifier('image'),
+            table1=sql.Identifier('question'),
+            col2=sql.Identifier('id')
+        ), [id_to_delete]
+    )
+
+    picture = cursor.fetchall()
+    picture = picture[0]['image']
+    print(picture, type(picture))
+    if picture != "../static/img/":
+        print('is different')
+        picture = picture.lstrip('.')
+        picture = picture.lstrip('/')
+        os.remove(picture)
+    cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('question'), col=sql.Identifier('id')), [id_to_delete]
     )
@@ -126,17 +143,22 @@ def delete_sql_answers(cursor, id_to_delete):
             .format(table=sql.Identifier('comment'), col=sql.Identifier('answer_id')), [id_to_delete]
     )
     cursor.execute(
-        sql.SQL("SELECT {col1} FROM {table1};")
+        sql.SQL("SELECT {col1} FROM {table1} WHERE {col2}=%s;")
             .format(
         col1 = sql.Identifier('image'),
-        table1 = sql.Identifier('answer')
-    )
+        table1 = sql.Identifier('answer'),
+        col2 = sql.Identifier('id')
+    ), [id_to_delete]
     )
 
     picture = cursor.fetchall()
     picture = picture[0]['image']
-    print(picture)
-
+    print(picture, type(picture))
+    if picture != "../static/img/":
+        print('is different')
+        picture = picture.lstrip('.')
+        picture = picture.lstrip('/')
+        os.remove(picture)
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('answer'), col=sql.Identifier('id')), [id_to_delete]
