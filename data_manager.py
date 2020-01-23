@@ -113,6 +113,9 @@ def delete_sql_questions(cursor, id_to_delete):
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('question_tag'), col=sql.Identifier('question_id')), [id_to_delete]
     )
+    cursor.execute(f"""
+                DELETE FROM question_status WHERE question_id={id_to_delete};
+    """)
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('question'), col=sql.Identifier('id')), [id_to_delete]
@@ -125,6 +128,9 @@ def delete_sql_answers(cursor, id_to_delete):
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('comment'), col=sql.Identifier('answer_id')), [id_to_delete]
     )
+    cursor.execute(f"""
+                DELETE FROM answer_status WHERE answer_id={id_to_delete};
+    """)
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('answer'), col=sql.Identifier('id')), [id_to_delete]

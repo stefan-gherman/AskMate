@@ -463,12 +463,17 @@ def register_user():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        hashed_password = data_manager.get_password_by_username(request.form['username'])
-        if data_manager.verify_password(request.form['password'], hashed_password):
-            session['username'] = request.form['username']
-            return redirect(url_for('route_home'))
-        else:
-            return render_template('login.html', alert_me=True)
+        try:
+            hashed_password = data_manager.get_password_by_username(request.form['username'])
+            if data_manager.verify_password(request.form['password'], hashed_password):
+                session['username'] = request.form['username']
+                return redirect(url_for('route_home'))
+            else:
+                return render_template('login.html', alert_me=True)
+        except:
+            no_user_in_db_message = 'Username or password invalid.'
+            return render_template('login.html',
+                                   no_user_in_db_message=no_user_in_db_message)
     return render_template('login.html')
 
 

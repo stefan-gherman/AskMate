@@ -18,13 +18,13 @@
         <div class="wrapped-votes">
             {% if session %}
                 {% if session['username'] == line.username %}
-                    <a href="#" class="vote-button">
+                    <a class="vote-button">
                         <img src="/static/local_ico/vote-up-button.png">
                     </a>
                     <br>
                     {{ line.vote_number }}
                     <br>
-                    <a href="#" class="vote-button">
+                    <a class="vote-button">
                                 <img src="/static/local_ico/vote-down-button.png">
                     </a>
                 {% endif %}
@@ -40,13 +40,13 @@
                     </a>
                 {% endif %}
             {% else %}
-                <a href="#" class="vote-button">
+                <a class="vote-button">
                     <img src="/static/local_ico/vote-up-button.png">
                 </a>
                 <br>
                 {{ line.vote_number }}
                 <br>
-                <a href="#" class="vote-button">
+                <a class="vote-button">
                             <img src="/static/local_ico/vote-down-button.png">
                 </a>
             {% endif %}
