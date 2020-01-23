@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager.UPLOAD_FOLDER
 app.secret_key = os.urandom((20))
-
+app.config['SERVER_NAME'] = '192.168.0.221:5000'
 # @app.route('/')
 # @app.route('/list')
 # def route_index():

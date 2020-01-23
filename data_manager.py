@@ -9,7 +9,7 @@ from psycopg2 import sql
 QUESTIONS_FILE = 'data/questions.csv'
 ANSWERS_FILE = 'data/answers.csv'
 UPLOAD_FOLDER = 'static/img'
-ALLOWED_EXTENSIONS = {'png', 'jpg'}
+ALLOWED_EXTENSIONS = {'png', 'jpg','jpeg'}
 
 
 @connection.connection_handler
@@ -125,6 +125,18 @@ def delete_sql_answers(cursor, id_to_delete):
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('comment'), col=sql.Identifier('answer_id')), [id_to_delete]
     )
+    cursor.execute(
+        sql.SQL("SELECT {col1} FROM {table1};")
+            .format(
+        col1 = sql.Identifier('image'),
+        table1 = sql.Identifier('answer')
+    )
+    )
+
+    picture = cursor.fetchall()
+    picture = picture[0]['image']
+    print(picture)
+
     cursor.execute(
         sql.SQL("DELETE FROM {table} WHERE {col}=%s;")
             .format(table=sql.Identifier('answer'), col=sql.Identifier('id')), [id_to_delete]
